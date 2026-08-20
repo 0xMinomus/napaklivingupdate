@@ -196,6 +196,7 @@ input {
   border: none;
   background: none;
   cursor: pointer;
+  place-items: center;
 }
 
 .menu-icon,
