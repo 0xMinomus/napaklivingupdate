@@ -1,0 +1,11 @@
+node_modules
+server/node_modules
+dist
+server/dist
+*.log
+.env
+server/.env
+.git
+.dockerignore
+docker-compose*.yml
+DEPLOY.md
