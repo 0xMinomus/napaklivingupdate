@@ -222,7 +222,13 @@ export default function Catalog(): ReactElement {
           <p className="breadcrumb">
             <Link to="/">Home</Link>
             <span>/</span>
-            <span>{mode === 'category' && meta ? meta.label : 'Shop'}</span>
+            <Link to="/catalog">Shop</Link>
+            {mode === 'category' && meta && (
+              <>
+                <span>/</span>
+                <span>{meta.label}</span>
+              </>
+            )}
           </p>
           <div className="page-hero-row">
             <div>
@@ -244,15 +250,13 @@ export default function Catalog(): ReactElement {
             className="category-links"
             aria-label={mode === 'category' ? 'Other categories' : 'Quick category filters'}
           >
-            {mode === 'shop' && (
-              <Link
+            <Link
                 className="category-chip"
                 to="/catalog"
                 aria-current={!categoryParam ? 'page' : undefined}
               >
                 All objects
               </Link>
-            )}
             {CHIPS.map((chip) => (
               <Link
                 key={chip.slug}
