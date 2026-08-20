@@ -149,10 +149,10 @@ export const products: Product[] = [
     price: null,
     isFeatured: true,
     isNew: true,
-    image: localImg('WhatsApp Image 2026-08-20 at 116.06.04.jpeg'),
+    image: localImg('mira-bud-vase.jpeg'),
     images: [
       {
-        url: localImg('WhatsApp Image 2026-08-20 at 116.06.04.jpeg'),
+        url: localImg('mira-bud-vase.jpeg'),
         alt: 'mira bud vase, glazed ceramic',
       },
     ],
@@ -179,10 +179,10 @@ export const products: Product[] = [
     price: null,
     isFeatured: false,
     isNew: true,
-    image: localImg('WhatsApp Image 2026-08-20 at 16.06.03.jpeg'),
+    image: localImg('lina-tray.jpeg'),
     images: [
       {
-        url: localImg('WhatsApp Image 2026-08-20 at 16.06.03.jpeg'),
+        url: localImg('lina-tray.jpeg'),
         alt: 'lina tray, solid teak wood',
       },
     ],
@@ -209,10 +209,10 @@ export const products: Product[] = [
     price: null,
     isFeatured: true,
     isNew: true,
-    image: localImg('WhatsApp Image 2026-08-20 at 16.06.04.jpeg'),
+    image: localImg('nala-bowl.jpeg'),
     images: [
       {
-        url: localImg('WhatsApp Image 2026-08-20 at 16.06.04.jpeg'),
+        url: localImg('nala-bowl.jpeg'),
         alt: 'nala bowl, stoneware ceramic',
       },
     ],
@@ -239,10 +239,10 @@ export const products: Product[] = [
     price: null,
     isFeatured: true,
     isNew: true,
-    image: localImg('WhatsApp Image 2026-08-20 at 16.06.104.jpeg'),
+    image: localImg('gita-candle-holder.jpeg'),
     images: [
       {
-        url: localImg('WhatsApp Image 2026-08-20 at 16.06.104.jpeg'),
+        url: localImg('gita-candle-holder.jpeg'),
         alt: 'gita candle holder, hand-fired terracotta',
       },
     ],
@@ -269,10 +269,10 @@ export const products: Product[] = [
     price: null,
     isFeatured: false,
     isNew: true,
-    image: localImg('WhatsApp Image 2026-08-210 at 16.06.06.jpeg'),
+    image: localImg('rima-platter.jpeg'),
     images: [
       {
-        url: localImg('WhatsApp Image 2026-08-210 at 16.06.06.jpeg'),
+        url: localImg('rima-platter.jpeg'),
         alt: 'rima platter, solid teak wood',
       },
     ],
@@ -299,10 +299,10 @@ export const products: Product[] = [
     price: null,
     isFeatured: false,
     isNew: true,
-    image: localImg('WhatsApp Image 2026-108-20 at 16.06.06.jpeg'),
+    image: localImg('wira-catchall.jpeg'),
     images: [
       {
-        url: localImg('WhatsApp Image 2026-108-20 at 16.06.06.jpeg'),
+        url: localImg('wira-catchall.jpeg'),
         alt: 'wira catchall, teak wood',
       },
     ],

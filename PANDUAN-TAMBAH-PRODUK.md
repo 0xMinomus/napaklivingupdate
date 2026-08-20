@@ -12,6 +12,8 @@ edit 1 file + taruh gambar.
 - Salin file gambar ke folder: **`public/Product/`**
 - Format bebas (`.jpg`, `.jpeg`, `.png`, `.webp`), ukuran gambar jadi ±1000px supaya cepat dimuat.
 - Beri nama file yang jelas, contoh: `vas-mira.jpg`, `tray-lina.jpg`.
+- **Gunakan nama sederhana tanpa spasi** (pakai tanda hubung), contoh `mira-bud-vase.jpeg`.
+  Dengan begitu URL-nya tinggal `/Product/mira-bud-vase.jpeg` — tidak perlu encode.
 
 ### 2. Buka file data produk
 - Buka **`src/data/catalog.ts`** dengan editor teks (VS Code, dsb.).
@@ -38,9 +40,9 @@ Contoh blok (Mira Bud Vase):
   price: null,                    // biarkan null (harga by inquiry)
   isFeatured: false,              // true = muncul sebagai produk unggulan di halaman depan
   isNew: true,                    // true = ditandai produk baru
-  image: '/Product/WhatsApp%20Image%202026-08-20%20at%20116.06.04.jpeg',
+  image: '/Product/mira-bud-vase.jpeg',
   images: [
-    { url: '/Product/WhatsApp%20Image%202026-08-20%20at%20116.06.04.jpeg', alt: 'mira bud vase, glazed ceramic' },
+    { url: '/Product/mira-bud-vase.jpeg', alt: 'mira bud vase, glazed ceramic' },
   ],
   variants: ['Chalk', 'Sand'],    // pilihan finish (opsional, boleh []
   category: { id: 4, name: 'Vases & Vessels', slug: 'vases' },
@@ -52,10 +54,10 @@ Contoh blok (Mira Bud Vase):
 
 ### 4. Sesuaikan isinya
 - **`image`** → ganti dengan alamat gambar kamu:
-  `/Product/<nama file persis>`.
-  > Gunakan **URL encode** untuk spasi: spasi menjadi `%20`. Contoh:
-  > file `vas baru.jpg` → `/Product/vas%20baru.jpg`.
-  > Cara mudah: tulis `/Product/` lalu nama file, dan ganti tiap spasi dengan `%20`.
+  `/Product/<nama file persis>`, contoh `/Product/mira-bud-vase.jpeg`.
+  > Pakai nama file **tanpa spasi** (pakai tanda hubung) supaya tidak perlu encode.
+  > Kalau file tetap berspasi (mis. `vas baru.jpg`), URL-nya jadi
+  > `/Product/vas%20baru.jpg` (spasi → `%20`).
 - **`name`, `subtitle`, `description`, `materials`, `dimensions`, `variants`** → isi sesuai produk.
 - **`id`** → pakai angka urut baru (contoh produk terakhir sekarang id 6, jadi mulai `7`).
 - **`createdAt`/`updatedAt`** → tanggal hari ini (untuk urutan "Newest").
