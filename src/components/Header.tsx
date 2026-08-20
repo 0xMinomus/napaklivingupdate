@@ -1,5 +1,5 @@
 import { useRef } from 'react'
-import type { ReactElement } from 'react'
+import type { ReactElement, SyntheticEvent } from 'react'
 import { Link, useLocation } from 'react-router-dom'
 
 const NAV = [
@@ -29,6 +29,10 @@ export default function Header({ overlay = false }: HeaderProps): ReactElement {
     if (menuRef.current) menuRef.current.removeAttribute('open')
   }
 
+  const handleMenuToggle = (e: SyntheticEvent<HTMLDetailsElement>): void => {
+    document.body.style.overflow = e.currentTarget.open ? 'hidden' : ''
+  }
+
   return (
     <header className={overlay ? 'site-header site-header--overlay' : 'site-header'}>
       <div className="container header-inner">
@@ -53,7 +57,7 @@ export default function Header({ overlay = false }: HeaderProps): ReactElement {
           Contact us <span aria-hidden="true">↗</span>
         </Link>
 
-        <details className="mobile-menu" ref={menuRef}>
+        <details className="mobile-menu" ref={menuRef} onToggle={handleMenuToggle}>
           <summary aria-label="Open menu">
             <span className="menu-icon" aria-hidden="true"></span>
           </summary>
