@@ -3,13 +3,9 @@ node_modules/
 
 # build output
 dist/
-server/dist/
 
 # env
 .env
-server/.env
-!.env.example
-!server/.env.example
 
 # logs & editor
 *.log
