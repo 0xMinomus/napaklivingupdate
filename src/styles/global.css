@@ -2038,9 +2038,13 @@ main > section *,
 
 @media (max-width: 767px) {
   .hero-bg {
-    align-items: flex-end;
+    align-items: center;
     min-height: 76vh;
     padding: 72px 0 56px;
+  }
+
+  .hero-bg .hero-copy {
+    padding-inline: 16px;
   }
 
   .hero-bg-overlay {
