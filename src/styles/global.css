@@ -2060,6 +2060,7 @@ main > section *,
   height: 100%;
   object-fit: cover;
   object-position: center 58%;
+  transform: scale(1.16);
 }
 
 .hero-bg-overlay {
