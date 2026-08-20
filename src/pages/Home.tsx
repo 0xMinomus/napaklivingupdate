@@ -63,7 +63,7 @@ export default function Home(): ReactElement {
         <section className="hero hero-bg" aria-labelledby="hero-title">
           <div className="hero-bg-image" aria-hidden="true">
             <img
-              src="/pexels-the-ghazi-2152398165-36353283.jpg"
+              src="/pexels-the-ghazi-2152398165-36353283.webp"
               alt=""
               fetchPriority="high"
               decoding="async"

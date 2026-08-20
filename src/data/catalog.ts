@@ -149,10 +149,10 @@ export const products: Product[] = [
     price: null,
     isFeatured: true,
     isNew: true,
-    image: localImg('mira-bud-vase.jpeg'),
+    image: localImg('mira-bud-vase.webp'),
     images: [
       {
-        url: localImg('mira-bud-vase.jpeg'),
+        url: localImg('mira-bud-vase.webp'),
         alt: 'mira bud vase, glazed ceramic',
       },
     ],
@@ -179,10 +179,10 @@ export const products: Product[] = [
     price: null,
     isFeatured: false,
     isNew: true,
-    image: localImg('lina-tray.jpeg'),
+    image: localImg('lina-tray.webp'),
     images: [
       {
-        url: localImg('lina-tray.jpeg'),
+        url: localImg('lina-tray.webp'),
         alt: 'lina tray, solid teak wood',
       },
     ],
@@ -209,10 +209,10 @@ export const products: Product[] = [
     price: null,
     isFeatured: true,
     isNew: true,
-    image: localImg('nala-bowl.jpeg'),
+    image: localImg('nala-bowl.webp'),
     images: [
       {
-        url: localImg('nala-bowl.jpeg'),
+        url: localImg('nala-bowl.webp'),
         alt: 'nala bowl, stoneware ceramic',
       },
     ],
@@ -239,10 +239,10 @@ export const products: Product[] = [
     price: null,
     isFeatured: true,
     isNew: true,
-    image: localImg('gita-candle-holder.jpeg'),
+    image: localImg('gita-candle-holder.webp'),
     images: [
       {
-        url: localImg('gita-candle-holder.jpeg'),
+        url: localImg('gita-candle-holder.webp'),
         alt: 'gita candle holder, hand-fired terracotta',
       },
     ],
@@ -269,10 +269,10 @@ export const products: Product[] = [
     price: null,
     isFeatured: false,
     isNew: true,
-    image: localImg('rima-platter.jpeg'),
+    image: localImg('rima-platter.webp'),
     images: [
       {
-        url: localImg('rima-platter.jpeg'),
+        url: localImg('rima-platter.webp'),
         alt: 'rima platter, solid teak wood',
       },
     ],
@@ -299,10 +299,10 @@ export const products: Product[] = [
     price: null,
     isFeatured: false,
     isNew: true,
-    image: localImg('wira-catchall.jpeg'),
+    image: localImg('wira-catchall.webp'),
     images: [
       {
-        url: localImg('wira-catchall.jpeg'),
+        url: localImg('wira-catchall.webp'),
         alt: 'wira catchall, teak wood',
       },
     ],
