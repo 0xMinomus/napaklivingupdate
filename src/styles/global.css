@@ -2167,6 +2167,13 @@ main > section *,
   }
 }
 
+.hero-bg .display-title span,
+.hero-bg .muted-line,
+.hero-bg .hero-lead,
+.hero-bg .shop-link {
+  animation: none;
+}
+
 /* ── Homepage header: blended with the hero background ─────────── */
 .site-header--overlay {
   position: absolute;
