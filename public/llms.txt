@@ -1,0 +1,16 @@
+# Napak Living
+
+> Napak Living — home objects made for quiet everyday rituals. A slow-living catalog of handmade ceramic pieces for the home: bud vases, trays, bowls, candle holders, platters, and catchalls.
+
+- [Napak Living — Home](https://napakliving-olive.vercel.app/): Brand story and featured products.
+- [Products](https://napakliving-olive.vercel.app/products): Complete catalog of handmade objects.
+- [Collections](https://napakliving-olive.vercel.app/collections): Curated slow-living collections.
+
+## Products
+
+- [Mira Bud Vase](https://napakliving-olive.vercel.app/products/mira-bud-vase): Small glazed bud vase.
+- [Lina Tray](https://napakliving-olive.vercel.app/products/lina-tray): Stoneware serving tray.
+- [Nala Bowl](https://napakliving-olive.vercel.app/products/nala-bowl): Hand-thrown ceramic bowl.
+- [Gita Candle Holder](https://napakliving-olive.vercel.app/products/gita-candle-holder): Ceramic candle holder.
+- [Rima Platter](https://napakliving-olive.vercel.app/products/rima-platter): Serving platter.
+- [Wira Catchall](https://napakliving-olive.vercel.app/products/wira-catchall): Tray for small everyday objects.
