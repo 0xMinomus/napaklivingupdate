@@ -36,7 +36,7 @@ export default function Gallery({ images, name }: GalleryProps): ReactElement {
         ))}
       </div>
       <figure className="gallery-main" id="gallery-main">
-        {current && <img src={current.url} alt={name} />}
+        {current && <img src={scaleImage(current.url, 1000)} alt={name} />}
       </figure>
     </div>
   )

@@ -65,7 +65,7 @@ export default function Collections(): ReactElement {
         <section className="container collection-list-grid" aria-label="Collection list">
           <CollectionCard
             to="/collection/ruang-pagi"
-            src="https://images.unsplash.com/photo-1600607687920-4e2a09cf159d?auto=format&fit=crop&w=1000&q=85"
+            src="https://images.unsplash.com/photo-1600607687920-4e2a09cf159d?auto=format&fit=crop&w=700&q=70"
             alt="A warm interior from the Ruang Pagi collection"
             mono="COLLECTION / 01"
             title="Ruang Pagi"
@@ -74,7 +74,7 @@ export default function Collections(): ReactElement {
 
           <CollectionCard
             to="/collection/bumi-tenang"
-            src="https://images.unsplash.com/photo-1618221195710-dd6b41faaea6?auto=format&fit=crop&w=1000&q=85"
+            src="https://images.unsplash.com/photo-1618221195710-dd6b41faaea6?auto=format&fit=crop&w=700&q=70"
             alt="A wooden shelf with objects from the Bumi Tenang collection"
             mono="COLLECTION / 02"
             title="Bumi Tenang"
@@ -83,7 +83,7 @@ export default function Collections(): ReactElement {
 
           <CollectionCard
             to="/catalog"
-            src="https://images.unsplash.com/photo-1600210492486-724fe5c67fb0?auto=format&fit=crop&w=1000&q=85"
+            src="https://images.unsplash.com/photo-1600210492486-724fe5c67fb0?auto=format&fit=crop&w=600&q=70"
             alt="A dining table set with Napak Living table accessories"
             mono="EDIT / 03"
             title="The Table, Slowly"

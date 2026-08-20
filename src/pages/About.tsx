@@ -29,7 +29,7 @@ export default function About(): ReactElement {
 
         <div className="container about-hero-image">
           <img
-            src="https://images.unsplash.com/photo-1600607688969-a5bfcd646154?auto=format&fit=crop&w=1800&q=85"
+            src="https://images.unsplash.com/photo-1600607688969-a5bfcd646154?auto=format&fit=crop&w=1200&q=70"
             alt="A home interior with natural materials and textured furniture"
           />
         </div>
@@ -49,7 +49,7 @@ export default function About(): ReactElement {
         <section className="container about-story-grid" aria-labelledby="founding-title">
           <div className="about-story-image">
             <img
-              src="https://images.unsplash.com/photo-1610701596007-11502861dcfa?auto=format&fit=crop&w=1000&q=85"
+              src="https://images.unsplash.com/photo-1610701596007-11502861dcfa?auto=format&fit=crop&w=700&q=70"
               alt="The process and result of handmade ceramics in natural tones"
               loading="lazy"
             />

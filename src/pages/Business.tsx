@@ -29,7 +29,7 @@ export default function Business(): ReactElement {
           </div>
           <div className="business-hero-image">
             <img
-              src="https://images.unsplash.com/photo-1600607687939-ce8a6c25118c?auto=format&fit=crop&w=1200&q=85"
+              src="https://images.unsplash.com/photo-1600607687939-ce8a6c25118c?auto=format&fit=crop&w=900&q=70"
               alt="A hospitality space with natural interiors and decorative objects"
             />
           </div>

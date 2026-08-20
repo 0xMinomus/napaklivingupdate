@@ -1,7 +1,7 @@
 import type { Category, Collection, Product } from '../types'
 
 const img = (id: string, w = 900) =>
-  `https://images.unsplash.com/${id}?auto=format&fit=crop&w=${w}&q=85`
+  `https://images.unsplash.com/${id}?auto=format&fit=crop&w=${w}&q=70`
 
 const localImg = (file: string) => `/Product/${encodeURI(file)}`
 

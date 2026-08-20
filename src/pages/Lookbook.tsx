@@ -51,21 +51,21 @@ export default function Lookbook(): ReactElement {
 
         <section className="container lookbook-page-grid" aria-label="Editorial lookbook">
           <LookbookCard
-            src="https://images.unsplash.com/photo-1616486338812-3dadae4b4ace?auto=format&fit=crop&w=800&q=85"
+            src="https://images.unsplash.com/photo-1616486338812-3dadae4b4ace?auto=format&fit=crop&w=600&q=70"
             alt="A living room corner with a vase and natural light"
             mono="01 / living slowly"
             caption="Details in the everyday"
           />
 
           <LookbookCard
-            src="https://images.unsplash.com/photo-1600210492486-724fe5c67fb0?auto=format&fit=crop&w=900&q=85"
+            src="https://images.unsplash.com/photo-1600210492486-724fe5c67fb0?auto=format&fit=crop&w=600&q=70"
             alt="A dining table styled with ceramics and flowers"
             mono="02 / gather here"
             caption="A table made for staying"
           />
 
           <LookbookCard
-            src="https://images.unsplash.com/photo-1604014237800-1c9102c219da?auto=format&fit=crop&w=700&q=85"
+            src="https://images.unsplash.com/photo-1604014237800-1c9102c219da?auto=format&fit=crop&w=500&q=70"
             alt="A decorative detail in sunlight"
             mono="03 / natural light"
             caption="Find your quiet"

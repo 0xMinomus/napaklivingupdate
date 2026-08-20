@@ -145,7 +145,7 @@ export default function Home(): ReactElement {
           <div className="collection-grid">
             <Link className="collection-card collection-card-large" to="/collection/ruang-pagi">
               <img
-                src="https://images.unsplash.com/photo-1600607687920-4e2a09cf159d?auto=format&fit=crop&w=1500&q=85"
+                src="https://images.unsplash.com/photo-1600607687920-4e2a09cf159d?auto=format&fit=crop&w=1000&q=70"
                 alt="An earthy dining room with Napak Living objects"
                 loading="lazy"
               />
@@ -161,7 +161,7 @@ export default function Home(): ReactElement {
             </Link>
             <Link className="collection-card" to="/collection/bumi-tenang">
               <img
-                src="https://images.unsplash.com/photo-1618221195710-dd6b41faaea6?auto=format&fit=crop&w=1200&q=85"
+                src="https://images.unsplash.com/photo-1618221195710-dd6b41faaea6?auto=format&fit=crop&w=900&q=70"
                 alt="A wooden shelf with natural-toned decorative objects"
                 loading="lazy"
               />
@@ -229,7 +229,7 @@ export default function Home(): ReactElement {
           <div className="lookbook-grid">
             <figure className="lookbook-image lookbook-tall">
               <img
-                src="https://images.unsplash.com/photo-1616486338812-3dadae4b4ace?auto=format&fit=crop&w=1000&q=85"
+                src="https://images.unsplash.com/photo-1616486338812-3dadae4b4ace?auto=format&fit=crop&w=700&q=70"
                 alt="A home corner with a chair, wooden table, and vase"
                 loading="lazy"
               />
@@ -240,7 +240,7 @@ export default function Home(): ReactElement {
             </figure>
             <figure className="lookbook-image lookbook-wide">
               <img
-                src="https://images.unsplash.com/photo-1600210492486-724fe5c67fb0?auto=format&fit=crop&w=1200&q=85"
+                src="https://images.unsplash.com/photo-1600210492486-724fe5c67fb0?auto=format&fit=crop&w=600&q=70"
                 alt="A dining table with ceramic plates and a flower vase"
                 loading="lazy"
               />
@@ -251,7 +251,7 @@ export default function Home(): ReactElement {
             </figure>
             <figure className="lookbook-image lookbook-small">
               <img
-                src="https://images.unsplash.com/photo-1604014237800-1c9102c219da?auto=format&fit=crop&w=900&q=85"
+                src="https://images.unsplash.com/photo-1604014237800-1c9102c219da?auto=format&fit=crop&w=500&q=70"
                 alt="A tabletop detail with sunlight"
                 loading="lazy"
               />
@@ -267,7 +267,7 @@ export default function Home(): ReactElement {
           <div className="story-image">
             <div className="story-image-frame">
               <img
-                src="https://images.unsplash.com/photo-1600607688969-a5bfcd646154?auto=format&fit=crop&w=1200&q=85"
+                src="https://images.unsplash.com/photo-1600607688969-a5bfcd646154?auto=format&fit=crop&w=900&q=70"
                 alt="Natural material textures and handmade ceramics"
                 loading="lazy"
               />

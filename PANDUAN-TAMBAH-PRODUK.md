@@ -14,6 +14,14 @@ edit 1 file + taruh gambar.
 - Beri nama file yang jelas, contoh: `vas-mira.jpg`, `tray-lina.jpg`.
 - **Gunakan nama sederhana tanpa spasi** (pakai tanda hubung), contoh `mira-bud-vase.jpeg`.
   Dengan begitu URL-nya tinggal `/Product/mira-bud-vase.jpeg` — tidak perlu encode.
+- **Wajib: buat juga 2 versi kecil** dengan akhiran `@640` dan `@320`
+  (untuk kartu produk & thumbnail di halaman detail). Contoh:
+  - `mira-bud-vase.jpeg` (gambar utama ±1000px)
+  - `mira-bud-vase@640.jpeg` (untuk kartu produk)
+  - `mira-bud-vase@320.jpeg` (untuk thumbnail galeri)
+  > Kalau versi `@640` tidak ada, gambar di kartu produk akan **404/rusak**.
+  > Cara cepat membuat versi kecil: buka di editor foto/Windows, resize,
+  > atau gunakan tool online (mis. tinypng / squoosh) lalu simpan dengan nama di atas.
 
 ### 2. Buka file data produk
 - Buka **`src/data/catalog.ts`** dengan editor teks (VS Code, dsb.).
