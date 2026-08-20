@@ -1578,7 +1578,7 @@ input {
 }
 
 body {
-  animation: page-enter 500ms ease both;
+  animation: none;
 }
 
 
