@@ -1,4 +1,4 @@
-# https://llmstxt.org/
+User-agent: *
+Allow: /
 
 Sitemap: https://napakliving-olive.vercel.app/sitemap.xml
-llms.txt: https://napakliving-olive.vercel.app/llms.txt
