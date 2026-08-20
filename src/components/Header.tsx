@@ -1,5 +1,6 @@
-import { useRef } from 'react'
-import type { ReactElement, SyntheticEvent } from 'react'
+import { useEffect, useState } from 'react'
+import type { ReactElement } from 'react'
+import { createPortal } from 'react-dom'
 import { Link, useLocation } from 'react-router-dom'
 
 const NAV = [
@@ -16,7 +17,7 @@ interface HeaderProps {
 
 export default function Header({ overlay = false }: HeaderProps): ReactElement {
   const location = useLocation()
-  const menuRef = useRef<HTMLDetailsElement>(null)
+  const [menuOpen, setMenuOpen] = useState(false)
 
   const isActive = (to: string): boolean => {
     if (to === '/collections') {
@@ -25,54 +26,78 @@ export default function Header({ overlay = false }: HeaderProps): ReactElement {
     return location.pathname === to
   }
 
-  const closeMenu = (): void => {
-    if (menuRef.current) menuRef.current.removeAttribute('open')
-  }
+  useEffect(() => {
+    document.body.style.overflow = menuOpen ? 'hidden' : ''
+    return () => {
+      document.body.style.overflow = ''
+    }
+  }, [menuOpen])
 
-  const handleMenuToggle = (e: SyntheticEvent<HTMLDetailsElement>): void => {
-    document.body.style.overflow = e.currentTarget.open ? 'hidden' : ''
-  }
+  const closeMenu = (): void => setMenuOpen(false)
+  const toggleMenu = (): void => setMenuOpen((v) => !v)
 
   return (
-    <header className={overlay ? 'site-header site-header--overlay' : 'site-header'}>
-      <div className="container header-inner">
-        <Link className="brand" to="/" aria-label="Napak Living home">
-          <span className="brand-mark" aria-hidden="true"></span>
-          <span>napak living</span>
-        </Link>
+    <>
+      <header className={overlay ? 'site-header site-header--overlay' : 'site-header'}>
+        <div className="container header-inner">
+          <Link className="brand" to="/" aria-label="Napak Living home">
+            <span className="brand-mark" aria-hidden="true"></span>
+            <span>napak living</span>
+          </Link>
 
-        <nav className="desktop-nav" aria-label="Main navigation">
-          {NAV.map((item) => (
-            <Link key={item.to} to={item.to} aria-current={isActive(item.to) ? 'page' : undefined}>
-              {item.label}
-            </Link>
-          ))}
-        </nav>
-
-        <Link
-          className="header-contact"
-          to="/contact"
-          aria-current={location.pathname === '/contact' ? 'page' : undefined}
-        >
-          Contact us <span aria-hidden="true">↗</span>
-        </Link>
-
-        <details className="mobile-menu" ref={menuRef} onToggle={handleMenuToggle}>
-          <summary aria-label="Open menu">
-            <span className="menu-icon" aria-hidden="true"></span>
-          </summary>
-          <nav aria-label="Mobile navigation" onClick={closeMenu}>
+          <nav className="desktop-nav" aria-label="Main navigation">
             {NAV.map((item) => (
               <Link key={item.to} to={item.to} aria-current={isActive(item.to) ? 'page' : undefined}>
                 {item.label}
               </Link>
             ))}
-            <Link to="/contact" aria-current={location.pathname === '/contact' ? 'page' : undefined}>
-              Contact
-            </Link>
           </nav>
-        </details>
-      </div>
-    </header>
+
+          <Link
+            className="header-contact"
+            to="/contact"
+            aria-current={location.pathname === '/contact' ? 'page' : undefined}
+          >
+            Contact us <span aria-hidden="true">↗</span>
+          </Link>
+
+          <button
+            className="mobile-menu-toggle"
+            aria-expanded={menuOpen}
+            aria-label={menuOpen ? 'Close menu' : 'Open menu'}
+            onClick={toggleMenu}
+          >
+            <span className="menu-icon" aria-hidden="true"></span>
+          </button>
+        </div>
+      </header>
+
+      {menuOpen &&
+        createPortal(
+          <div className="mobile-menu-overlay" role="dialog" aria-modal="true" aria-label="Menu">
+            <button className="mobile-menu-close" aria-label="Close menu" onClick={closeMenu}>
+              <span className="menu-icon" aria-hidden="true"></span>
+            </button>
+            <nav aria-label="Mobile navigation" onClick={closeMenu}>
+              {NAV.map((item) => (
+                <Link
+                  key={item.to}
+                  to={item.to}
+                  aria-current={isActive(item.to) ? 'page' : undefined}
+                >
+                  {item.label}
+                </Link>
+              ))}
+              <Link
+                to="/contact"
+                aria-current={location.pathname === '/contact' ? 'page' : undefined}
+              >
+                Contact
+              </Link>
+            </nav>
+          </div>,
+          document.body
+        )}
+    </>
   )
 }
