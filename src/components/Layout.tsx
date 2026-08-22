@@ -7,18 +7,21 @@ import ScrollAnimations from './ScrollAnimations'
 
 export default function Layout(): ReactElement {
   const location = useLocation()
-  const scope = useRef<HTMLDivElement>(null)
+  const routeScope = useRef<HTMLDivElement>(null)
   const overlay = location.pathname === '/'
+  const routeKey = `${location.pathname}${location.search}`
 
   return (
-    <div className="site-shell" ref={scope}>
+    <div className="site-shell">
       <ScrollToTop />
       <a className="skip-link" href="#main-content">
         Skip to main content
       </a>
       <Header overlay={overlay} />
-      <Outlet />
-      <ScrollAnimations scope={scope} routeKey={`${location.pathname}${location.search}`} />
+      <div className="route-view" key={routeKey} ref={routeScope}>
+        <Outlet />
+      </div>
+      <ScrollAnimations scope={routeScope} routeKey={routeKey} />
     </div>
   )
 }

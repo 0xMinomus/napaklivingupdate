@@ -43,7 +43,6 @@ interface ScrollAnimationsProps {
 interface RevealOptions {
   delay?: number
   y?: number
-  scale?: number
 }
 
 function selectAll(root: HTMLElement, selector: string): HTMLElement[] {
@@ -58,29 +57,31 @@ export default function ScrollAnimations({ scope, routeKey }: ScrollAnimationsPr
 
       const media = gsap.matchMedia()
 
-      media.add('(prefers-reduced-motion: no-preference)', () => {
+      media.add({ reduceMotion: '(prefers-reduced-motion: reduce)' }, ({ conditions }) => {
+        if (conditions?.reduceMotion) return
+
         const animated = new WeakSet<HTMLElement>()
-        let refreshFrame: number | null = null
+        const revealTweens = new Map<HTMLElement, gsap.core.Tween>()
+        let scanTimer: number | null = null
+        const duration = window.matchMedia('(max-width: 767px)').matches ? 0.68 : 0.82
 
         const reveal = (element: HTMLElement, options: RevealOptions = {}): void => {
           if (animated.has(element)) return
           animated.add(element)
 
-          gsap.fromTo(
+          const tween = gsap.fromTo(
             element,
             {
               autoAlpha: 0,
               y: options.y ?? 34,
-              scale: options.scale ?? 0.985,
               willChange: 'transform, opacity',
             },
             {
               autoAlpha: 1,
               y: 0,
-              scale: 1,
-              duration: 0.82,
+              duration,
               delay: options.delay ?? 0,
-              ease: 'power3.out',
+              ease: 'power2.out',
               clearProps: 'opacity,visibility,transform,willChange',
               scrollTrigger: {
                 trigger: element,
@@ -90,6 +91,7 @@ export default function ScrollAnimations({ scope, routeKey }: ScrollAnimationsPr
               },
             },
           )
+          revealTweens.set(element, tween)
         }
 
         const animateHeroCopy = (): void => {
@@ -100,22 +102,20 @@ export default function ScrollAnimations({ scope, routeKey }: ScrollAnimationsPr
           if (!copy.length) return
 
           animated.add(hero)
-          gsap.fromTo(
+          const tween = gsap.fromTo(
             copy,
             {
               autoAlpha: 0,
-              y: 26,
-              filter: 'blur(8px)',
-              willChange: 'transform, opacity, filter',
+              y: 22,
+              willChange: 'transform, opacity',
             },
             {
               autoAlpha: 1,
               y: 0,
-              filter: 'blur(0px)',
-              duration: 0.9,
-              stagger: 0.14,
-              ease: 'power3.out',
-              clearProps: 'opacity,visibility,transform,filter,willChange',
+              duration,
+              stagger: 0.1,
+              ease: 'power2.out',
+              clearProps: 'opacity,visibility,transform,willChange',
               scrollTrigger: {
                 trigger: hero,
                 start: 'top 90%',
@@ -124,6 +124,7 @@ export default function ScrollAnimations({ scope, routeKey }: ScrollAnimationsPr
               },
             },
           )
+          revealTweens.set(hero, tween)
         }
 
         const scan = (): void => {
@@ -132,8 +133,7 @@ export default function ScrollAnimations({ scope, routeKey }: ScrollAnimationsPr
           selectAll(root, SECTION_SELECTOR).forEach((element, index) => {
             reveal(element, {
               delay: Math.min(index * 0.04, 0.16),
-              scale: 0.995,
-              y: 38,
+              y: 0,
             })
           })
 
@@ -145,31 +145,43 @@ export default function ScrollAnimations({ scope, routeKey }: ScrollAnimationsPr
         }
 
         const safeScan = contextSafe(scan)
-        const scheduleScan = (): void => {
-          if (refreshFrame !== null) cancelAnimationFrame(refreshFrame)
-          refreshFrame = requestAnimationFrame(() => {
-            refreshFrame = null
-            safeScan()
-            ScrollTrigger.refresh()
-          })
+        const refresh = (): void => {
+          ScrollTrigger.refresh()
+          ScrollTrigger.update()
+
+          const viewportBottom = window.innerHeight * 0.9
+          for (const [element, tween] of revealTweens) {
+            const rect = element.getBoundingClientRect()
+            if (rect.top <= viewportBottom && rect.bottom >= 0 && tween.progress() === 0) {
+              tween.play()
+            }
+          }
         }
+        const scheduleScan = (delay = 0): void => {
+          if (scanTimer !== null) window.clearTimeout(scanTimer)
+          scanTimer = window.setTimeout(() => {
+            scanTimer = null
+            safeScan()
+            refresh()
+          }, delay)
+        }
+        const scheduleAfterLoad = (): void => scheduleScan(32)
 
         const observer =
           typeof MutationObserver === 'undefined'
             ? null
             : new MutationObserver(() => {
-                scheduleScan()
+                scheduleScan(40)
               })
 
         observer?.observe(root, { childList: true, subtree: true })
-        window.addEventListener('load', scheduleScan)
-        safeScan()
-        ScrollTrigger.refresh()
+        window.addEventListener('load', scheduleAfterLoad)
+        scheduleScan()
 
         return () => {
           observer?.disconnect()
-          window.removeEventListener('load', scheduleScan)
-          if (refreshFrame !== null) cancelAnimationFrame(refreshFrame)
+          window.removeEventListener('load', scheduleAfterLoad)
+          if (scanTimer !== null) window.clearTimeout(scanTimer)
         }
       })
 
