@@ -2276,6 +2276,8 @@ main > section.hero-bg,
   z-index: 30;
   background: linear-gradient(180deg, rgba(16, 16, 16, 0.5), rgba(16, 16, 16, 0) 100%);
   border-bottom: none;
+  animation: none !important;
+  animation-timeline: auto !important;
 }
 
 .site-header--overlay .brand {
