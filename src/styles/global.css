@@ -2132,11 +2132,25 @@ main > section *,
   line-height: 1.1;
   padding: 2px 0 8px;
   text-shadow: 0 2px 24px rgba(16, 16, 16, 0.55);
+  animation: none;
+}
+
+.hero-bg .display-title span {
+  animation: hero-text-in 900ms cubic-bezier(0.2, 0.7, 0.2, 1) both;
+}
+
+.hero-bg .display-title span:nth-child(1) {
+  animation-delay: 320ms;
+}
+
+.hero-bg .display-title span:nth-child(2) {
+  animation-delay: 460ms;
 }
 
 .hero-bg .muted-line {
   color: #efe3c7;
   text-shadow: 0 1px 14px rgba(16, 16, 16, 0.5);
+  animation: hero-text-in 900ms cubic-bezier(0.2, 0.7, 0.2, 1) 460ms both;
 }
 
 .hero-bg .hero-lead {
@@ -2158,6 +2172,7 @@ main > section *,
   font-weight: 600;
   letter-spacing: 0.02em;
   text-shadow: 0 1px 12px rgba(16, 16, 16, 0.5);
+  animation: hero-text-in 900ms cubic-bezier(0.2, 0.7, 0.2, 1) 620ms both;
   transition: color 160ms ease, gap 160ms ease;
 }
 
@@ -2187,6 +2202,19 @@ main > section *,
   transform: translateX(3px);
 }
 
+@keyframes hero-text-in {
+  from {
+    opacity: 0;
+    transform: translateY(26px);
+    filter: blur(8px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+    filter: blur(0);
+  }
+}
+
 @media (max-width: 767px) {
   .hero-bg .display-title {
     font-size: clamp(38px, 11vw, 54px);
@@ -2201,17 +2229,42 @@ main > section *,
   }
 }
 
-/* GSAP owns homepage hero motion; keep the background layers static. */
+/* Keep the homepage hero image still; animate only its copy. */
 main > section.hero-bg,
 .hero-bg-image,
 .hero-bg-image img,
-.hero-bg .display-title,
-.hero-bg .display-title span,
-.hero-bg .hero-lead,
-.hero-bg .shop-link {
+.hero-bg .display-title {
   animation: none !important;
   animation-timeline: auto !important;
   animation-range: normal !important;
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .hero-bg .display-title span {
+    animation: hero-text-in 900ms cubic-bezier(0.2, 0.7, 0.2, 1) both !important;
+    animation-timeline: auto !important;
+    animation-range: normal !important;
+  }
+
+  .hero-bg .display-title span:nth-child(1) {
+    animation-delay: 320ms !important;
+  }
+
+  .hero-bg .display-title span:nth-child(2) {
+    animation-delay: 460ms !important;
+  }
+
+  .hero-bg .hero-lead {
+    animation: hero-text-in 900ms cubic-bezier(0.2, 0.7, 0.2, 1) 520ms both !important;
+    animation-timeline: auto !important;
+    animation-range: normal !important;
+  }
+
+  .hero-bg .shop-link {
+    animation: hero-text-in 900ms cubic-bezier(0.2, 0.7, 0.2, 1) 620ms both !important;
+    animation-timeline: auto !important;
+    animation-range: normal !important;
+  }
 }
 
 /* ── Homepage header: blended with the hero background ─────────── */
@@ -2290,6 +2343,77 @@ main > section.hero-bg,
   }
 }
 
+/* ── Scroll-triggered card reveal (all browsers) ───────────────── */
+.product-card,
+.collection-list-card,
+.lookbook-page-card {
+  --reveal-delay: 0ms;
+  animation: none !important;
+  opacity: 0;
+  translate: 0 26px;
+  transition:
+    opacity 620ms cubic-bezier(0.2, 0.7, 0.2, 1) var(--reveal-delay),
+    translate 620ms cubic-bezier(0.2, 0.7, 0.2, 1) var(--reveal-delay),
+    transform 320ms cubic-bezier(0.2, 0.7, 0.2, 1),
+    box-shadow 320ms ease,
+    border-color 320ms ease;
+}
+
+.product-card.revealed,
+.collection-list-card.revealed,
+.lookbook-page-card.revealed {
+  opacity: 1;
+  translate: 0 0;
+}
+
+.product-grid > .product-card:nth-child(2),
+.catalog-grid > .product-card:nth-child(2),
+.collection-list-grid > .collection-list-card:nth-child(2),
+.lookbook-page-grid > .lookbook-page-card:nth-child(2) {
+  --reveal-delay: 70ms;
+}
+
+.product-grid > .product-card:nth-child(3),
+.catalog-grid > .product-card:nth-child(3),
+.collection-list-grid > .collection-list-card:nth-child(3),
+.lookbook-page-grid > .lookbook-page-card:nth-child(3) {
+  --reveal-delay: 140ms;
+}
+
+.product-grid > .product-card:nth-child(4),
+.catalog-grid > .product-card:nth-child(4) {
+  --reveal-delay: 210ms;
+}
+
+.product-grid > .product-card:nth-child(5),
+.catalog-grid > .product-card:nth-child(5) {
+  --reveal-delay: 280ms;
+}
+
+.product-grid > .product-card:nth-child(6),
+.catalog-grid > .product-card:nth-child(6) {
+  --reveal-delay: 350ms;
+}
+
+.product-grid > .product-card:nth-child(7),
+.catalog-grid > .product-card:nth-child(7) {
+  --reveal-delay: 420ms;
+}
+
+.product-grid > .product-card:nth-child(8),
+.catalog-grid > .product-card:nth-child(8) {
+  --reveal-delay: 490ms;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .product-card,
+  .collection-list-card,
+  .lookbook-page-card {
+    opacity: 1;
+    translate: none;
+  }
+}
+
 /* ── Home lookbook image hover animation ───────────────────────── */
 .lookbook-image {
   transition: transform 320ms cubic-bezier(0.2, 0.7, 0.2, 1), box-shadow 320ms ease;
@@ -2307,16 +2431,4 @@ main > section.hero-bg,
 .lookbook-image:hover img {
   filter: saturate(1.05) contrast(1.02);
   transform: scale(1.065);
-}
-
-/* GSAP owns page entrance and scroll-reveal motion. */
-.site-header,
-.site-header *,
-main > section,
-main > section *,
-.site-footer,
-.site-footer * {
-  animation: none !important;
-  animation-timeline: auto !important;
-  animation-range: normal !important;
 }
