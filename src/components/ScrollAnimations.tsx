@@ -61,7 +61,7 @@ export default function ScrollAnimations({ scope, routeKey }: ScrollAnimationsPr
         if (conditions?.reduceMotion) return
 
         const animated = new WeakSet<HTMLElement>()
-        const revealTweens = new Map<HTMLElement, gsap.core.Tween>()
+        const revealTweens = new Map<HTMLElement, gsap.core.Animation>()
         let scanTimer: number | null = null
         const duration = window.matchMedia('(max-width: 767px)').matches ? 0.68 : 0.82
 
@@ -102,7 +102,8 @@ export default function ScrollAnimations({ scope, routeKey }: ScrollAnimationsPr
           if (!copy.length) return
 
           animated.add(hero)
-          const tween = gsap.fromTo(
+          const timeline = gsap.timeline()
+          timeline.fromTo(
             copy,
             {
               autoAlpha: 0,
@@ -116,15 +117,9 @@ export default function ScrollAnimations({ scope, routeKey }: ScrollAnimationsPr
               stagger: 0.1,
               ease: 'power2.out',
               clearProps: 'opacity,visibility,transform,willChange',
-              scrollTrigger: {
-                trigger: hero,
-                start: 'top 90%',
-                toggleActions: 'play none none none',
-                once: true,
-              },
             },
           )
-          revealTweens.set(hero, tween)
+          revealTweens.set(hero, timeline)
         }
 
         const scan = (): void => {
