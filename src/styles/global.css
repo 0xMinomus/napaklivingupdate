@@ -2344,9 +2344,7 @@ main > section.hero-bg,
 }
 
 /* ── Scroll-triggered card reveal (all browsers) ───────────────── */
-.product-card,
-.collection-list-card,
-.lookbook-page-card {
+.product-card {
   --reveal-delay: 0ms;
   animation: none !important;
   opacity: 0;
@@ -2359,24 +2357,18 @@ main > section.hero-bg,
     border-color 320ms ease;
 }
 
-.product-card.revealed,
-.collection-list-card.revealed,
-.lookbook-page-card.revealed {
+.product-card.revealed {
   opacity: 1;
   translate: 0 0;
 }
 
 .product-grid > .product-card:nth-child(2),
-.catalog-grid > .product-card:nth-child(2),
-.collection-list-grid > .collection-list-card:nth-child(2),
-.lookbook-page-grid > .lookbook-page-card:nth-child(2) {
+.catalog-grid > .product-card:nth-child(2) {
   --reveal-delay: 70ms;
 }
 
 .product-grid > .product-card:nth-child(3),
-.catalog-grid > .product-card:nth-child(3),
-.collection-list-grid > .collection-list-card:nth-child(3),
-.lookbook-page-grid > .lookbook-page-card:nth-child(3) {
+.catalog-grid > .product-card:nth-child(3) {
   --reveal-delay: 140ms;
 }
 
@@ -2406,9 +2398,7 @@ main > section.hero-bg,
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .product-card,
-  .collection-list-card,
-  .lookbook-page-card {
+  .product-card {
     opacity: 1;
     translate: none;
   }
