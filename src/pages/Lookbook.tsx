@@ -2,7 +2,6 @@ import type { ReactElement } from 'react'
 import { Link } from 'react-router-dom'
 import Footer from '../components/Footer'
 import { useDocumentTitle } from '../hooks/useDocumentTitle'
-import { useRevealOnScroll } from '../lib/reveal'
 
 interface LookbookCardProps {
   src: string
@@ -12,10 +11,8 @@ interface LookbookCardProps {
 }
 
 function LookbookCard({ src, alt, mono, caption }: LookbookCardProps): ReactElement {
-  const ref = useRevealOnScroll<HTMLElement>()
-
   return (
-    <figure className="lookbook-page-card" ref={ref}>
+    <figure className="lookbook-page-card">
       <img src={src} alt={alt} loading="lazy" decoding="async" />
       <figcaption>
         <span className="mono">{mono}</span>

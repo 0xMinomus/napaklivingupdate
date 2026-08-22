@@ -2,7 +2,6 @@ import type { ReactElement } from 'react'
 import { Link } from 'react-router-dom'
 import Footer from '../components/Footer'
 import { useDocumentTitle } from '../hooks/useDocumentTitle'
-import { useRevealOnScroll } from '../lib/reveal'
 
 interface CollectionCardProps {
   to: string
@@ -21,10 +20,8 @@ function CollectionCard({
   title,
   description,
 }: CollectionCardProps): ReactElement {
-  const ref = useRevealOnScroll<HTMLAnchorElement>()
-
   return (
-    <Link className="collection-list-card" to={to} ref={ref}>
+    <Link className="collection-list-card" to={to}>
       <img src={src} alt={alt} loading="lazy" decoding="async" />
       <div className="collection-list-info">
         <span className="mono">{mono}</span>
