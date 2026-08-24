@@ -5,6 +5,7 @@ import { get } from '../api'
 import Footer from '../components/Footer'
 import ProductGrid from '../components/ProductGrid'
 import { useDocumentTitle } from '../hooks/useDocumentTitle'
+import { usePageHero } from '../hooks/usePageHero'
 import type { Collection } from '../types'
 
 interface CollectionConfig {
@@ -71,6 +72,7 @@ export default function CollectionDetail(): ReactElement {
 
   const displayName = data?.name ?? (config ? config.titleLine1 + ' ' + config.titleLine2.replace(/\.$/, '') : slug)
   useDocumentTitle(`${displayName} — Napak Living`)
+  usePageHero()
 
   return (
     <>

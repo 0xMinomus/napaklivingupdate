@@ -3,9 +3,11 @@ import { Link } from 'react-router-dom'
 import ContactForm from '../components/ContactForm'
 import Footer from '../components/Footer'
 import { useDocumentTitle } from '../hooks/useDocumentTitle'
+import { usePageHero } from '../hooks/usePageHero'
 
 export default function Business(): ReactElement {
   useDocumentTitle('Trade & Business — Napak Living')
+  usePageHero()
 
   return (
     <>

@@ -1,7 +1,8 @@
 import type { ReactElement } from 'react'
-import { Outlet, useLocation } from 'react-router-dom'
+import { useLocation } from 'react-router-dom'
 import Header from './Header'
 import ScrollToTop from './ScrollToTop'
+import PageEffects from './PageEffects'
 
 export default function Layout(): ReactElement {
   const { pathname } = useLocation()
@@ -10,11 +11,8 @@ export default function Layout(): ReactElement {
   return (
     <>
       <ScrollToTop />
-      <a className="skip-link" href="#main-content">
-        Skip to main content
-      </a>
       <Header overlay={overlay} />
-      <Outlet />
+      <PageEffects key={pathname} />
     </>
   )
 }

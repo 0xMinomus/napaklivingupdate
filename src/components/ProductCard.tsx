@@ -2,15 +2,13 @@ import type { ReactElement } from 'react'
 import { Link } from 'react-router-dom'
 import { scaleImage } from '../lib/image'
 import { productUrl } from '../lib/links'
-import { useRevealOnScroll } from '../lib/reveal'
 import type { ProductSummary } from '../types'
 
 export default function ProductCard({ product }: { product: ProductSummary }): ReactElement {
-  const ref = useRevealOnScroll<HTMLElement>()
   const subtitle = [product.category?.name, product.materials].filter(Boolean).join(' · ')
 
   return (
-    <article className="product-card" ref={ref}>
+    <article className="product-card">
       <Link
         className="product-image"
         to={productUrl(product.slug)}

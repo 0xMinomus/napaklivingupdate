@@ -6,6 +6,7 @@ import Footer from '../components/Footer'
 import Pagination from '../components/Pagination'
 import ProductGrid from '../components/ProductGrid'
 import { useDocumentTitle } from '../hooks/useDocumentTitle'
+import { usePageHero } from '../hooks/usePageHero'
 import { categoryUrl } from '../lib/links'
 import type { Paginated, ProductSummary } from '../types'
 
@@ -130,6 +131,7 @@ export default function Catalog(): ReactElement {
   useDocumentTitle(
     mode === 'category' && meta ? `${meta.label} — Napak Living` : 'Shop — Napak Living'
   )
+  usePageHero()
 
   const setParams = (updates: Record<string, string | string[] | null>): void => {
     setSearchParams(

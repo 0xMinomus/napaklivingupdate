@@ -5,6 +5,7 @@ import { get } from '../api'
 import ProductGrid from '../components/ProductGrid'
 import Footer from '../components/Footer'
 import { useDocumentTitle } from '../hooks/useDocumentTitle'
+import { useHeroAnimation } from '../hooks/useHeroAnimation'
 import type { Paginated, ProductSummary } from '../types'
 
 function shuffle<T>(arr: T[]): T[] {
@@ -56,6 +57,7 @@ function FeaturedProducts(): ReactElement {
 
 export default function Home(): ReactElement {
   useDocumentTitle('Napak Living — Objects for a slower home')
+  useHeroAnimation()
 
   return (
     <>

@@ -2,9 +2,11 @@ import type { ReactElement } from 'react'
 import { Link } from 'react-router-dom'
 import Footer from '../components/Footer'
 import { useDocumentTitle } from '../hooks/useDocumentTitle'
+import { usePageHero } from '../hooks/usePageHero'
 
 export default function About(): ReactElement {
   useDocumentTitle('Our Story — Napak Living')
+  usePageHero()
 
   return (
     <>

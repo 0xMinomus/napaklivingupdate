@@ -6,6 +6,7 @@ import Footer from '../components/Footer'
 import Gallery from '../components/Gallery'
 import ProductGrid from '../components/ProductGrid'
 import { useDocumentTitle } from '../hooks/useDocumentTitle'
+import { usePageHero } from '../hooks/usePageHero'
 import { categoryUrl, isKnownCategory } from '../lib/links'
 import type { Product, ProductSummary } from '../types'
 
@@ -66,6 +67,7 @@ export default function ProductDetail(): ReactElement {
   useDocumentTitle(
     product ? `${product.name} — Napak Living` : 'Product — Napak Living'
   )
+  usePageHero()
 
   const categoryName = product?.category?.name ?? ''
   const categorySlug = product?.category?.slug
