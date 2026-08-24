@@ -2,7 +2,6 @@ import type { ReactElement } from 'react'
 import { Link } from 'react-router-dom'
 import Footer from '../components/Footer'
 import { useDocumentTitle } from '../hooks/useDocumentTitle'
-import { usePageHero } from '../hooks/usePageHero'
 
 interface CollectionCardProps {
   to: string
@@ -38,7 +37,6 @@ function CollectionCard({
 
 export default function Collections(): ReactElement {
   useDocumentTitle('Collections — Napak Living')
-  usePageHero()
 
   return (
     <>
@@ -55,9 +53,8 @@ export default function Collections(): ReactElement {
             <span className="muted-line">to live with.</span>
           </h1>
           <p className="lead">
-            A collection of thoughtfully chosen pieces, made by skilled Indonesian artisans. From
-            tableware to home décor and hospitality essentials, each piece reflects the beauty and
-            character of handmade craftsmanship.
+            Each collection is born from a mood: morning light, earthy surfaces, and objects that
+            invite us to stay a little longer.
           </p>
           <div className="page-hero-rule"></div>
         </section>

@@ -2,7 +2,6 @@ import type { ReactElement } from 'react'
 import { Link } from 'react-router-dom'
 import Footer from '../components/Footer'
 import { useDocumentTitle } from '../hooks/useDocumentTitle'
-import { usePageHero } from '../hooks/usePageHero'
 
 interface LookbookCardProps {
   src: string
@@ -25,7 +24,6 @@ function LookbookCard({ src, alt, mono, caption }: LookbookCardProps): ReactElem
 
 export default function Lookbook(): ReactElement {
   useDocumentTitle('Lookbook — Napak Living')
-  usePageHero()
 
   return (
     <>

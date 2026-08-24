@@ -16,7 +16,7 @@ Single source of truth for this codebase. Read this once and you know everything
 2. `src/api.ts` is a **client-side mock API**: same function signatures as the old REST API (`getProducts`, `getProductBySlug`, etc.) but resolves instantly from local data. Components don't know/care there's no server.
 3. Deployed on **Vercel**. `vercel.json` sets `"buildCommand": "npm run build"` explicitly — this intentionally overrides any stale `vercel-build` setting in the Vercel dashboard. Don't remove it.
 4. All images are **WebP only**, no `.jpg/.png` anywhere. Product images come in 3 sizes each (`base`=1000px max-dim, `@640`, `@320`) under `public/Product/`.
-5. React 19 + Vite 6 + TypeScript + react-router-dom v7. No CSS framework, no Tailwind, no UI library. Plain CSS in two files.
+5. React 19 + Vite 6 + TypeScript + react-router-dom v7 + GSAP/ScrollTrigger. No CSS framework, no Tailwind, no UI library. Plain CSS in two files.
 6. Node 22 (`engines` in package.json). `"type": "module"`.
 
 ## 3. Tech Stack
@@ -26,12 +26,13 @@ Single source of truth for this codebase. Read this once and you know everything
 | Framework | React 19 + TypeScript 5.7                | Strict types in `src/types.ts`                 |
 | Bundler   | Vite 6 (`@vitejs/plugin-react`)          | Dev server port 5173                           |
 | Routing   | react-router-dom v7                      | `BrowserRouter`, see route map below           |
+| Animation | GSAP 3 + `@gsap/react` (`ScrollTrigger`) | Global scroll reveals in `ScrollAnimations.tsx` |
 | Styling   | Plain CSS, 2 files                       | `src/styles/global.css` (~2400 lines) + `src/styles/pages.css` (~1650 lines) |
 | Fonts     | Google Fonts: Manrope, Inter, DM Mono    | Loaded **non-blocking** (see §9)               |
 | Hosting   | Vercel (static build, SPA rewrite)       | Auto-deploy on push to `main`                  |
 | Backend   | **None**                                 | Formerly Express+Prisma in `server/` — deleted |
 
-Dependencies are minimal on purpose: `react`, `react-dom`, `react-router-dom`. No state library, no animation library, no icon set (icons are inline SVG/CSS shapes).
+Dependencies are minimal on purpose: `react`, `react-dom`, `react-router-dom`, `gsap`, and `@gsap/react`. No state library, no CSS framework, no icon set (icons are inline SVG/CSS shapes).
 
 ## 4. Project Structure
 
@@ -55,10 +56,11 @@ Dependencies are minimal on purpose: `react`, `react-dom`, `react-router-dom`. N
 │   ├── lib/
 │   │   ├── image.ts            # scaleImage(url, width) — responsive URL builder (§7)
 │   │   ├── links.ts            # productUrl/categoryUrl/collectionUrl helpers
-│   │   └── reveal.ts           # useRevealOnScroll hook (IntersectionObserver)
+│   │   └── (no scroll hook)    # Scroll reveal is centralized in components/ScrollAnimations.tsx
 │   ├── hooks/useDocumentTitle.ts
 │   ├── components/             # Header, Footer, Layout, Gallery, ProductCard,
-│   │                           # ProductGrid, Pagination, ContactForm, ScrollToTop
+│   │                           # ProductGrid, Pagination, ContactForm, ScrollToTop,
+│   │                           # ScrollAnimations (global GSAP + ScrollTrigger controller)
 │   ├── pages/                  # Home, Catalog, ProductDetail, Collections,
 │   │                           # CollectionDetail, Lookbook, About, Business,
 │   │                           # Contact, ThankYou, NotFound
@@ -151,7 +153,16 @@ Rules:
 - Overlay: `createPortal(<div class="mobile-menu-overlay">…</div>, document.body)` — solid krem background `var(--color-bone-canvas)` (#efefe4), centered nav links `clamp(22px, 6vw, 30px)`, active page gets olive underline (`--color-studio-blue` #58624a), staggered fade-in, Esc/close button dismisses, body scroll locked while open.
 - Brand palette: olive `#58624a` (`--color-studio-blue`/`--color-wash-blue`), bone `#efefe4`, paper `#fcfcf9`, ink `#181818`.
 
-## 13. Commands
+## 13. GSAP Scroll Animations
+
+- `src/components/ScrollAnimations.tsx` is mounted once by `Layout` and scopes all GSAP work to the site shell.
+- It registers `ScrollTrigger`, creates reveal animations for page sections, cards, galleries, forms, panels, footer content, and category links, and rescans after lazy/dynamic route content appears.
+- The homepage hero background is intentionally excluded from scroll animation. Its `scale(1.16)` is static; only hero text is animated.
+- Route changes rerun the controller using `routeKey` (`pathname + search`) and automatically revert old tweens/triggers through `useGSAP`.
+- `prefers-reduced-motion: reduce` skips GSAP animations and leaves content visible.
+- Animate only transform/opacity/filter where possible. Do not add CSS opacity-zero reveal rules or another IntersectionObserver reveal system; they conflict with GSAP.
+
+## 14. Commands
 
 ```bash
 npm install          # setup
@@ -165,7 +176,7 @@ There is no test suite, no linter config. Verify changes with `npx tsc --noEmit 
 
 Deploy = `git add -A && git commit -m "..." && git push origin main` (auto-deploys).
 
-## 14. Code Conventions
+## 15. Code Conventions
 
 - TypeScript everywhere; shared domain types centralized in `src/types.ts`.
 - No code comments unless asked; no emojis in code/UI.
@@ -173,6 +184,6 @@ Deploy = `git add -A && git commit -m "..." && git push origin main` (auto-deplo
 - CSS: BEM-ish flat class names, design tokens as CSS custom properties in `:root` of `global.css`. Responsive breakpoints around 1331px (desktop nav→burger) and 767px/680px (mobile tweaks).
 - Animations respect `prefers-reduced-motion` — anything that hides content behind animation must keep content visible when animations are off (see §11.2).
 
-## 15. Removed Legacy (context for "why isn't X here")
+## 16. Removed Legacy (context for "why isn't X here")
 
 Formerly a monorepo with `server/` (Express + Prisma + SQLite, admin CRUD API) and Docker/nginx deploy files. All removed in favor of pure static hosting. `src/api.ts` kept the old API surface so pages would need zero changes. If real backend/e-commerce is ever needed, reintroduce it behind the same `api.ts` interface.
