@@ -1796,7 +1796,7 @@ input {
 }
 
 .hero-bg .muted-line {
-  color: #efe3c7;
+  color: var(--color-paper-white);
   text-shadow: 0 1px 14px rgba(16, 16, 16, 0.5);
 }
 
