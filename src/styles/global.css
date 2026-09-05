@@ -118,20 +118,12 @@ input {
   display: inline-flex;
   align-items: center;
   flex: 0 0 auto;
-  gap: 9px;
-  color: var(--color-ink);
-  font-size: 16px;
-  font-weight: 600;
-  letter-spacing: -0.4px;
 }
 
-.brand-mark {
-  display: inline-block;
-  width: 14px;
-  height: 14px;
-  border-radius: 4px 4px 4px 0;
-  background: var(--color-studio-blue);
-  transform: rotate(-8deg);
+.brand img {
+  display: block;
+  height: 34px;
+  width: auto;
 }
 
 .desktop-nav {
@@ -1803,9 +1795,13 @@ input {
 }
 
 @media (max-width: 767px) {
-  .site-header--overlay .brand {
-    font-size: 17px;
-  }
+.site-header--overlay .brand img {
+  filter: brightness(0) invert(1);
+}
+
+.site-header--overlay .brand {
+  font-size: 18px;
+}
 
   .site-header--overlay .desktop-nav a,
   .site-header--overlay .header-contact {

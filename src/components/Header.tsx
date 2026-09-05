@@ -41,8 +41,7 @@ export default function Header({ overlay = false }: HeaderProps): ReactElement {
       <header className={overlay ? 'site-header site-header--overlay' : 'site-header'}>
         <div className="container header-inner">
           <Link className="brand" to="/" aria-label="Napak Living home">
-            <span className="brand-mark" aria-hidden="true"></span>
-            <span>napak living</span>
+            <img src="/logo.png" alt="Napak Living" width="128" height="128" />
           </Link>
 
           <nav className="desktop-nav" aria-label="Main navigation">

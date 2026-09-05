@@ -23,8 +23,7 @@ export default function Footer({ variant = 'instagram', minimal = false }: Foote
         <div className="container footer-top">
           <div className="footer-brand">
             <Link className="brand" to="/" aria-label="Napak Living home">
-              <span className="brand-mark" aria-hidden="true"></span>
-              <span>napak living</span>
+              <img src="/logo.png" alt="Napak Living" width="128" height="128" />
             </Link>
             <p>Objects for a slower home.</p>
           </div>
