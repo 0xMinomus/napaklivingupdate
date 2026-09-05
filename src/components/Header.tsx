@@ -11,7 +11,11 @@ const NAV = [
   { to: '/business', label: 'Trade' },
 ]
 
-export default function Header(): ReactElement {
+interface HeaderProps {
+  overlay?: boolean
+}
+
+export default function Header({ overlay = false }: HeaderProps): ReactElement {
   const location = useLocation()
   const [menuOpen, setMenuOpen] = useState(false)
   const [scrolled, setScrolled] = useState(false)
@@ -42,7 +46,9 @@ export default function Header(): ReactElement {
 
   return (
     <>
-      <header className={`site-header${scrolled ? ' site-header--scrolled' : ''}`}>
+      <header
+        className={`site-header${overlay ? ' site-header--overlay' : ''}${scrolled ? ' site-header--scrolled' : ''}`}
+      >
         <div className="container header-inner">
           <Link className="brand" to="/" aria-label="Napak Living home">
             <img src="/logo-hitam.png" alt="Napak Living" width="6023" height="1457" />
