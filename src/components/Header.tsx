@@ -50,7 +50,12 @@ export default function Header({ overlay = false }: HeaderProps): ReactElement {
         className={`site-header${overlay ? ' site-header--overlay' : ''}${scrolled ? ' site-header--scrolled' : ''}`}
       >
         <div className="container header-inner">
-          <Link className="brand" to="/" aria-label="Napak Living home">
+          <Link
+            className="brand"
+            to="/"
+            aria-label="Napak Living home"
+            onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}
+          >
             <img src="/logo-hitam.png" alt="Napak Living" width="6023" height="1457" />
           </Link>
 
