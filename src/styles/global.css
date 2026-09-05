@@ -1634,7 +1634,7 @@ input {
 }
 
 .hero-bg .muted-line {
-  color: rgba(252, 252, 249, 0.76);
+  color: var(--color-paper-white);
 }
 
 .hero-bg .lead {
