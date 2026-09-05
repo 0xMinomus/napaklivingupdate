@@ -122,8 +122,14 @@ input {
 
 .brand img {
   display: block;
-  height: 34px;
+  height: 44px;
   width: auto;
+}
+
+@media (max-width: 767px) {
+  .brand img {
+    height: 34px;
+  }
 }
 
 .desktop-nav {
