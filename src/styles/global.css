@@ -1591,7 +1591,8 @@ input {
   position: relative;
   display: flex;
   align-items: center;
-  min-height: clamp(540px, 82vh, 780px);
+  min-height: 100vh;
+  min-height: 100svh;
   margin-top: 0;
   padding: 96px 0;
   overflow: hidden;
@@ -1648,7 +1649,8 @@ input {
 @media (max-width: 767px) {
   .hero-bg {
     align-items: center;
-    min-height: 76vh;
+    min-height: 100vh;
+    min-height: 100svh;
     padding: 72px 0 56px;
   }
 
