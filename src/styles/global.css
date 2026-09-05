@@ -124,7 +124,6 @@ input {
   display: block;
   height: 36px;
   width: auto;
-  filter: brightness(0);
 }
 
 @media (max-width: 767px) {
@@ -1804,10 +1803,6 @@ input {
 @media (max-width: 767px) {
 .site-header--overlay .header-inner {
   padding-top: 10px;
-}
-
-.site-header--overlay .brand img {
-  filter: none;
 }
 
 .site-header--overlay .brand {
