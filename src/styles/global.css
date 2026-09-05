@@ -107,11 +107,12 @@ input {
   left: 0;
   right: 0;
   z-index: 30;
+  transform: translateY(-100%);
   background: rgba(16, 16, 16, 0.55);
   -webkit-backdrop-filter: blur(12px);
   backdrop-filter: blur(12px);
   border-bottom: 1px solid rgba(252, 252, 249, 0.12);
-  transition: background 500ms cubic-bezier(0.22, 1, 0.36, 1), border-color 500ms cubic-bezier(0.22, 1, 0.36, 1), box-shadow 500ms cubic-bezier(0.22, 1, 0.36, 1);
+  transition: transform 500ms cubic-bezier(0.22, 1, 0.36, 1), background 500ms cubic-bezier(0.22, 1, 0.36, 1), border-color 500ms cubic-bezier(0.22, 1, 0.36, 1), box-shadow 500ms cubic-bezier(0.22, 1, 0.36, 1);
 }
 
 .site-header .brand img {
@@ -137,6 +138,7 @@ input {
 }
 
 .site-header--scrolled {
+  transform: translateY(0);
   background: rgba(16, 16, 16, 0.85);
   box-shadow: 0 8px 24px rgba(16, 16, 16, 0.25);
 }
