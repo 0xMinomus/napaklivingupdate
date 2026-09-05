@@ -6,12 +6,11 @@ import PageEffects from './PageEffects'
 
 export default function Layout(): ReactElement {
   const { pathname } = useLocation()
-  const overlay = pathname === '/'
 
   return (
     <>
       <ScrollToTop />
-      <Header overlay={overlay} />
+      <Header />
       <PageEffects key={pathname} />
     </>
   )
