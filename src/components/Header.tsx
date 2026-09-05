@@ -18,6 +18,14 @@ interface HeaderProps {
 export default function Header({ overlay = false }: HeaderProps): ReactElement {
   const location = useLocation()
   const [menuOpen, setMenuOpen] = useState(false)
+  const [scrolled, setScrolled] = useState(false)
+
+  useEffect(() => {
+    const onScroll = (): void => setScrolled(window.scrollY > 8)
+    onScroll()
+    window.addEventListener('scroll', onScroll, { passive: true })
+    return () => window.removeEventListener('scroll', onScroll)
+  }, [])
 
   const isActive = (to: string): boolean => {
     if (to === '/collections') {
@@ -38,7 +46,9 @@ export default function Header({ overlay = false }: HeaderProps): ReactElement {
 
   return (
     <>
-      <header className={overlay ? 'site-header site-header--overlay' : 'site-header'}>
+      <header
+        className={`site-header${overlay ? ' site-header--overlay' : ''}${scrolled ? ' site-header--scrolled' : ''}`}
+      >
         <div className="container header-inner">
           <Link className="brand" to="/" aria-label="Napak Living home">
             <img src="/logo-hitam.png" alt="Napak Living" width="6023" height="1457" />

@@ -1,5 +1,17 @@
 .page-main {
+  padding-top: 76px;
   padding-bottom: 1px;
+}
+
+section[id],
+#main-content {
+  scroll-margin-top: 84px;
+}
+
+@media (max-width: 767px) {
+  .page-main {
+    padding-top: 66px;
+  }
 }
 
 .page-hero {
