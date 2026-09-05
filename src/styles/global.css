@@ -1801,7 +1801,6 @@ input {
   background: var(--color-paper-white);
 }
 
-@media (max-width: 767px) {
 .site-header--overlay .header-inner {
   padding-top: 10px;
 }
@@ -1810,9 +1809,10 @@ input {
   filter: brightness(0) invert(1);
 }
 
-.site-header--overlay .brand {
-  font-size: 18px;
-}
+@media (max-width: 767px) {
+  .site-header--overlay .brand {
+    font-size: 18px;
+  }
 
   .site-header--overlay .desktop-nav a,
   .site-header--overlay .header-contact {
