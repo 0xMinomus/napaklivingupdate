@@ -180,7 +180,6 @@ input {
   display: flex;
   align-items: center;
   gap: 32px;
-  padding-top: 10px;
 }
 
 .brand {
@@ -212,7 +211,7 @@ input {
 .desktop-nav a {
   color: var(--color-carbon);
   cursor: pointer;
-  font-size: 12px;
+  font-size: 13px;
   letter-spacing: -0.1px;
 }
 
