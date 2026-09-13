@@ -1,11 +1,9 @@
 export interface CategoryRef {
-  id: number
   name: string
   slug: string
 }
 
 export interface CollectionRef {
-  id: number
   name: string
   slug: string
 }
@@ -16,7 +14,6 @@ export interface ProductImage {
 }
 
 export interface ProductSummary {
-  id: number
   name: string
   slug: string
   code: string | null
@@ -52,7 +49,6 @@ export interface Paginated<T> {
 }
 
 export interface Category {
-  id: number
   name: string
   slug: string
   description: string | null
@@ -64,7 +60,6 @@ export interface Category {
 }
 
 export interface Collection {
-  id: number
   name: string
   slug: string
   description: string | null

@@ -1,7 +1,8 @@
 # Deploy ke Vercel
 
-Website sekarang **100% statis** — produk & koleksi ada di frontend (`src/data/catalog.ts`),
-tanpa database, tanpa API, tanpa server. Deploy jadi sangat sederhana.
+Website sekarang **statis + Decap CMS** — produk & koleksi ada di `content/*.json`,
+diedit lewat `/admin`, tanpa database, tanpa API bisnis. Deploy jadi sangat sederhana.
+Satu-satunya function adalah `api/auth.js` (broker OAuth GitHub untuk login admin).
 
 ---
 
@@ -20,7 +21,8 @@ git push -u origin main
 
 1. [vercel.com/new](https://vercel.com/new) → Import repo GitHub.
 2. Framework preset: **Vite** (auto-detect). `vercel.json` hanya berisi rewrite SPA.
-3. **Tidak perlu env variable apa pun** — tidak ada `DATABASE_URL`, tidak ada Neon.
+3. **Butuh 2 env variable** untuk login admin: `OAUTH_CLIENT_ID` dan
+   `OAUTH_CLIENT_SECRET` dari GitHub OAuth App (lihat `PANDUAN-TAMBAH-PRODUK.md`).
 4. Deploy. Selesai.
 
 ## 3. Setelah deploy
@@ -30,8 +32,8 @@ git push -u origin main
 
 ## 4. Menambah produk
 
-Ikuti `PANDUAN-TAMBAH-PRODUK.md` (taruh gambar di `public/Product/` + edit
-`src/data/catalog.ts`).
+Ikuti `PANDUAN-TAMBAH-PRODUK.md` (buka `/admin`, isi form, upload gambar ke
+`public/Product/`).
 
 ## Catatan
 

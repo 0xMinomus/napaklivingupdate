@@ -1,0 +1,123 @@
+backend:
+  name: github
+  repo: 0xMinomus/napaklivingupdate
+  branch: main
+  base_url: https://napaklivingupdate.vercel.app
+  auth_endpoint: api/auth
+
+# Uploaded files land in public/Product and are referenced as /Product/...
+media_folder: public/Product
+public_folder: /Product
+
+collections:
+  - name: products
+    label: Products
+    folder: content/products
+    extension: json
+    format: json
+    create: true
+    delete: true
+    slug: '{{slug}}'
+    summary: '{{name}} ({{slug}})'
+    fields:
+      - { label: 'Name', name: name, widget: string, required: true }
+      - { label: 'Slug (URL — lock after first publish, renaming breaks links)', name: slug, widget: string, required: true, pattern: ['^[a-z0-9-]+$', 'Lowercase letters, numbers and hyphens only'] }
+      - { label: 'Display Code (e.g. NL / 007)', name: code, widget: string, required: false }
+      - { label: 'SKU', name: sku, widget: string, required: false }
+      - { label: 'Subtitle', name: subtitle, widget: string, required: false }
+      - { label: 'Description', name: description, widget: text, required: false }
+      - { label: 'Materials (e.g. Glazed ceramic, Solid teak wood)', name: materials, widget: string, required: false }
+      - { label: 'Dimensions (e.g. Ø 10 · H 15 cm)', name: dimensions, widget: string, required: false }
+      - { label: 'Care', name: care, widget: string, required: false }
+      - label: Availability
+        name: availability
+        widget: select
+        required: true
+        default: made-to-order
+        options:
+          - { label: 'Ready to ship', value: ready }
+          - { label: 'Made to order', value: made-to-order }
+      - label: Status
+        name: status
+        widget: select
+        required: true
+        default: active
+        options:
+          - { label: 'Active (visible on site)', value: active }
+          - { label: 'Draft (hidden, kept)', value: draft }
+      - { label: 'Price (empty = by inquiry)', name: price, widget: string, required: false }
+      - { label: 'New badge', name: isNew, widget: boolean, required: false, default: false }
+      - { label: 'Featured on home', name: isFeatured, widget: boolean, required: false, default: false }
+      - { label: 'Main Image (WebP — filename should match the slug)', name: image, widget: image, required: true }
+      - label: Gallery Images
+        name: images
+        widget: list
+        required: false
+        fields:
+          - { label: 'Image', name: url, widget: image, required: true }
+          - { label: 'Alt Text', name: alt, widget: string, required: true }
+      - label: Finishes / Variants
+        name: variants
+        widget: list
+        required: false
+        field: { label: 'Variant', name: variant, widget: string }
+      - label: Category
+        name: category
+        widget: relation
+        collection: categories
+        value_field: slug
+        display_fields: [name]
+        search_fields: [name, slug]
+        required: true
+      - label: Collections
+        name: collections
+        widget: list
+        required: false
+        field:
+          label: Collection
+          name: collection
+          widget: relation
+          collection: collections
+          value_field: slug
+          display_fields: [name]
+          search_fields: [name, slug]
+      - { label: 'Release Date (empty = treated as newest)', name: createdAt, widget: datetime, required: false }
+      - { label: 'Last Updated', name: updatedAt, widget: datetime, required: false }
+
+  - name: categories
+    label: Categories
+    folder: content/categories
+    extension: json
+    format: json
+    create: true
+    delete: true
+    slug: '{{slug}}'
+    summary: '{{name}} ({{slug}})'
+    fields:
+      - { label: 'Name', name: name, widget: string, required: true }
+      - { label: 'Slug (URL — lock after first publish)', name: slug, widget: string, required: true, pattern: ['^[a-z0-9-]+$', 'Lowercase letters, numbers and hyphens only'] }
+      - { label: 'Description', name: description, widget: text, required: false }
+      - { label: 'Image', name: image, widget: image, required: false }
+      - label: Parent Category
+        name: parent
+        widget: relation
+        collection: categories
+        value_field: slug
+        display_fields: [name]
+        search_fields: [name, slug]
+        required: false
+
+  - name: collections
+    label: Collections
+    folder: content/collections
+    extension: json
+    format: json
+    create: true
+    delete: true
+    slug: '{{slug}}'
+    summary: '{{name}} ({{slug}})'
+    fields:
+      - { label: 'Name', name: name, widget: string, required: true }
+      - { label: 'Slug (URL — lock after first publish)', name: slug, widget: string, required: true, pattern: ['^[a-z0-9-]+$', 'Lowercase letters, numbers and hyphens only'] }
+      - { label: 'Description', name: description, widget: text, required: false }
+      - { label: 'Image', name: image, widget: image, required: false }

@@ -1,0 +1,32 @@
+{
+  "name": "Rima Platter",
+  "slug": "rima-platter",
+  "code": "NL / 005",
+  "sku": "NL-RIMA-005",
+  "subtitle": "A generous platter for sharing.",
+  "description": "Rima is a solid teak platter for breads, fruits, or everyday serving, finished to stay alive to the touch.",
+  "materials": "Solid teak wood",
+  "dimensions": "W 40 · D 20 · H 3 cm",
+  "care": "Wipe with soft cloth",
+  "availability": "made-to-order",
+  "status": "active",
+  "price": null,
+  "isFeatured": false,
+  "isNew": true,
+  "image": "/Product/rima-platter.webp",
+  "images": [
+    {
+      "url": "/Product/rima-platter.webp",
+      "alt": "rima platter, solid teak wood"
+    }
+  ],
+  "variants": [
+    "Natural teak"
+  ],
+  "category": "serving-pieces",
+  "collections": [
+    "the-table-slowly"
+  ],
+  "createdAt": "2026-04-01T00:00:00.000Z",
+  "updatedAt": "2026-04-01T00:00:00.000Z"
+}

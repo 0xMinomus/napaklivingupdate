@@ -1,6 +1,6 @@
 import { useState } from 'react'
 import type { ReactElement } from 'react'
-import { scaleImage } from '../lib/image'
+import { fallbackToBaseImage, scaleImage } from '../lib/image'
 import type { ProductImage } from '../types'
 
 interface GalleryProps {
@@ -31,12 +31,13 @@ export default function Gallery({ images, name }: GalleryProps): ReactElement {
               alt={img.alt ?? `${name} view ${index + 1}`}
               loading="lazy"
               decoding="async"
+              onError={fallbackToBaseImage}
             />
           </a>
         ))}
       </div>
       <figure className="gallery-main" id="gallery-main">
-        {current && <img src={scaleImage(current.url, 1000)} alt={name} />}
+        {current && <img src={scaleImage(current.url, 1000)} alt={name} onError={fallbackToBaseImage} />}
       </figure>
     </div>
   )

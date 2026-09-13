@@ -1,18 +1,115 @@
 import type { Collection, Paginated, Product, ProductSummary } from './types'
-import { categories, collections, products } from './data/catalog'
 
 export const API_URL: string = (import.meta.env as { VITE_API_URL?: string } | undefined)
   ?.VITE_API_URL ?? '/api'
 
 type QueryParams = Record<string, string | number | boolean | undefined>
 
-const toSummary = (p: Product): ProductSummary => p
+interface ProductFile {
+  name: string
+  slug: string
+  code?: string | null
+  sku?: string | null
+  subtitle?: string | null
+  description?: string | null
+  materials?: string | null
+  dimensions?: string | null
+  care?: string | null
+  availability?: string | null
+  status?: string | null
+  price?: string | null
+  isFeatured?: boolean | null
+  isNew?: boolean | null
+  image?: string | null
+  images?: { url: string; alt?: string | null }[] | null
+  variants?: string[] | null
+  category?: string | null
+  collections?: (string | { collection: string })[] | null
+  createdAt?: string | null
+  updatedAt?: string | null
+}
 
-function resolveCategoryIds(slug: string): number[] {
-  const category = categories.find((c) => c.slug === slug)
+interface CategoryFile {
+  name: string
+  slug: string
+  description?: string | null
+  image?: string | null
+  parent?: string | null
+}
+
+interface CollectionFile {
+  name: string
+  slug: string
+  description?: string | null
+  image?: string | null
+}
+
+const productFiles = import.meta.glob<{ default: ProductFile }>('../content/products/*.json', {
+  eager: true,
+})
+const categoryFiles = import.meta.glob<{ default: CategoryFile }>(
+  '../content/categories/*.json',
+  { eager: true }
+)
+const collectionFiles = import.meta.glob<{ default: CollectionFile }>(
+  '../content/collections/*.json',
+  { eager: true }
+)
+
+// Products without a date sort as newest-first so fresh CMS entries surface on top.
+const FALLBACK_DATE = new Date().toISOString()
+
+const rawCategories = Object.values(categoryFiles).map((m) => m.default)
+const rawCollections = Object.values(collectionFiles).map((m) => m.default)
+
+const categoryBySlug = new Map(rawCategories.map((c) => [c.slug, c]))
+const collectionBySlug = new Map(rawCollections.map((c) => [c.slug, c]))
+
+function toSummary(p: Product): ProductSummary {
+  const { description: _d, dimensions: _dm, care: _c, availability: _a, status: _s, isFeatured: _f, images: _i, variants: _v, createdAt: _ca, updatedAt: _ua, ...summary } = p
+  return summary
+}
+
+function buildProducts(): Product[] {
+  return Object.values(productFiles).map((m) => {
+    const f = m.default
+    const category = f.category ? categoryBySlug.get(f.category) : undefined
+    return {
+      name: f.name,
+      slug: f.slug,
+      code: f.code ?? null,
+      sku: f.sku ?? null,
+      subtitle: f.subtitle ?? null,
+      description: f.description ?? null,
+      materials: f.materials ?? null,
+      dimensions: f.dimensions ?? null,
+      care: f.care ?? null,
+      availability: f.availability ?? '',
+      status: f.status ?? 'active',
+      price: f.price ?? null,
+      isFeatured: f.isFeatured ?? false,
+      isNew: f.isNew ?? false,
+      image: f.image ?? null,
+      images: (f.images ?? []).map((img) => ({ url: img.url, alt: img.alt ?? null })),
+      variants: f.variants ?? [],
+      category: category ? { name: category.name, slug: category.slug } : null,
+      collections: (f.collections ?? [])
+        .map((c) => (typeof c === 'string' ? c : c.collection))
+        .map((slug) => collectionBySlug.get(slug))
+        .filter((c): c is CollectionFile => Boolean(c))
+        .map((c) => ({ name: c.name, slug: c.slug })),
+      createdAt: f.createdAt ?? FALLBACK_DATE,
+      updatedAt: f.updatedAt ?? FALLBACK_DATE,
+    }
+  })
+}
+
+const products = buildProducts()
+
+function resolveCategorySlugs(slug: string): string[] {
+  const category = categoryBySlug.get(slug)
   if (!category) return []
-  const children = categories.filter((c) => c.parent?.slug === slug)
-  return [category.id, ...children.map((c) => c.id)]
+  return [slug, ...rawCategories.filter((c) => c.parent === slug).map((c) => c.slug)]
 }
 
 function bySort(sort: string) {
@@ -56,14 +153,14 @@ function listProducts(params: QueryParams): Paginated<ProductSummary> {
   }
 
   if (category) {
-    const ids = new Set(
+    const slugs = new Set(
       category
         .split(',')
         .map((s) => s.trim())
         .filter(Boolean)
-        .flatMap(resolveCategoryIds)
+        .flatMap(resolveCategorySlugs)
     )
-    list = list.filter((p) => p.category !== null && ids.has(p.category.id))
+    list = list.filter((p) => p.category !== null && slugs.has(p.category.slug))
   }
 
   if (collection) {
@@ -117,22 +214,37 @@ function relatedProducts(slug: string): ProductSummary[] {
     .filter(
       (p) =>
         p.status === 'active' &&
-        p.id !== product.id &&
-        (p.category?.id === product.category?.id ||
-          p.collections.some((c) => product.collections.some((pc) => pc.id === c.id)))
+        p.slug !== product.slug &&
+        (p.category?.slug === product.category?.slug ||
+          p.collections.some((c) => product.collections.some((pc) => pc.slug === c.slug)))
     )
     .slice(0, 4)
     .map(toSummary)
 }
 
+function buildCollections(): Collection[] {
+  return rawCollections.map((c) => {
+    const items = products
+      .filter((p) => p.status === 'active' && p.collections.some((pc) => pc.slug === c.slug))
+      .sort((a, b) => a.createdAt.localeCompare(b.createdAt))
+      .map(toSummary)
+    return {
+      name: c.name,
+      slug: c.slug,
+      description: c.description ?? null,
+      image: c.image ?? null,
+      productCount: items.length,
+      products: items,
+    }
+  })
+}
+
+const collections = buildCollections()
+
 function collectionDetail(slug: string): Collection {
   const collection = collections.find((c) => c.slug === slug)
   if (!collection) throw new Error('Collection not found')
-  const items = products
-    .filter((p) => p.status === 'active' && p.collections.some((c) => c.slug === slug))
-    .sort((a, b) => a.createdAt.localeCompare(b.createdAt))
-    .map(toSummary)
-  return { ...collection, productCount: items.length, products: items }
+  return collection
 }
 
 function routeGet(path: string, params: QueryParams = {}): unknown {

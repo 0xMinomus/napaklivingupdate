@@ -1,0 +1,33 @@
+{
+  "name": "Wira Catchall",
+  "slug": "wira-catchall",
+  "code": "NL / 006",
+  "sku": "NL-WIRA-006",
+  "subtitle": "A quiet place for small things.",
+  "description": "Wira is a small teak catchall for keys, coins, and other objects that need a place to land at the end of the day.",
+  "materials": "Teak wood",
+  "dimensions": "W 16 · D 12 · H 4 cm",
+  "care": "Wipe with soft cloth",
+  "availability": "made-to-order",
+  "status": "active",
+  "price": null,
+  "isFeatured": false,
+  "isNew": true,
+  "image": "/Product/wira-catchall.webp",
+  "images": [
+    {
+      "url": "/Product/wira-catchall.webp",
+      "alt": "wira catchall, teak wood"
+    }
+  ],
+  "variants": [
+    "Natural teak",
+    "Dark teak"
+  ],
+  "category": "lifestyle",
+  "collections": [
+    "bumi-tenang"
+  ],
+  "createdAt": "2026-04-15T00:00:00.000Z",
+  "updatedAt": "2026-04-15T00:00:00.000Z"
+}

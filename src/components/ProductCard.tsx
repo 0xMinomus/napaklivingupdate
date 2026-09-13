@@ -1,6 +1,6 @@
 import type { ReactElement } from 'react'
 import { Link } from 'react-router-dom'
-import { scaleImage } from '../lib/image'
+import { fallbackToBaseImage, scaleImage } from '../lib/image'
 import { productUrl } from '../lib/links'
 import type { ProductSummary } from '../types'
 
@@ -16,7 +16,7 @@ export default function ProductCard({ product }: { product: ProductSummary }): R
       >
         {product.isNew && <span className="product-tag">New</span>}
         {product.image && (
-          <img src={scaleImage(product.image, 640)} alt={product.name} loading="lazy" decoding="async" />
+          <img src={scaleImage(product.image, 640)} alt={product.name} loading="lazy" decoding="async" onError={fallbackToBaseImage} />
         )}
         <span className="image-arrow" aria-hidden="true">
           ↗

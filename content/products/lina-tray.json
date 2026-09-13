@@ -1,0 +1,33 @@
+{
+  "name": "Lina Tray",
+  "slug": "lina-tray",
+  "code": "NL / 002",
+  "sku": "NL-LINA-002",
+  "subtitle": "A warm surface for everyday rituals.",
+  "description": "Lina is a teak tray with edges that feel comfortable in the hand, made to carry morning coffee or gather small objects.",
+  "materials": "Solid teak wood",
+  "dimensions": "W 32 · D 22 · H 4 cm",
+  "care": "Wipe with soft cloth",
+  "availability": "made-to-order",
+  "status": "active",
+  "price": null,
+  "isFeatured": false,
+  "isNew": true,
+  "image": "/Product/lina-tray.webp",
+  "images": [
+    {
+      "url": "/Product/lina-tray.webp",
+      "alt": "lina tray, solid teak wood"
+    }
+  ],
+  "variants": [
+    "Natural teak",
+    "Dark teak"
+  ],
+  "category": "trays",
+  "collections": [
+    "ruang-pagi"
+  ],
+  "createdAt": "2026-02-15T00:00:00.000Z",
+  "updatedAt": "2026-02-15T00:00:00.000Z"
+}

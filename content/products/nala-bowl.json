@@ -1,0 +1,34 @@
+{
+  "name": "Nala Bowl",
+  "slug": "nala-bowl",
+  "code": "NL / 003",
+  "sku": "NL-NALA-003",
+  "subtitle": "A generous bowl for the things we share.",
+  "description": "Nala has a rounded, generous form made to be approached. Use it to serve fruit, hold small objects, or let it sit as a quiet centerpiece.",
+  "materials": "Stoneware ceramic",
+  "dimensions": "Ø 26 · H 8 cm",
+  "care": "Wipe with soft cloth",
+  "availability": "made-to-order",
+  "status": "active",
+  "price": null,
+  "isFeatured": true,
+  "isNew": true,
+  "image": "/Product/nala-bowl.webp",
+  "images": [
+    {
+      "url": "/Product/nala-bowl.webp",
+      "alt": "nala bowl, stoneware ceramic"
+    }
+  ],
+  "variants": [
+    "Cloud",
+    "Earth",
+    "Moss"
+  ],
+  "category": "bowls",
+  "collections": [
+    "bumi-tenang"
+  ],
+  "createdAt": "2026-03-01T00:00:00.000Z",
+  "updatedAt": "2026-03-01T00:00:00.000Z"
+}

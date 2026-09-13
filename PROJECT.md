@@ -12,8 +12,8 @@ Single source of truth for this codebase. Read this once and you know everything
 
 ## 2. TL;DR — Critical Facts
 
-1. **100% static frontend. NO backend.** The old Express/Prisma server was fully deleted. All product data lives in `src/data/catalog.ts` as typed TypeScript constants.
-2. `src/api.ts` is a **client-side mock API**: same function signatures as the old REST API (`getProducts`, `getProductBySlug`, etc.) but resolves instantly from local data. Components don't know/care there's no server.
+1. **Static frontend + Decap CMS (git-based, no server).** Product/category/collection content lives in `content/*.json` (one file per product/category/collection), edited via `/admin` (Decap, GitHub OAuth via `api/auth.js`). Every save = commit to `main` = Vercel rebuild. `src/api.ts` is a **client-side mock API** over those JSON files (same signatures as the old REST API); components don't know/care there's no server.
+2. Deployed on **Vercel**. `vercel.json` sets `"buildCommand": "npm run build"` explicitly — this intentionally overrides any stale `vercel-build` setting in the Vercel dashboard. Don't remove it. NOTE: `api/auth.js` is a Vercel serverless function (OAuth broker) — functions take precedence over the SPA rewrite in `vercel.json`; keep the rewrite as-is.
 3. Deployed on **Vercel**. `vercel.json` sets `"buildCommand": "npm run build"` explicitly — this intentionally overrides any stale `vercel-build` setting in the Vercel dashboard. Don't remove it.
 4. All images are **WebP only**, no `.jpg/.png` anywhere. Product images come in 3 sizes each (`base`=1000px max-dim, `@640`, `@320`) under `public/Product/`.
 5. React 19 + Vite 6 + TypeScript + react-router-dom v7. No CSS framework, no Tailwind, no UI library. Plain CSS in two files.
@@ -50,8 +50,7 @@ Dependencies are minimal on purpose: `react`, `react-dom`, `react-router-dom`. N
 │   ├── main.tsx                # imports global.css + pages.css, renders <App/>
 │   ├── App.tsx                 # all routes inside <Layout/>
 │   ├── types.ts                # Product, ProductSummary, Category, Collection, Paginated<T>
-│   ├── api.ts                  # mock API over catalog.ts (async signatures preserved)
-│   ├── data/catalog.ts         # THE database: categories[], collections[], products[]
+│   ├── api.ts                  # mock API over content/*.json (async signatures preserved)
 │   ├── lib/
 │   │   ├── image.ts            # scaleImage(url, width) — responsive URL builder (§7)
 │   │   ├── links.ts            # productUrl/categoryUrl/collectionUrl helpers
@@ -69,14 +68,14 @@ Dependencies are minimal on purpose: `react`, `react-dom`, `react-router-dom`. N
 
 ## 5. Data Model & Content
 
-Everything renders from `src/data/catalog.ts`:
+Everything renders from `content/*.json` (Decap CMS, one file per product/category/collection):
 
-- **categories[]** — tree via `parent` ref + `children[]`. Roots: Home Decor, Table Accessories, Lifestyle. Children e.g. Vases, Trays, Bowls.
-- **collections[]** — curated groupings with `image` + `productCount`.
-- **products[]** — full `Product` shape: `name/slug/code/sku/subtitle/materials/price/isNew/image/category/collections/description/dimensions/care/availability/status/isFeatured/images[]/variants[]/createdAt`.
+- **categories/** — tree via `parent` slug. Roots: Home Decor, Table Accessories, Lifestyle. Children e.g. Vases, Trays, Bowls. `children[]` + `productCount` computed in `api.ts`, never stored.
+- **collections/** — curated groupings with `image`; `productCount` + `products[]` computed in `api.ts`.
+- **products/** — full `Product` shape minus numeric `id` (slug is the identity): `name/slug/code/sku/subtitle/materials/price/isNew/image/category(slug)/collections(slugs)/description/dimensions/care/availability/active|draft/isFeatured/images[]/variants[]/createdAt`.
 - `Paginated<T>` exists because the old API paginated; the mock keeps the same shape (`items/total/page/pageSize/totalPages`).
 
-To add a product: edit `catalog.ts` AND add its WebP images (see `PANDUAN-TAMBAH-PRODUK.md` — written in Indonesian, includes the @640/@320 variant requirement).
+To add a product: use `/admin` (see `PANDUAN-TAMBAH-PRODUK.md` — written in Indonesian, includes the @640/@320 variant requirement). Draft status hides the product without deleting its file.
 
 ## 6. Route Map
 

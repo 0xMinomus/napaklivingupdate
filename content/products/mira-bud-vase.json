@@ -1,0 +1,33 @@
+{
+  "name": "Mira Bud Vase",
+  "slug": "mira-bud-vase",
+  "code": "NL / 001",
+  "sku": "NL-MIRA-001",
+  "subtitle": "A small vase for a single stem.",
+  "description": "Mira is a compact bud vase with a soft, quiet finish, made to hold a single stem or stand alone on a shelf.",
+  "materials": "Glazed ceramic",
+  "dimensions": "Ø 10 · H 15 cm",
+  "care": "Wipe with soft cloth",
+  "availability": "made-to-order",
+  "status": "active",
+  "price": null,
+  "isFeatured": true,
+  "isNew": true,
+  "image": "/Product/mira-bud-vase.webp",
+  "images": [
+    {
+      "url": "/Product/mira-bud-vase.webp",
+      "alt": "mira bud vase, glazed ceramic"
+    }
+  ],
+  "variants": [
+    "Chalk",
+    "Sand"
+  ],
+  "category": "vases",
+  "collections": [
+    "ruang-pagi"
+  ],
+  "createdAt": "2026-02-01T00:00:00.000Z",
+  "updatedAt": "2026-02-01T00:00:00.000Z"
+}
