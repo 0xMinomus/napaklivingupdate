@@ -33,11 +33,20 @@ export default async function handler(req, res) {
     : { error: data.error_description ?? 'OAuth exchange failed' }
 
   res.setHeader('Content-Type', 'text/html')
+  // Decap requires a two-step handshake: the popup must first post
+  // 'authorizing:github', wait for Decap's echo, and only then post the
+  // final 'authorization:github:...' result. Skipping the handshake leaves
+  // Decap stuck on the login screen forever.
+  const message = `authorization:github:${ok ? 'success' : 'error'}:${JSON.stringify(payload)}`
   res.end(
     `<!doctype html><html><body><script>` +
-      `window.opener.postMessage('authorization:github:${ok ? 'success' : 'error'}:${JSON.stringify(
-        payload
-      )}', '*');window.close();` +
+      `(function(){var message=${JSON.stringify(message)};` +
+      `function receiveMessage(e){` +
+      `window.opener.postMessage(message,e.origin);` +
+      `window.removeEventListener('message',receiveMessage,false);}` +
+      `window.addEventListener('message',receiveMessage,false);` +
+      `window.opener.postMessage('authorizing:github','*');` +
+      `})();` +
       `</script></body></html>`
   )
 }
