@@ -346,45 +346,43 @@ export default function Catalog(): ReactElement {
               </div>
 
               {mode === 'shop' && (
-                <>
-                  <div className="filter-group">
-                    <h3 className="filter-group-title">Material</h3>
-                    <div className="filter-options">
-                      {SHOP_MATERIALS.map((opt) => (
-                        <label className="filter-option" key={opt.value}>
-                          <input
-                            type="checkbox"
-                            data-filter="material"
-                            value={opt.value}
-                            checked={material.includes(opt.value)}
-                            onChange={(e) => handleCheck('material', opt.value, e.target.checked)}
-                          />
-                          {opt.label}
-                        </label>
-                      ))}
-                    </div>
+                <div className="filter-group">
+                  <h3 className="filter-group-title">Material</h3>
+                  <div className="filter-options">
+                    {SHOP_MATERIALS.map((opt) => (
+                      <label className="filter-option" key={opt.value}>
+                        <input
+                          type="checkbox"
+                          data-filter="material"
+                          value={opt.value}
+                          checked={material.includes(opt.value)}
+                          onChange={(e) => handleCheck('material', opt.value, e.target.checked)}
+                        />
+                        {opt.label}
+                      </label>
+                    ))}
                   </div>
-                  <div className="filter-group">
-                    <h3 className="filter-group-title">Availability</h3>
-                    <div className="filter-options">
-                      {SHOP_AVAILABILITY.map((opt) => (
-                        <label className="filter-option" key={opt.value}>
-                          <input
-                            type="checkbox"
-                            data-filter="availability"
-                            value={opt.value}
-                            checked={availability.includes(opt.value)}
-                            onChange={(e) =>
-                              handleCheck('availability', opt.value, e.target.checked)
-                            }
-                          />
-                          {opt.label}
-                        </label>
-                      ))}
-                    </div>
-                  </div>
-                </>
+                </div>
               )}
+              <div className="filter-group">
+                <h3 className="filter-group-title">Availability</h3>
+                <div className="filter-options">
+                  {SHOP_AVAILABILITY.map((opt) => (
+                    <label className="filter-option" key={opt.value}>
+                      <input
+                        type="checkbox"
+                        data-filter="availability"
+                        value={opt.value}
+                        checked={availability.includes(opt.value)}
+                        onChange={(e) =>
+                          handleCheck('availability', opt.value, e.target.checked)
+                        }
+                      />
+                      {opt.label}
+                    </label>
+                  ))}
+                </div>
+              </div>
 
               <Link
                 className="filter-reset"
