@@ -6,6 +6,10 @@ dist/
 
 # env
 .env
+.env.local
+
+# local-only agent memory (never commit)
+MEMORY.md
 
 # logs & editor
 *.log
