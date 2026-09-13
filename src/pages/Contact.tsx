@@ -45,11 +45,11 @@ export default function Contact(): ReactElement {
               <div className="contact-item">
                 <span>Studio / showroom</span>
                 <address>
-                  18 Kemang Raya Street
+                  Jimbaran
                   <br />
-                  South Jakarta 12730
+                  Bali, Indonesia
                   <br />
-                  Indonesia
+                  by appointment
                 </address>
               </div>
               <div className="contact-item">
@@ -87,18 +87,25 @@ export default function Contact(): ReactElement {
           </ContactForm>
 
           <div className="map-card">
-            <span>
+            <iframe
+              title="Map to Napak Living Studio"
+              src="https://maps.google.com/maps?q=-8.7961749,115.1869325&z=16&output=embed"
+              loading="lazy"
+              referrerPolicy="no-referrer-when-downgrade"
+            />
+            <div className="map-info">
+              <span>Visit the studio</span>
               <strong>Napak Living Studio</strong>
-              <small>South Jakarta · by appointment</small>
+              <p>Jimbaran, Bali — open by appointment. Tap the pin for directions.</p>
               <a
                 className="text-link"
-                href="https://maps.google.com/?q=Kemang+Jakarta"
+                href="https://maps.app.goo.gl/EVkYBVYKu3ViL8aE8"
                 target="_blank"
                 rel="noreferrer"
               >
                 Open in Google Maps <span aria-hidden="true">↗</span>
               </a>
-            </span>
+            </div>
           </div>
         </section>
       </main>
