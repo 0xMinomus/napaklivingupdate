@@ -6,7 +6,16 @@ const EASE = 'power2.out'
 const FAST = 0.3
 const NORMAL = 0.4
 
+// ponytail: shadow/border milik CSS :hover (instant, serentak). GSAP pegang y/zoom/arrow saja biar tidak tarik-menarik dan delay. Butuh fade shadow lagi = hapus rule CSS, kembalikan boxShadow ke sini.
+function hoverTo(target: Element | null | undefined, vars: object): void {
+  if (!target) return
+  gsap.to(target, { overwrite: 'auto', duration: FAST, ease: EASE, ...vars })
+}
+
 function addHover(el: Element, enter: () => void, leave: () => void) {
+  const node = el as HTMLElement
+  if (node.dataset.hoverBound) return
+  node.dataset.hoverBound = '1'
   el.addEventListener('mouseenter', enter)
   el.addEventListener('mouseleave', leave)
 }
@@ -18,16 +27,16 @@ function setupProductCards(root: HTMLElement) {
     const meta = card.closest('.product-card')?.querySelector('.product-meta h3')
     addHover(card,
       () => {
-        gsap.to(card, { y: -4, boxShadow: '0 14px 32px rgba(24,24,24,0.1)', borderColor: 'rgba(24,24,24,0.12)', duration: FAST, ease: EASE })
-        if (img) gsap.to(img, { scale: 1.05, duration: NORMAL, ease: EASE })
-        if (arrow) gsap.to(arrow, { opacity: 1, y: 0, duration: FAST, ease: EASE })
-        if (meta) gsap.to(meta, { color: '#58624a', x: 2, duration: FAST, ease: EASE })
+        hoverTo(card, { y: -4 })
+        hoverTo(img, { scale: 1.05, duration: NORMAL })
+        hoverTo(arrow, { opacity: 1, y: 0 })
+        hoverTo(meta, { color: '#58624a', x: 2 })
       },
       () => {
-        gsap.to(card, { y: 0, boxShadow: '0 0 0 rgba(24,24,24,0)', borderColor: 'rgba(24,24,24,0)', duration: FAST, ease: EASE })
-        if (img) gsap.to(img, { scale: 1, duration: NORMAL, ease: EASE })
-        if (arrow) gsap.to(arrow, { opacity: 0, y: 5, duration: FAST, ease: EASE })
-        if (meta) gsap.to(meta, { color: '', x: 0, duration: FAST, ease: EASE })
+        hoverTo(card, { y: 0 })
+        hoverTo(img, { scale: 1, duration: NORMAL })
+        hoverTo(arrow, { opacity: 0, y: 5 })
+        hoverTo(meta, { color: '', x: 0 })
       }
     )
   })
@@ -40,16 +49,16 @@ function setupCollectionCards(root: HTMLElement) {
     const arrow = card.querySelector('.collection-arrow')
     addHover(card,
       () => {
-        gsap.to(card, { y: -4, boxShadow: '0 14px 32px rgba(24,24,24,0.1)', duration: FAST, ease: EASE })
-        if (img) gsap.to(img, { scale: 1.06, duration: NORMAL, ease: EASE })
-        if (info) gsap.to(info, { y: -4, duration: FAST, ease: EASE })
-        if (arrow) gsap.to(arrow, { backgroundColor: '#fcfcf9', color: '#181818', duration: FAST, ease: EASE })
+        hoverTo(card, { y: -4, boxShadow: '0 14px 32px rgba(24,24,24,0.1)' })
+        hoverTo(img, { scale: 1.06, duration: NORMAL })
+        hoverTo(info, { y: -4 })
+        hoverTo(arrow, { backgroundColor: '#fcfcf9', color: '#181818' })
       },
       () => {
-        gsap.to(card, { y: 0, boxShadow: '0 0 0 rgba(24,24,24,0)', duration: FAST, ease: EASE })
-        if (img) gsap.to(img, { scale: 1, duration: NORMAL, ease: EASE })
-        if (info) gsap.to(info, { y: 0, duration: FAST, ease: EASE })
-        if (arrow) gsap.to(arrow, { backgroundColor: '', color: '', duration: FAST, ease: EASE })
+        hoverTo(card, { y: 0, boxShadow: '0 0 0 rgba(24,24,24,0)' })
+        hoverTo(img, { scale: 1, duration: NORMAL })
+        hoverTo(info, { y: 0 })
+        hoverTo(arrow, { backgroundColor: '', color: '' })
       }
     )
   })
@@ -62,16 +71,16 @@ function setupCollectionListCards(root: HTMLElement) {
     const arrow = card.querySelector('.collection-list-arrow')
     addHover(card,
       () => {
-        gsap.to(card, { y: -5, boxShadow: '0 18px 38px rgba(24,24,24,0.14)', duration: FAST, ease: EASE })
-        if (img) gsap.to(img, { scale: 1.05, duration: NORMAL, ease: EASE })
-        if (info) gsap.to(info, { y: -4, duration: FAST, ease: EASE })
-        if (arrow) gsap.to(arrow, { backgroundColor: '#fcfcf9', color: '#181818', rotation: -8, scale: 1.08, duration: FAST, ease: EASE })
+        hoverTo(card, { y: -5 })
+        hoverTo(img, { scale: 1.05, duration: NORMAL })
+        hoverTo(info, { y: -4 })
+        hoverTo(arrow, { backgroundColor: '#fcfcf9', color: '#181818', rotation: -8, scale: 1.08 })
       },
       () => {
-        gsap.to(card, { y: 0, boxShadow: '0 0 0 rgba(24,24,24,0)', duration: FAST, ease: EASE })
-        if (img) gsap.to(img, { scale: 1, duration: NORMAL, ease: EASE })
-        if (info) gsap.to(info, { y: 0, duration: FAST, ease: EASE })
-        if (arrow) gsap.to(arrow, { backgroundColor: '', color: '', rotation: 0, scale: 1, duration: FAST, ease: EASE })
+        hoverTo(card, { y: 0 })
+        hoverTo(img, { scale: 1, duration: NORMAL })
+        hoverTo(info, { y: 0 })
+        hoverTo(arrow, { backgroundColor: '', color: '', rotation: 0, scale: 1 })
       }
     )
   })
@@ -82,12 +91,12 @@ function setupLookbookCards(root: HTMLElement) {
     const img = card.querySelector('img')
     addHover(card,
       () => {
-        gsap.to(card, { y: -4, boxShadow: '0 14px 32px rgba(24,24,24,0.1)', duration: FAST, ease: EASE })
-        if (img) gsap.to(img, { scale: 1.04, duration: NORMAL, ease: EASE })
+        hoverTo(card, { y: -4 })
+        hoverTo(img, { scale: 1.04, duration: NORMAL })
       },
       () => {
-        gsap.to(card, { y: 0, boxShadow: '0 0 0 rgba(24,24,24,0)', duration: FAST, ease: EASE })
-        if (img) gsap.to(img, { scale: 1, duration: NORMAL, ease: EASE })
+        hoverTo(card, { y: 0 })
+        hoverTo(img, { scale: 1, duration: NORMAL })
       }
     )
   })
@@ -98,14 +107,14 @@ function setupGallery(root: HTMLElement) {
     const img = gallery.querySelector('img')
     if (!img) return
     addHover(gallery,
-      () => { gsap.to(img, { scale: 1.025, duration: NORMAL, ease: EASE }) },
-      () => { gsap.to(img, { scale: 1, duration: NORMAL, ease: EASE }) }
+      () => { hoverTo(img, { scale: 1.025, duration: NORMAL }) },
+      () => { hoverTo(img, { scale: 1, duration: NORMAL }) }
     )
   })
   root.querySelectorAll('.gallery-thumb').forEach((thumb) => {
     addHover(thumb,
-      () => { gsap.to(thumb, { y: -3, duration: FAST, ease: EASE }) },
-      () => { gsap.to(thumb, { y: 0, duration: FAST, ease: EASE }) }
+      () => { hoverTo(thumb, { y: -3 }) },
+      () => { hoverTo(thumb, { y: 0 }) }
     )
   })
 }
@@ -117,12 +126,12 @@ function setupStoryFrame(root: HTMLElement) {
     if (!frame) return
     addHover(story,
       () => {
-        gsap.to(frame, { y: -4, boxShadow: '0 14px 32px rgba(24,24,24,0.1)', duration: FAST, ease: EASE })
-        if (img) gsap.to(img, { scale: 1.06, duration: NORMAL, ease: EASE })
+        hoverTo(frame, { y: -4, boxShadow: '0 14px 32px rgba(24,24,24,0.1)' })
+        hoverTo(img, { scale: 1.06, duration: NORMAL })
       },
       () => {
-        gsap.to(frame, { y: 0, boxShadow: '0 0 0 rgba(24,24,24,0)', duration: FAST, ease: EASE })
-        if (img) gsap.to(img, { scale: 1, duration: NORMAL, ease: EASE })
+        hoverTo(frame, { y: 0, boxShadow: '0 0 0 rgba(24,24,24,0)' })
+        hoverTo(img, { scale: 1, duration: NORMAL })
       }
     )
   })
@@ -134,12 +143,12 @@ function setupAboutImages(root: HTMLElement) {
     if (!img) return
     addHover(container,
       () => {
-        gsap.to(container, { y: -4, boxShadow: '0 14px 32px rgba(24,24,24,0.1)', duration: FAST, ease: EASE })
-        gsap.to(img, { scale: 1.04, duration: NORMAL, ease: EASE })
+        hoverTo(container, { y: -4 })
+        hoverTo(img, { scale: 1.04, duration: NORMAL })
       },
       () => {
-        gsap.to(container, { y: 0, boxShadow: '0 0 0 rgba(24,24,24,0)', duration: FAST, ease: EASE })
-        gsap.to(img, { scale: 1, duration: NORMAL, ease: EASE })
+        hoverTo(container, { y: 0 })
+        hoverTo(img, { scale: 1, duration: NORMAL })
       }
     )
   })
@@ -148,8 +157,8 @@ function setupAboutImages(root: HTMLElement) {
 function setupButtons(root: HTMLElement) {
   root.querySelectorAll('.button').forEach((btn) => {
     addHover(btn,
-      () => { gsap.to(btn, { y: -2, duration: FAST, ease: EASE }) },
-      () => { gsap.to(btn, { y: 0, duration: FAST, ease: EASE }) }
+      () => { hoverTo(btn, { y: -2 }) },
+      () => { hoverTo(btn, { y: 0 }) }
     )
   })
 }
@@ -158,14 +167,12 @@ function setupCategoryLinks(root: HTMLElement) {
   root.querySelectorAll('.category-list a').forEach((link) => {
     addHover(link,
       () => {
-        gsap.to(link, { paddingLeft: 10, color: '#58624a', duration: FAST, ease: EASE })
-        const arrow = link.querySelector('span:last-child')
-        if (arrow) gsap.to(arrow, { x: 4, rotation: -4, duration: FAST, ease: EASE })
+        hoverTo(link, { paddingLeft: 10, color: '#58624a' })
+        hoverTo(link.querySelector('span:last-child'), { x: 4, rotation: -4 })
       },
       () => {
-        gsap.to(link, { paddingLeft: 4, color: '', duration: FAST, ease: EASE })
-        const arrow = link.querySelector('span:last-child')
-        if (arrow) gsap.to(arrow, { x: 0, rotation: 0, duration: FAST, ease: EASE })
+        hoverTo(link, { paddingLeft: 4, color: '' })
+        hoverTo(link.querySelector('span:last-child'), { x: 0, rotation: 0 })
       }
     )
   })
@@ -175,10 +182,10 @@ function setupImageHotspots(root: HTMLElement) {
   root.querySelectorAll('.image-hotspot').forEach((hotspot) => {
     addHover(hotspot,
       () => {
-        gsap.to(hotspot, { scale: 1.12, backgroundColor: '#58624a', duration: FAST, ease: EASE })
+        hoverTo(hotspot, { scale: 1.12, backgroundColor: '#58624a' })
       },
       () => {
-        gsap.to(hotspot, { scale: 1, backgroundColor: '', duration: FAST, ease: EASE })
+        hoverTo(hotspot, { scale: 1, backgroundColor: '' })
       }
     )
   })
@@ -190,12 +197,12 @@ function setupLookbookHome(root: HTMLElement) {
     if (!img) return
     addHover(figure,
       () => {
-        gsap.to(figure, { y: -4, boxShadow: '0 14px 32px rgba(24,24,24,0.1)', duration: FAST, ease: EASE })
-        gsap.to(img, { scale: 1.06, duration: NORMAL, ease: EASE })
+        hoverTo(figure, { y: -4 })
+        hoverTo(img, { scale: 1.06, duration: NORMAL })
       },
       () => {
-        gsap.to(figure, { y: 0, boxShadow: '0 0 0 rgba(24,24,24,0)', duration: FAST, ease: EASE })
-        gsap.to(img, { scale: 1, duration: NORMAL, ease: EASE })
+        hoverTo(figure, { y: 0 })
+        hoverTo(img, { scale: 1, duration: NORMAL })
       }
     )
   })
