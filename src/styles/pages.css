@@ -655,9 +655,7 @@ section[id],
 .lookbook-page-grid {
   display: grid;
   grid-template-columns: 1fr 1.35fr 0.9fr;
-  grid-template-rows: auto auto;
-  column-gap: 16px;
-  row-gap: 48px;
+  gap: 16px;
   align-items: start;
   margin-top: 55px;
 }
@@ -735,25 +733,6 @@ section[id],
 .hotspot-three {
   top: 48%;
   right: 24%;
-}
-
-.lookbook-note {
-  grid-column: 1 / -1;
-  display: grid;
-  gap: 14px;
-  justify-items: start;
-  padding: 23px 0 0;
-  border-top: 1px solid var(--color-stone);
-}
-
-.lookbook-note p {
-  max-width: 500px;
-  margin: 0;
-  color: var(--color-slate);
-  font-family: var(--font-matter);
-  font-size: 22px;
-  letter-spacing: -0.035em;
-  line-height: 1.35;
 }
 
 .about-intro {
@@ -1535,8 +1514,7 @@ section[id],
 
   .lookbook-page-grid {
     grid-template-columns: 1fr 1fr;
-    column-gap: 10px;
-    row-gap: 32px;
+    gap: 10px;
     margin-top: 40px;
   }
 
@@ -1565,10 +1543,6 @@ section[id],
 
   .lookbook-page-card figcaption span + span {
     margin-top: 4px;
-  }
-
-  .lookbook-note {
-    grid-column: 1 / -1;
   }
 
   .about-hero-image {

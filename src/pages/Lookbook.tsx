@@ -69,13 +69,6 @@ export default function Lookbook(): ReactElement {
             mono="03 / natural light"
             caption="Find your quiet"
           />
-
-          <div className="lookbook-note">
-            <p>“The smallest objects can change the way a room holds us.”</p>
-            <Link className="text-link" to="/catalog">
-              Explore the objects <span aria-hidden="true">→</span>
-            </Link>
-          </div>
         </section>
 
         <section className="container section" aria-labelledby="lookbook-download-title">
