@@ -1,33 +1,33 @@
 {
+  "price": null,
   "name": "Gita Candle Holder",
   "slug": "gita-candle-holder",
-  "code": "NL / 004",
-  "sku": "NL-GITA-004",
-  "subtitle": "A small glow for the end of the day.",
-  "description": "Gita is made to hold a small glow. Its earthy terracotta and rounded form make candlelight feel warmer, on a table or in a quiet corner.",
   "materials": "Hand-fired terracotta",
+  "code": "NL / 004",
   "dimensions": "Ø 9 · H 7 cm",
+  "variants": [
+    "Burnt clay",
+    "Natural clay"
+  ],
+  "updatedAt": "2026-03-15T00:00:00.000Z",
   "care": "Wipe with soft cloth",
-  "availability": "made-to-order",
   "status": "active",
-  "price": null,
-  "isFeatured": true,
-  "isNew": true,
-  "image": "/Product/gita-candle-holder.webp",
+  "collections": [
+    "bumi-tenang"
+  ],
+  "isNew": false,
+  "subtitle": "A small glow for the end of the day.",
   "images": [
     {
       "url": "/Product/gita-candle-holder.webp",
       "alt": "gita candle holder, hand-fired terracotta"
     }
   ],
-  "variants": [
-    "Burnt clay",
-    "Natural clay"
-  ],
-  "category": "candle-holders",
-  "collections": [
-    "bumi-tenang"
-  ],
+  "isFeatured": true,
   "createdAt": "2026-03-15T00:00:00.000Z",
-  "updatedAt": "2026-03-15T00:00:00.000Z"
+  "availability": "made-to-order",
+  "image": "/Product/gita-candle-holder.webp",
+  "description": "Gita is made to hold a small glow. Its earthy terracotta and rounded form make candlelight feel warmer, on a table or in a quiet corner.",
+  "sku": "NL-GITA-004",
+  "category": "candle-holders"
 }
