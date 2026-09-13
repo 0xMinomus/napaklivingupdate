@@ -6,8 +6,8 @@ Single source of truth for this codebase. Read this once and you know everything
 
 **Napak Living** is a marketing/catalog website for an Indonesian home-decor brand ("Objects for a slower home"). It showcases products (vases, trays, bowls, candle holders), collections, a lookbook, and company info, plus a contact form.
 
-- **Live URL:** https://napakliving-olive.vercel.app (this exact domain is hardcoded in `public/llms.txt`, `public/robots.txt`, `public/sitemap.xml` — update all three if the domain ever changes)
-- **Repo:** `github.com/0xMinomus/napakliving`, branch `main`. Pushing to `main` auto-deploys to Vercel.
+- **Live URL:** https://napaklivingupdate.vercel.app (this exact domain is hardcoded in `public/llms.txt`, `public/robots.txt`, `public/sitemap.xml` — update all three if the domain ever changes)
+- **Repo:** `github.com/0xMinomus/napaklivingupdate`, branch `main`. Pushing to `main` auto-deploys to Vercel.
 - **Language of UI copy:** English. User communicates with the developer in Indonesian.
 
 ## 2. TL;DR — Critical Facts
@@ -135,7 +135,7 @@ Rules:
 - `public/llms.txt`: must start with an `# H1` and contain links (an "agentic browsing" checker flagged missing H1 + links once).
 - `public/robots.txt`: keep it minimal/valid — `User-agent: *`, `Allow: /`, `Sitemap:` line. An unknown directive (`llms.txt:`) once dropped the SEO score.
 - `index.html` has `<link rel="alternate" type="text/markdown" href="/llms.txt">`.
-- Domain `napakliving-olive.vercel.app` is hardcoded in these three files.
+- Domain `napaklivingupdate.vercel.app` is hardcoded in these three files.
 
 ## 11. Past Bugs & Their Fixes (do not reintroduce)
 
