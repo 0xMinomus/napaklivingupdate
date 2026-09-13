@@ -656,7 +656,8 @@ section[id],
   display: grid;
   grid-template-columns: 1fr 1.35fr 0.9fr;
   grid-template-rows: auto auto;
-  gap: 16px;
+  column-gap: 16px;
+  row-gap: 48px;
   align-items: start;
   margin-top: 55px;
 }
@@ -1535,7 +1536,8 @@ section[id],
 
   .lookbook-page-grid {
     grid-template-columns: 1fr 1fr;
-    gap: 10px;
+    column-gap: 10px;
+    row-gap: 32px;
     margin-top: 40px;
   }
 
