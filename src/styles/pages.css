@@ -671,6 +671,7 @@ section[id],
   object-fit: cover;
   border-radius: 12px;
   background: var(--color-ash-gray);
+  aspect-ratio: 0.92;
 }
 
 .lookbook-page-card:first-child img {
@@ -1521,6 +1522,10 @@ section[id],
   .lookbook-page-card:first-child {
     grid-column: 1 / -1;
     grid-row: auto;
+  }
+
+  .lookbook-page-card img {
+    aspect-ratio: 0.82;
   }
 
   .lookbook-page-card:first-child img {
