@@ -15,7 +15,7 @@ export default async function handler(req, res) {
   if (!code) {
     const url =
       `https://github.com/login/oauth/authorize?client_id=${encodeURIComponent(clientId)}` +
-      `&scope=repo`
+      `&scope=public_repo`
     res.writeHead(302, { Location: url })
     res.end()
     return

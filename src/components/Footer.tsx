@@ -14,9 +14,7 @@ export default function Footer({ variant = 'instagram', minimal = false }: Foote
 
   const handleNewsletter = (e: FormEvent<HTMLFormElement>): void => {
     e.preventDefault()
-    const data = new FormData(e.currentTarget)
-    const email = (data.get('email') as string) ?? ''
-    navigate(`/thank-you?email=${encodeURIComponent(email)}`)
+    navigate('/thank-you')
   }
 
   return (
