@@ -1,15 +1,33 @@
+import { useEffect, useState } from 'react'
 import type { ReactElement } from 'react'
 import { Link } from 'react-router-dom'
+import { DEFAULT_BUSINESS, get } from '../api'
 import ContactForm from '../components/ContactForm'
 import Footer from '../components/Footer'
 import { useDocumentTitle } from '../hooks/useDocumentTitle'
 import { usePageHero } from '../hooks/usePageHero'
 import { useSettings } from '../hooks/useSettings'
+import type { BusinessPage } from '../types'
 
 export default function Business(): ReactElement {
   useDocumentTitle('Trade & Business — Napak Living')
   usePageHero()
   const settings = useSettings()
+  const [page, setPage] = useState<BusinessPage>(DEFAULT_BUSINESS)
+
+  useEffect(() => {
+    let cancelled = false
+    get<BusinessPage>('/pages/business')
+      .then((data) => {
+        if (!cancelled) setPage(data)
+      })
+      .catch(() => {
+        if (!cancelled) setPage(DEFAULT_BUSINESS)
+      })
+    return () => {
+      cancelled = true
+    }
+  }, [])
 
   return (
     <>
@@ -21,29 +39,23 @@ export default function Business(): ReactElement {
               <span>/</span>
               <span>Trade</span>
             </p>
-            <p className="eyebrow">For your next space</p>
+            <p className="eyebrow">{page.heroEyebrow}</p>
             <h1 id="page-title" className="display-title">
-              <span>Let’s make a</span>
-              <span className="muted-line">space together.</span>
+              <span>{page.heroTitle1}</span>
+              <span className="muted-line">{page.heroTitle2}</span>
             </h1>
-            <p className="lead business-intro">
-              We are open to collaborations with designers, hospitality teams, retail partners, and
-              anyone who wants to bring Napak into a new space.
-            </p>
+            <p className="lead business-intro">{page.heroLead}</p>
           </div>
           <div className="business-hero-image">
-            <img
-              src="https://images.unsplash.com/photo-1600607687939-ce8a6c25118c?auto=format&fit=crop&w=900&q=70"
-              alt="A hospitality space with natural interiors and decorative objects"
-            />
+            <img src={page.heroImage} alt={page.heroAlt ?? ''} />
           </div>
         </section>
 
         <section className="container business-layout" aria-labelledby="inquiry-title">
           <aside className="business-aside">
-            <p className="eyebrow">Start a conversation / 01</p>
-            <h2>Tell us what you are building.</h2>
-            <p>Tell us about your needs and project context. Our team will follow up by email or WhatsApp.</p>
+            <p className="eyebrow">{page.asideEyebrow}</p>
+            <h2>{page.asideTitle}</h2>
+            <p>{page.asideText}</p>
             <div className="business-contact-list">
               <a href={`mailto:${settings.tradeEmail}`}>{settings.tradeEmail} ↗</a>
               <a href={settings.whatsapp}>WhatsApp trade desk ↗</a>
@@ -111,32 +123,19 @@ export default function Business(): ReactElement {
         </section>
 
         <section className="container business-services" aria-labelledby="services-title">
-          <p className="eyebrow">Ways we work / 02</p>
+          <p className="eyebrow">{page.servicesEyebrow}</p>
           <h2 id="services-title" className="section-title">
-            <span>A place for</span>
-            <span className="muted-line">good collaborations.</span>
+            <span>{page.servicesTitle1}</span>
+            <span className="muted-line">{page.servicesTitle2}</span>
           </h2>
           <div className="service-grid">
-            <article className="service-card">
-              <span className="mono">01 / wholesale</span>
-              <h3>Stock Napak</h3>
-              <p>For stores and distributors who want to bring our collection to their community.</p>
-            </article>
-            <article className="service-card">
-              <span className="mono">02 / design trade</span>
-              <h3>Source with us</h3>
-              <p>Access specifications and support for interior and styling projects.</p>
-            </article>
-            <article className="service-card">
-              <span className="mono">03 / hospitality</span>
-              <h3>Set the scene</h3>
-              <p>Objects for hotels, restaurants, cafés, and spaces that welcome many stories.</p>
-            </article>
-            <article className="service-card">
-              <span className="mono">04 / custom</span>
-              <h3>Make something</h3>
-              <p>Collaborations and custom orders for more specific needs.</p>
-            </article>
+            {page.services.map((service) => (
+              <article className="service-card" key={service.mono}>
+                <span className="mono">{service.mono}</span>
+                <h3>{service.title}</h3>
+                <p>{service.text}</p>
+              </article>
+            ))}
           </div>
         </section>
       </main>

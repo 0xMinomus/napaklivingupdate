@@ -1,4 +1,4 @@
-import type { Collection, HomePage, LookbookEntry, Paginated, Product, ProductSummary, Settings } from './types'
+import type { AboutPage, BusinessPage, Collection, ContactPage, HomePage, LookbookEntry, Paginated, Product, ProductSummary, Settings } from './types'
 
 export const API_URL: string = (import.meta.env as { VITE_API_URL?: string } | undefined)
   ?.VITE_API_URL ?? '/api'
@@ -42,6 +42,8 @@ interface CollectionFile {
   slug: string
   description?: string | null
   image?: string | null
+  tagline?: string | null
+  order?: number | null
   eyebrow?: string | null
   titleLine1?: string | null
   titleLine2?: string | null
@@ -54,10 +56,10 @@ interface CollectionFile {
   quote?: string | null
 }
 
-interface HomeFile {
-  heroImage?: string | null
-  heroAlt?: string | null
-}
+const pageFiles = import.meta.glob<{ default: Record<string, unknown> }>(
+  '../content/pages/*.json',
+  { eager: true }
+)
 
 interface SettingsFile {
   email?: string | null
@@ -89,9 +91,6 @@ const collectionFiles = import.meta.glob<{ default: CollectionFile }>(
   '../content/collections/*.json',
   { eager: true }
 )
-const pageFiles = import.meta.glob<{ default: HomeFile }>('../content/pages/*.json', {
-  eager: true,
-})
 const settingsFiles = import.meta.glob<{ default: SettingsFile }>('../content/settings.json', {
   eager: true,
 })
@@ -267,7 +266,7 @@ function relatedProducts(slug: string): ProductSummary[] {
 }
 
 function buildCollections(): Collection[] {
-  return rawCollections.map((c) => {
+  const list = rawCollections.map((c) => {
     const items = products
       .filter((p) => p.status === 'active' && p.collections.some((pc) => pc.slug === c.slug))
       .sort((a, b) => a.createdAt.localeCompare(b.createdAt))
@@ -277,6 +276,8 @@ function buildCollections(): Collection[] {
       slug: c.slug,
       description: c.description ?? null,
       image: c.image ?? null,
+      tagline: c.tagline ?? null,
+      order: c.order ?? 0,
       eyebrow: c.eyebrow ?? null,
       titleLine1: c.titleLine1 ?? null,
       titleLine2: c.titleLine2 ?? null,
@@ -291,6 +292,7 @@ function buildCollections(): Collection[] {
       products: items,
     }
   })
+  return list.sort((a, b) => a.order - b.order)
 }
 
 const collections = buildCollections()
@@ -328,13 +330,114 @@ function siteSettings(): Settings {
   }
 }
 
-function homePage(): HomePage {
-  const entry = Object.entries(pageFiles).find(([path]) => path.endsWith('/home.json'))
-  const file = entry ? entry[1].default : null
-  return {
-    heroImage: file?.heroImage ?? DEFAULT_HERO_IMAGE,
-    heroAlt: file?.heroAlt ?? null,
+const DEFAULT_HOME: HomePage = {
+  heroImage: DEFAULT_HERO_IMAGE,
+  heroAlt: null,
+}
+
+export const DEFAULT_ABOUT: AboutPage = {
+  heroEyebrow: 'Our story / a beginning',
+  heroTitle1: 'Made for the',
+  heroTitle2: 'life inside.',
+  heroLead: 'Napak means a trace. We create objects that give life room to leave its own trace.',
+  heroImage:
+    'https://images.unsplash.com/photo-1600607688969-a5bfcd646154?auto=format&fit=crop&w=1200&q=70',
+  heroAlt: 'A home interior with natural materials and textured furniture',
+  statementEyebrow: 'A point of view',
+  statementTitle1: 'Home is not a look.',
+  statementTitle2: 'It is a feeling.',
+  statementLead:
+    'Napak Living was born from a desire to slow down how we choose and live with objects. We believe a good object does not need to shout to feel meaningful.',
+  storyEyebrow: 'The beginning / 2024',
+  storyTitle1: 'Objects that',
+  storyTitle2: 'leave a trace.',
+  storyImage:
+    'https://images.unsplash.com/photo-1610701596007-11502861dcfa?auto=format&fit=crop&w=700&q=70',
+  storyAlt: 'The process and result of handmade ceramics in natural tones',
+  storyLead1:
+    'We started Napak with a simple question: why cannot the objects we use every day feel more personal? From there, we began working with artisans to explore useful forms, honest materials, and an unhurried process.',
+  storyLead2:
+    'Every product has slight differences. To us, this is not a flaw, but proof that it has been touched, shaped, and given time.',
+  philosophyEyebrow: 'Our philosophy',
+  philosophyTitle1: 'Less, but',
+  philosophyTitle2: 'more considered.',
+  philosophyLead:
+    'We design with three questions: is it useful, does it feel good in the hand, and can it live with you for a long time?',
+  values: [
+    { title: 'Honest materials', text: 'We let wood, clay, and fibers show their natural character.' },
+    { title: 'Made locally', text: 'Hand knowledge and collaboration with artisans are part of every form.' },
+    { title: 'Made to last', text: 'Objects are designed to be used, cared for, and passed through everyday life.' },
+    { title: 'Room for change', text: 'A good object does not dictate a room; it grows with it.' },
+  ],
+  materialsEyebrow: 'Materials & craftsmanship',
+  materialsTitle1: 'Touch is part',
+  materialsTitle2: 'of the design.',
+  materials: [
+    { tag: '01 / ceramic', title: 'Shaped earth', text: 'Stoneware and terracotta with soft, understated glazes.' },
+    { tag: '02 / wood', title: 'Warm grain', text: 'Selected wood treated with a natural finish so it remains alive to the touch.' },
+    { tag: '03 / textile', title: 'Everyday texture', text: 'Fibers and linen that add a tactile quality to tables and rooms.' },
+  ],
+}
+
+export const DEFAULT_BUSINESS: BusinessPage = {
+  heroEyebrow: 'For your next space',
+  heroTitle1: 'Let’s make a',
+  heroTitle2: 'space together.',
+  heroLead:
+    'We are open to collaborations with designers, hospitality teams, retail partners, and anyone who wants to bring Napak into a new space.',
+  heroImage:
+    'https://images.unsplash.com/photo-1600607687939-ce8a6c25118c?auto=format&fit=crop&w=900&q=70',
+  heroAlt: 'A hospitality space with natural interiors and decorative objects',
+  asideEyebrow: 'Start a conversation / 01',
+  asideTitle: 'Tell us what you are building.',
+  asideText:
+    'Tell us about your needs and project context. Our team will follow up by email or WhatsApp.',
+  servicesEyebrow: 'Ways we work / 02',
+  servicesTitle1: 'A place for',
+  servicesTitle2: 'good collaborations.',
+  services: [
+    { mono: '01 / wholesale', title: 'Stock Napak', text: 'For stores and distributors who want to bring our collection to their community.' },
+    { mono: '02 / design trade', title: 'Source with us', text: 'Access specifications and support for interior and styling projects.' },
+    { mono: '03 / hospitality', title: 'Set the scene', text: 'Objects for hotels, restaurants, cafés, and spaces that welcome many stories.' },
+    { mono: '04 / custom', title: 'Make something', text: 'Collaborations and custom orders for more specific needs.' },
+  ],
+}
+
+export const DEFAULT_CONTACT: ContactPage = {
+  heroEyebrow: 'Say hello / we are here',
+  heroTitle1: 'Let’s stay',
+  heroTitle2: 'in touch.',
+  heroLead:
+    'For product questions, orders, or simply to say hello, send a message through the channel that feels most convenient for you.',
+  infoTitle: 'Come by, write, or call.',
+  infoText: 'We will do our best to reply within 1–2 business days.',
+  mapLabel: 'Visit the studio',
+  mapName: 'Napak Living Studio',
+  mapText: 'Jimbaran, Bali — open by appointment. Tap the pin for directions.',
+}
+
+const PAGE_DEFAULTS: Record<string, object> = {
+  home: DEFAULT_HOME,
+  about: DEFAULT_ABOUT,
+  business: DEFAULT_BUSINESS,
+  contact: DEFAULT_CONTACT,
+}
+
+function pageBySlug<T extends object>(slug: string, defaults: T): T {
+  const entry = Object.entries(pageFiles).find(([path]) => path.endsWith(`/${slug}.json`))
+  const file = (entry ? entry[1].default : {}) as Partial<T>
+  const merged = { ...defaults }
+  for (const key of Object.keys(defaults) as (keyof T)[]) {
+    const value = file[key]
+    if (value === undefined || value === null) continue
+    if (Array.isArray(value) && value.length === 0) continue
+    ;(merged as Record<string, unknown>)[key as string] = value
   }
+  return merged
+}
+
+function homePage(): HomePage {
+  return pageBySlug('home', { ...DEFAULT_HOME })
 }
 
 export const DEFAULT_LOOKBOOK: LookbookEntry[] = [
@@ -381,6 +484,15 @@ function routeGet(path: string, params: QueryParams = {}): unknown {
   if (path === '/home') return homePage()
   if (path === '/settings') return siteSettings()
   if (path === '/lookbook') return { items: lookbookEntries() }
+  if (path === '/collections') return { items: collections }
+
+  const pageMatch = path.match(/^\/pages\/([^/]+)$/)
+  if (pageMatch) {
+    const slug = decodeURIComponent(pageMatch[1])
+    const defaults = PAGE_DEFAULTS[slug]
+    if (!defaults) throw new Error(`Route ${path} not found`)
+    return pageBySlug(slug, defaults)
+  }
 
   let match = path.match(/^\/products\/([^/]+)\/related$/)
   if (match) return { items: relatedProducts(decodeURIComponent(match[1])) }

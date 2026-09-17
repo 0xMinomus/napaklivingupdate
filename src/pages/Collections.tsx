@@ -1,8 +1,11 @@
+import { useEffect, useState } from 'react'
 import type { ReactElement } from 'react'
 import { Link } from 'react-router-dom'
+import { get } from '../api'
 import Footer from '../components/Footer'
 import { useDocumentTitle } from '../hooks/useDocumentTitle'
 import { usePageHero } from '../hooks/usePageHero'
+import type { Collection } from '../types'
 
 interface CollectionCardProps {
   to: string
@@ -39,6 +42,21 @@ function CollectionCard({
 export default function Collections(): ReactElement {
   useDocumentTitle('Collections — Napak Living')
   usePageHero()
+  const [items, setItems] = useState<Collection[]>([])
+
+  useEffect(() => {
+    let cancelled = false
+    get<{ items: Collection[] }>('/collections')
+      .then((data) => {
+        if (!cancelled) setItems(data.items)
+      })
+      .catch(() => {
+        if (!cancelled) setItems([])
+      })
+    return () => {
+      cancelled = true
+    }
+  }, [])
 
   return (
     <>
@@ -63,32 +81,17 @@ export default function Collections(): ReactElement {
         </section>
 
         <section className="container collection-list-grid" aria-label="Collection list">
-          <CollectionCard
-            to="/collection/ruang-pagi"
-            src="https://images.unsplash.com/photo-1600607687920-4e2a09cf159d?auto=format&fit=crop&w=700&q=70"
-            alt="A warm interior from the Ruang Pagi collection"
-            mono="COLLECTION / 01"
-            title="Ruang Pagi"
-            description="Soft colors and forms that make room for a slower start to the day."
-          />
-
-          <CollectionCard
-            to="/collection/bumi-tenang"
-            src="https://images.unsplash.com/photo-1618221195710-dd6b41faaea6?auto=format&fit=crop&w=700&q=70"
-            alt="A wooden shelf with objects from the Bumi Tenang collection"
-            mono="COLLECTION / 02"
-            title="Bumi Tenang"
-            description="Honest materials and natural textures for a grounded home."
-          />
-
-          <CollectionCard
-            to="/catalog"
-            src="https://images.unsplash.com/photo-1600210492486-724fe5c67fb0?auto=format&fit=crop&w=600&q=70"
-            alt="A dining table set with Napak Living table accessories"
-            mono="EDIT / 03"
-            title="The Table, Slowly"
-            description="A table collection for conversations that do not need to be rushed."
-          />
+          {items.map((c, i) => (
+            <CollectionCard
+              key={c.slug}
+              to={`/collection/${encodeURIComponent(c.slug)}`}
+              src={c.image ?? ''}
+              alt={c.name}
+              mono={`COLLECTION / ${String(i + 1).padStart(2, '0')}`}
+              title={c.name}
+              description={c.tagline ?? c.description ?? ''}
+            />
+          ))}
         </section>
       </main>
       <Footer variant="instagram" />

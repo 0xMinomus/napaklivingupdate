@@ -121,6 +121,8 @@ collections:
       - { label: 'Slug (URL — lock after first publish)', name: slug, widget: string, required: true, pattern: ['^[a-z0-9-]+$', 'Lowercase letters, numbers and hyphens only'] }
       - { label: 'Description', name: description, widget: text, required: false }
       - { label: 'Image', name: image, widget: image, required: false }
+      - { label: 'Tagline (short line for cards)', name: tagline, widget: string, required: false }
+      - { label: 'Order', name: order, widget: number, required: false, default: 0 }
       - { label: 'Eyebrow (e.g. Collection / 01)', name: eyebrow, widget: string, required: false }
       - { label: 'Title Line 1', name: titleLine1, widget: string, required: false }
       - { label: 'Title Line 2', name: titleLine2, widget: string, required: false }
@@ -141,6 +143,89 @@ collections:
         fields:
           - { label: 'Hero Image (lebar ±1600px, WebP)', name: heroImage, widget: image, required: true }
           - { label: 'Hero Alt Text', name: heroAlt, widget: string, required: false }
+
+      - name: about
+        label: About Page
+        file: content/pages/about.json
+        fields:
+          - { label: 'Hero Eyebrow', name: heroEyebrow, widget: string, required: false }
+          - { label: 'Hero Title Line 1', name: heroTitle1, widget: string, required: false }
+          - { label: 'Hero Title Line 2', name: heroTitle2, widget: string, required: false }
+          - { label: 'Hero Lead', name: heroLead, widget: text, required: false }
+          - { label: 'Hero Image', name: heroImage, widget: image, required: false }
+          - { label: 'Hero Alt Text', name: heroAlt, widget: string, required: false }
+          - { label: 'Statement Eyebrow', name: statementEyebrow, widget: string, required: false }
+          - { label: 'Statement Title Line 1', name: statementTitle1, widget: string, required: false }
+          - { label: 'Statement Title Line 2', name: statementTitle2, widget: string, required: false }
+          - { label: 'Statement Lead', name: statementLead, widget: text, required: false }
+          - { label: 'Story Eyebrow', name: storyEyebrow, widget: string, required: false }
+          - { label: 'Story Title Line 1', name: storyTitle1, widget: string, required: false }
+          - { label: 'Story Title Line 2', name: storyTitle2, widget: string, required: false }
+          - { label: 'Story Image', name: storyImage, widget: image, required: false }
+          - { label: 'Story Alt Text', name: storyAlt, widget: string, required: false }
+          - { label: 'Story Lead 1', name: storyLead1, widget: text, required: false }
+          - { label: 'Story Lead 2', name: storyLead2, widget: text, required: false }
+          - { label: 'Philosophy Eyebrow', name: philosophyEyebrow, widget: string, required: false }
+          - { label: 'Philosophy Title Line 1', name: philosophyTitle1, widget: string, required: false }
+          - { label: 'Philosophy Title Line 2', name: philosophyTitle2, widget: string, required: false }
+          - { label: 'Philosophy Lead', name: philosophyLead, widget: text, required: false }
+          - label: Values
+            name: values
+            widget: list
+            required: false
+            fields:
+              - { label: 'Title', name: title, widget: string }
+              - { label: 'Text', name: text, widget: text }
+          - { label: 'Materials Eyebrow', name: materialsEyebrow, widget: string, required: false }
+          - { label: 'Materials Title Line 1', name: materialsTitle1, widget: string, required: false }
+          - { label: 'Materials Title Line 2', name: materialsTitle2, widget: string, required: false }
+          - label: Materials
+            name: materials
+            widget: list
+            required: false
+            fields:
+              - { label: 'Tag (e.g. 01 / ceramic)', name: tag, widget: string }
+              - { label: 'Title', name: title, widget: string }
+              - { label: 'Text', name: text, widget: text }
+
+      - name: business
+        label: Business Page
+        file: content/pages/business.json
+        fields:
+          - { label: 'Hero Eyebrow', name: heroEyebrow, widget: string, required: false }
+          - { label: 'Hero Title Line 1', name: heroTitle1, widget: string, required: false }
+          - { label: 'Hero Title Line 2', name: heroTitle2, widget: string, required: false }
+          - { label: 'Hero Lead', name: heroLead, widget: text, required: false }
+          - { label: 'Hero Image', name: heroImage, widget: image, required: false }
+          - { label: 'Hero Alt Text', name: heroAlt, widget: string, required: false }
+          - { label: 'Aside Eyebrow', name: asideEyebrow, widget: string, required: false }
+          - { label: 'Aside Title', name: asideTitle, widget: string, required: false }
+          - { label: 'Aside Text', name: asideText, widget: text, required: false }
+          - { label: 'Services Eyebrow', name: servicesEyebrow, widget: string, required: false }
+          - { label: 'Services Title Line 1', name: servicesTitle1, widget: string, required: false }
+          - { label: 'Services Title Line 2', name: servicesTitle2, widget: string, required: false }
+          - label: Services
+            name: services
+            widget: list
+            required: false
+            fields:
+              - { label: 'Mono (e.g. 01 / wholesale)', name: mono, widget: string }
+              - { label: 'Title', name: title, widget: string }
+              - { label: 'Text', name: text, widget: text }
+
+      - name: contact
+        label: Contact Page
+        file: content/pages/contact.json
+        fields:
+          - { label: 'Hero Eyebrow', name: heroEyebrow, widget: string, required: false }
+          - { label: 'Hero Title Line 1', name: heroTitle1, widget: string, required: false }
+          - { label: 'Hero Title Line 2', name: heroTitle2, widget: string, required: false }
+          - { label: 'Hero Lead', name: heroLead, widget: text, required: false }
+          - { label: 'Info Title', name: infoTitle, widget: string, required: false }
+          - { label: 'Info Text', name: infoText, widget: text, required: false }
+          - { label: 'Map Label', name: mapLabel, widget: string, required: false }
+          - { label: 'Map Name', name: mapName, widget: string, required: false }
+          - { label: 'Map Text', name: mapText, widget: text, required: false }
 
   - name: settings
     label: Settings

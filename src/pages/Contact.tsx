@@ -1,15 +1,34 @@
+import { useEffect, useState } from 'react'
 import type { ReactElement } from 'react'
 import { Link } from 'react-router-dom'
+import { DEFAULT_CONTACT, get } from '../api'
 import ContactForm from '../components/ContactForm'
 import Footer from '../components/Footer'
 import { useDocumentTitle } from '../hooks/useDocumentTitle'
 import { usePageHero } from '../hooks/usePageHero'
 import { useSettings } from '../hooks/useSettings'
+import type { ContactPage } from '../types'
 
 export default function Contact(): ReactElement {
   useDocumentTitle('Contact — Napak Living')
   usePageHero()
   const settings = useSettings()
+  const [page, setPage] = useState<ContactPage>(DEFAULT_CONTACT)
+
+  useEffect(() => {
+    let cancelled = false
+    get<ContactPage>('/pages/contact')
+      .then((data) => {
+        if (!cancelled) setPage(data)
+      })
+      .catch(() => {
+        if (!cancelled) setPage(DEFAULT_CONTACT)
+      })
+    return () => {
+      cancelled = true
+    }
+  }, [])
+
   const addressLines = (settings.studioAddress ?? '').split('\n').filter(Boolean)
 
   return (
@@ -21,21 +40,18 @@ export default function Contact(): ReactElement {
             <span>/</span>
             <span>Contact</span>
           </p>
-          <p className="eyebrow">Say hello / we are here</p>
+          <p className="eyebrow">{page.heroEyebrow}</p>
           <h1 id="page-title" className="display-title">
-            <span>Let’s stay</span>
-            <span className="muted-line">in touch.</span>
+            <span>{page.heroTitle1}</span>
+            <span className="muted-line">{page.heroTitle2}</span>
           </h1>
-          <p className="lead">
-            For product questions, orders, or simply to say hello, send a message through the channel
-            that feels most convenient for you.
-          </p>
+          <p className="lead">{page.heroLead}</p>
         </section>
 
         <section className="container contact-layout" aria-label="Contact Napak Living">
           <div className="contact-information">
-            <h2>Come by, write, or call.</h2>
-            <p>We will do our best to reply within 1–2 business days.</p>
+            <h2>{page.infoTitle}</h2>
+            <p>{page.infoText}</p>
             <div className="contact-items">
               <div className="contact-item">
                 <span>Email</span>
@@ -98,9 +114,9 @@ export default function Contact(): ReactElement {
               referrerPolicy="no-referrer-when-downgrade"
             />
             <div className="map-info">
-              <span>Visit the studio</span>
-              <strong>Napak Living Studio</strong>
-              <p>Jimbaran, Bali — open by appointment. Tap the pin for directions.</p>
+              <span>{page.mapLabel}</span>
+              <strong>{page.mapName}</strong>
+              <p>{page.mapText}</p>
               <a
                 className="text-link"
                 href={settings.mapsUrl ?? ''}

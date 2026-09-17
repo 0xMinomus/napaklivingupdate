@@ -1,0 +1,37 @@
+{
+  "heroEyebrow": "Our story / a beginning",
+  "heroTitle1": "Made for the",
+  "heroTitle2": "life inside.",
+  "heroLead": "Napak means a trace. We create objects that give life room to leave its own trace.",
+  "heroImage": "https://images.unsplash.com/photo-1600607688969-a5bfcd646154?auto=format&fit=crop&w=1200&q=70",
+  "heroAlt": "A home interior with natural materials and textured furniture",
+  "statementEyebrow": "A point of view",
+  "statementTitle1": "Home is not a look.",
+  "statementTitle2": "It is a feeling.",
+  "statementLead": "Napak Living was born from a desire to slow down how we choose and live with objects. We believe a good object does not need to shout to feel meaningful.",
+  "storyEyebrow": "The beginning / 2024",
+  "storyTitle1": "Objects that",
+  "storyTitle2": "leave a trace.",
+  "storyImage": "https://images.unsplash.com/photo-1610701596007-11502861dcfa?auto=format&fit=crop&w=700&q=70",
+  "storyAlt": "The process and result of handmade ceramics in natural tones",
+  "storyLead1": "We started Napak with a simple question: why cannot the objects we use every day feel more personal? From there, we began working with artisans to explore useful forms, honest materials, and an unhurried process.",
+  "storyLead2": "Every product has slight differences. To us, this is not a flaw, but proof that it has been touched, shaped, and given time.",
+  "philosophyEyebrow": "Our philosophy",
+  "philosophyTitle1": "Less, but",
+  "philosophyTitle2": "more considered.",
+  "philosophyLead": "We design with three questions: is it useful, does it feel good in the hand, and can it live with you for a long time?",
+  "values": [
+    { "title": "Honest materials", "text": "We let wood, clay, and fibers show their natural character." },
+    { "title": "Made locally", "text": "Hand knowledge and collaboration with artisans are part of every form." },
+    { "title": "Made to last", "text": "Objects are designed to be used, cared for, and passed through everyday life." },
+    { "title": "Room for change", "text": "A good object does not dictate a room; it grows with it." }
+  ],
+  "materialsEyebrow": "Materials & craftsmanship",
+  "materialsTitle1": "Touch is part",
+  "materialsTitle2": "of the design.",
+  "materials": [
+    { "tag": "01 / ceramic", "title": "Shaped earth", "text": "Stoneware and terracotta with soft, understated glazes." },
+    { "tag": "02 / wood", "title": "Warm grain", "text": "Selected wood treated with a natural finish so it remains alive to the touch." },
+    { "tag": "03 / textile", "title": "Everyday texture", "text": "Fibers and linen that add a tactile quality to tables and rooms." }
+  ]
+}

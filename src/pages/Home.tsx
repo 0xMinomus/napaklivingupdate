@@ -6,7 +6,7 @@ import ProductGrid from '../components/ProductGrid'
 import Footer from '../components/Footer'
 import { useDocumentTitle } from '../hooks/useDocumentTitle'
 import { useHeroAnimation } from '../hooks/useHeroAnimation'
-import type { HomePage, LookbookEntry, Paginated, ProductSummary } from '../types'
+import type { Collection, HomePage, LookbookEntry, Paginated, ProductSummary } from '../types'
 
 function shuffle<T>(arr: T[]): T[] {
   const a = arr.slice()
@@ -87,6 +87,47 @@ function LookbookPreview(): ReactElement {
             <span>{entry.caption}</span>
           </figcaption>
         </figure>
+      ))}
+    </div>
+  )
+}
+
+function CollectionPreview(): ReactElement {
+  const [items, setItems] = useState<Collection[]>([])
+
+  useEffect(() => {
+    let cancelled = false
+    get<{ items: Collection[] }>('/collections')
+      .then((data) => {
+        if (!cancelled) setItems(data.items)
+      })
+      .catch(() => {
+        if (!cancelled) setItems([])
+      })
+    return () => {
+      cancelled = true
+    }
+  }, [])
+
+  return (
+    <div className="collection-grid">
+      {items.map((c, i) => (
+        <Link
+          key={c.slug}
+          className={i === 0 ? 'collection-card collection-card-large' : 'collection-card'}
+          to={`/collection/${encodeURIComponent(c.slug)}`}
+        >
+          <img src={c.image ?? ''} alt={c.name} loading="lazy" />
+          <span className="collection-overlay"></span>
+          <div className="collection-info">
+            <span className="mono">COLLECTION / {String(i + 1).padStart(2, '0')}</span>
+            <h3>{c.name}</h3>
+            <p>{c.tagline ?? c.description ?? ''}</p>
+            <span className="collection-arrow" aria-hidden="true">
+              ↗
+            </span>
+          </div>
+        </Link>
       ))}
     </div>
   )
@@ -196,40 +237,7 @@ export default function Home(): ReactElement {
             </Link>
           </div>
 
-          <div className="collection-grid">
-            <Link className="collection-card collection-card-large" to="/collection/ruang-pagi">
-              <img
-                src="https://images.unsplash.com/photo-1600607687920-4e2a09cf159d?auto=format&fit=crop&w=1000&q=70"
-                alt="An earthy dining room with Napak Living objects"
-                loading="lazy"
-              />
-              <span className="collection-overlay"></span>
-              <div className="collection-info">
-                <span className="mono">COLLECTION / 01</span>
-                <h3>Ruang Pagi</h3>
-                <p>Soft colors for a slower beginning.</p>
-                <span className="collection-arrow" aria-hidden="true">
-                  ↗
-                </span>
-              </div>
-            </Link>
-            <Link className="collection-card" to="/collection/bumi-tenang">
-              <img
-                src="https://images.unsplash.com/photo-1618221195710-dd6b41faaea6?auto=format&fit=crop&w=900&q=70"
-                alt="A wooden shelf with natural-toned decorative objects"
-                loading="lazy"
-              />
-              <span className="collection-overlay"></span>
-              <div className="collection-info">
-                <span className="mono">COLLECTION / 02</span>
-                <h3>Bumi Tenang</h3>
-                <p>Honest materials, enduring forms.</p>
-                <span className="collection-arrow" aria-hidden="true">
-                  ↗
-                </span>
-              </div>
-            </Link>
-          </div>
+          <CollectionPreview />
         </section>
 
         <section className="category-band" id="categories" aria-labelledby="categories-title">

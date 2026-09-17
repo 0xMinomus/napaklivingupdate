@@ -64,6 +64,8 @@ export interface Collection {
   slug: string
   description: string | null
   image: string | null
+  tagline: string | null
+  order: number
   eyebrow: string | null
   titleLine1: string | null
   titleLine2: string | null
@@ -100,4 +102,74 @@ export interface LookbookEntry {
   mono: string
   caption: string
   order: number
+}
+
+export interface TextItem {
+  title: string
+  text: string
+}
+
+export interface TaggedTextItem extends TextItem {
+  tag: string
+}
+
+export interface ServiceItem extends TextItem {
+  mono: string
+}
+
+export interface AboutPage {
+  heroEyebrow: string
+  heroTitle1: string
+  heroTitle2: string
+  heroLead: string
+  heroImage: string
+  heroAlt: string | null
+  statementEyebrow: string
+  statementTitle1: string
+  statementTitle2: string
+  statementLead: string
+  storyEyebrow: string
+  storyTitle1: string
+  storyTitle2: string
+  storyImage: string
+  storyAlt: string | null
+  storyLead1: string
+  storyLead2: string
+  philosophyEyebrow: string
+  philosophyTitle1: string
+  philosophyTitle2: string
+  philosophyLead: string
+  values: TextItem[]
+  materialsEyebrow: string
+  materialsTitle1: string
+  materialsTitle2: string
+  materials: TaggedTextItem[]
+}
+
+export interface BusinessPage {
+  heroEyebrow: string
+  heroTitle1: string
+  heroTitle2: string
+  heroLead: string
+  heroImage: string
+  heroAlt: string | null
+  asideEyebrow: string
+  asideTitle: string
+  asideText: string
+  servicesEyebrow: string
+  servicesTitle1: string
+  servicesTitle2: string
+  services: ServiceItem[]
+}
+
+export interface ContactPage {
+  heroEyebrow: string
+  heroTitle1: string
+  heroTitle2: string
+  heroLead: string
+  infoTitle: string
+  infoText: string
+  mapLabel: string
+  mapName: string
+  mapText: string
 }
