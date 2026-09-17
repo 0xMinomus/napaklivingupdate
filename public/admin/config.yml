@@ -121,3 +121,13 @@ collections:
       - { label: 'Slug (URL — lock after first publish)', name: slug, widget: string, required: true, pattern: ['^[a-z0-9-]+$', 'Lowercase letters, numbers and hyphens only'] }
       - { label: 'Description', name: description, widget: text, required: false }
       - { label: 'Image', name: image, widget: image, required: false }
+
+  - name: pages
+    label: Pages
+    files:
+      - name: home
+        label: Home Hero
+        file: content/pages/home.json
+        fields:
+          - { label: 'Hero Image (lebar ±1600px, WebP)', name: heroImage, widget: image, required: true }
+          - { label: 'Hero Alt Text', name: heroAlt, widget: string, required: false }

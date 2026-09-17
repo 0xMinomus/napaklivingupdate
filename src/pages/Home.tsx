@@ -6,7 +6,7 @@ import ProductGrid from '../components/ProductGrid'
 import Footer from '../components/Footer'
 import { useDocumentTitle } from '../hooks/useDocumentTitle'
 import { useHeroAnimation } from '../hooks/useHeroAnimation'
-import type { Paginated, ProductSummary } from '../types'
+import type { HomePage, Paginated, ProductSummary } from '../types'
 
 function shuffle<T>(arr: T[]): T[] {
   const a = arr.slice()
@@ -58,6 +58,21 @@ function FeaturedProducts(): ReactElement {
 export default function Home(): ReactElement {
   useDocumentTitle('Napak Living — Objects for a slower home')
   useHeroAnimation()
+  const [hero, setHero] = useState<HomePage | null>(null)
+
+  useEffect(() => {
+    let cancelled = false
+    get<HomePage>('/home')
+      .then((data) => {
+        if (!cancelled) setHero(data)
+      })
+      .catch(() => {
+        if (!cancelled) setHero(null)
+      })
+    return () => {
+      cancelled = true
+    }
+  }, [])
 
   return (
     <>
@@ -65,8 +80,8 @@ export default function Home(): ReactElement {
         <section className="hero hero-bg" aria-labelledby="hero-title">
           <div className="hero-bg-image" aria-hidden="true">
             <img
-              src="/pexels-the-ghazi-2152398165-36353283.webp"
-              alt=""
+              src={hero?.heroImage ?? '/pexels-the-ghazi-2152398165-36353283.webp'}
+              alt={hero?.heroAlt ?? ''}
               fetchPriority="high"
               decoding="async"
             />

@@ -67,3 +67,8 @@ export interface Collection {
   productCount: number
   products?: ProductSummary[]
 }
+
+export interface HomePage {
+  heroImage: string | null
+  heroAlt: string | null
+}

@@ -1,4 +1,4 @@
-import type { Collection, Paginated, Product, ProductSummary } from './types'
+import type { Collection, HomePage, Paginated, Product, ProductSummary } from './types'
 
 export const API_URL: string = (import.meta.env as { VITE_API_URL?: string } | undefined)
   ?.VITE_API_URL ?? '/api'
@@ -44,6 +44,11 @@ interface CollectionFile {
   image?: string | null
 }
 
+interface HomeFile {
+  heroImage?: string | null
+  heroAlt?: string | null
+}
+
 const productFiles = import.meta.glob<{ default: ProductFile }>('../content/products/*.json', {
   eager: true,
 })
@@ -55,6 +60,9 @@ const collectionFiles = import.meta.glob<{ default: CollectionFile }>(
   '../content/collections/*.json',
   { eager: true }
 )
+const pageFiles = import.meta.glob<{ default: HomeFile }>('../content/pages/*.json', {
+  eager: true,
+})
 
 // Products without a date sort as newest-first so fresh CMS entries surface on top.
 const FALLBACK_DATE = new Date().toISOString()
@@ -247,8 +255,20 @@ function collectionDetail(slug: string): Collection {
   return collection
 }
 
+const DEFAULT_HERO_IMAGE = '/pexels-the-ghazi-2152398165-36353283.webp'
+
+function homePage(): HomePage {
+  const entry = Object.entries(pageFiles).find(([path]) => path.endsWith('/home.json'))
+  const file = entry ? entry[1].default : null
+  return {
+    heroImage: file?.heroImage ?? DEFAULT_HERO_IMAGE,
+    heroAlt: file?.heroAlt ?? null,
+  }
+}
+
 function routeGet(path: string, params: QueryParams = {}): unknown {
   if (path === '/products') return listProducts(params)
+  if (path === '/home') return homePage()
 
   let match = path.match(/^\/products\/([^/]+)\/related$/)
   if (match) return { items: relatedProducts(decodeURIComponent(match[1])) }
