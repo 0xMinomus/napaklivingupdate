@@ -1,11 +1,11 @@
 import { useEffect, useState } from 'react'
 import type { ReactElement } from 'react'
 import { Link } from 'react-router-dom'
-import { get } from '../api'
+import { DEFAULT_COLLECTIONS_PAGE, get } from '../api'
 import Footer from '../components/Footer'
 import { useDocumentTitle } from '../hooks/useDocumentTitle'
 import { usePageHero } from '../hooks/usePageHero'
-import type { Collection } from '../types'
+import type { Collection, PageHero } from '../types'
 
 interface CollectionCardProps {
   to: string
@@ -43,6 +43,7 @@ export default function Collections(): ReactElement {
   useDocumentTitle('Collections — Napak Living')
   usePageHero()
   const [items, setItems] = useState<Collection[]>([])
+  const [page, setPage] = useState<PageHero>(DEFAULT_COLLECTIONS_PAGE)
 
   useEffect(() => {
     let cancelled = false
@@ -52,6 +53,13 @@ export default function Collections(): ReactElement {
       })
       .catch(() => {
         if (!cancelled) setItems([])
+      })
+    get<PageHero>('/pages/collections')
+      .then((data) => {
+        if (!cancelled) setPage(data)
+      })
+      .catch(() => {
+        if (!cancelled) setPage(DEFAULT_COLLECTIONS_PAGE)
       })
     return () => {
       cancelled = true
@@ -67,16 +75,12 @@ export default function Collections(): ReactElement {
             <span>/</span>
             <span>Collections</span>
           </p>
-          <p className="eyebrow">Curated by feeling</p>
+          <p className="eyebrow">{page.heroEyebrow}</p>
           <h1 id="page-title" className="display-title">
-            <span>Find a feeling</span>
-            <span className="muted-line">to live with.</span>
+            <span>{page.heroTitle1}</span>
+            <span className="muted-line">{page.heroTitle2}</span>
           </h1>
-          <p className="lead">
-            A collection of thoughtfully chosen pieces, made by skilled Indonesian artisans. From
-            tableware to home décor and hospitality essentials, each piece reflects the beauty and
-            character of handmade craftsmanship.
-          </p>
+          <p className="lead">{page.heroLead}</p>
           <div className="page-hero-rule"></div>
         </section>
 

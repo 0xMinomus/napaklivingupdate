@@ -27,7 +27,7 @@ export default function Footer({ variant = 'instagram', minimal = false }: Foote
             <Link className="brand" to="/" aria-label="Napak Living home">
               <img src="/logo.png" alt="Napak Living" width="6023" height="1457" />
             </Link>
-            <p>Objects for a slower home.</p>
+            <p>{settings.footerTagline}</p>
           </div>
           <div className="footer-column">
             <p className="footer-label">Explore</p>
@@ -48,8 +48,8 @@ export default function Footer({ variant = 'instagram', minimal = false }: Foote
             )}
           </div>
           <div className="newsletter">
-            <p className="footer-label">Stay close</p>
-            <p>Occasional notes from our home.</p>
+            <p className="footer-label">{settings.newsletterTitle}</p>
+            <p>{settings.newsletterText}</p>
             <form className="newsletter-form" onSubmit={handleNewsletter}>
               <label className="sr-only" htmlFor="footer-email">
                 Email address
@@ -58,7 +58,7 @@ export default function Footer({ variant = 'instagram', minimal = false }: Foote
                 id="footer-email"
                 name="email"
                 type="email"
-                placeholder="Email address"
+                placeholder={settings.newsletterPlaceholder}
                 autoComplete="email"
                 required
               />
@@ -70,8 +70,8 @@ export default function Footer({ variant = 'instagram', minimal = false }: Foote
         </div>
       )}
       <div className="container footer-bottom">
-        <span className="mono">© 2024 Napak Living</span>
-        <span className="mono">Jakarta / Indonesia</span>
+        <span className="mono">{settings.copyrightNote}</span>
+        <span className="mono">{settings.locationNote}</span>
         <a className="mono" href="#main-content">
           Back to top ↑
         </a>

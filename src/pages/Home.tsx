@@ -1,13 +1,12 @@
 import { useEffect, useState } from 'react'
 import type { ReactElement } from 'react'
 import { Link } from 'react-router-dom'
-import { get, DEFAULT_LOOKBOOK } from '../api'
+import { get, DEFAULT_HOME, DEFAULT_LOOKBOOK } from '../api'
 import ProductGrid from '../components/ProductGrid'
 import Footer from '../components/Footer'
 import { useDocumentTitle } from '../hooks/useDocumentTitle'
 import { useHeroAnimation } from '../hooks/useHeroAnimation'
-import type { Collection, HomePage, LookbookEntry, Paginated, ProductSummary } from '../types'
-
+import type { Category, Collection, HomePage, LookbookEntry, Paginated, ProductSummary } from '../types'
 function shuffle<T>(arr: T[]): T[] {
   const a = arr.slice()
   for (let i = a.length - 1; i > 0; i--) {
@@ -92,8 +91,37 @@ function LookbookPreview(): ReactElement {
   )
 }
 
-function CollectionPreview(): ReactElement {
-  const [items, setItems] = useState<Collection[]>([])
+function CategoryBand(): ReactElement {
+  const [items, setItems] = useState<Category[]>([])
+
+  useEffect(() => {
+    let cancelled = false
+    get<{ items: Category[] }>('/categories')
+      .then((data) => {
+        if (!cancelled) setItems(data.items.filter((c) => c.showOnHome))
+      })
+      .catch(() => {
+        if (!cancelled) setItems([])
+      })
+    return () => {
+      cancelled = true
+    }
+  }, [])
+
+  return (
+    <nav className="category-list" aria-label="Product categories">
+      {items.map((c, i) => (
+        <Link key={c.slug} to={`/catalog?category=${encodeURIComponent(c.slug)}`}>
+          <span>{String(i + 1).padStart(2, '0')}</span>
+          <strong>{c.name}</strong>
+          <span aria-hidden="true">↗</span>
+        </Link>
+      ))}
+    </nav>
+  )
+}
+
+function CollectionPreview(): ReactElement {  const [items, setItems] = useState<Collection[]>([])
 
   useEffect(() => {
     let cancelled = false
@@ -136,16 +164,16 @@ function CollectionPreview(): ReactElement {
 export default function Home(): ReactElement {
   useDocumentTitle('Napak Living — Objects for a slower home')
   useHeroAnimation()
-  const [hero, setHero] = useState<HomePage | null>(null)
+  const [page, setPage] = useState<HomePage>(DEFAULT_HOME)
 
   useEffect(() => {
     let cancelled = false
     get<HomePage>('/home')
       .then((data) => {
-        if (!cancelled) setHero(data)
+        if (!cancelled) setPage(data)
       })
       .catch(() => {
-        if (!cancelled) setHero(null)
+        if (!cancelled) setPage(DEFAULT_HOME)
       })
     return () => {
       cancelled = true
@@ -158,8 +186,8 @@ export default function Home(): ReactElement {
         <section className="hero hero-bg" aria-labelledby="hero-title">
           <div className="hero-bg-image" aria-hidden="true">
             <img
-              src={hero?.heroImage ?? '/pexels-the-ghazi-2152398165-36353283.webp'}
-              alt={hero?.heroAlt ?? ''}
+              src={page.heroImage ?? '/pexels-the-ghazi-2152398165-36353283.webp'}
+              alt={page.heroAlt ?? ''}
               fetchPriority="high"
               decoding="async"
             />
@@ -168,15 +196,12 @@ export default function Home(): ReactElement {
           <div className="container hero-bg-content">
             <div className="hero-copy">
               <h1 id="hero-title" className="display-title">
-                <span>A room that feels</span>
-                <span className="muted-line">like coming home.</span>
+                <span>{page.heroTitle1}</span>
+                <span className="muted-line">{page.heroTitle2}</span>
               </h1>
-              <p className="lead hero-lead">
-                Everyday objects made by hand, thoughtfully selected, and designed to live with you
-                for years.
-              </p>
+              <p className="lead hero-lead">{page.heroLead}</p>
               <Link className="shop-link" to="/catalog">
-                <span className="shop-link-text">Shop the collection</span>
+                <span className="shop-link-text">{page.heroCta}</span>
                 <span aria-hidden="true">↗</span>
               </Link>
             </div>
@@ -185,18 +210,14 @@ export default function Home(): ReactElement {
 
         <section className="intro section container" aria-labelledby="intro-title">
           <div className="section-heading intro-heading">
-            <p className="eyebrow">A considered collection</p>
+            <p className="eyebrow">{page.introEyebrow}</p>
             <h2 id="intro-title" className="section-title">
-              <span>Objects that belong</span>
-              <span className="muted-line">without a loud voice.</span>
+              <span>{page.introTitle1}</span>
+              <span className="muted-line">{page.introTitle2}</span>
             </h2>
           </div>
           <div className="intro-body">
-            <p className="lead">
-              Napak Living brings together home decor, table accessories, and lifestyle pieces that
-              slow the rhythm of home. Each form celebrates natural texture, beautiful imperfection,
-              and the small moments that make a space feel like ours.
-            </p>
+            <p className="lead">{page.introLead}</p>
             <a className="text-link" href="#story">
               Discover our philosophy <span aria-hidden="true">→</span>
             </a>
@@ -206,10 +227,10 @@ export default function Home(): ReactElement {
         <section className="section container" id="products" aria-labelledby="products-title">
           <div className="section-topline">
             <div className="section-heading">
-              <p className="eyebrow">Selected objects / 01</p>
+              <p className="eyebrow">{page.featuredEyebrow}</p>
               <h2 id="products-title" className="section-title">
-                <span>Pieces with</span>
-                <span className="muted-line">a quiet presence.</span>
+                <span>{page.featuredTitle1}</span>
+                <span className="muted-line">{page.featuredTitle2}</span>
               </h2>
             </div>
             <Link className="text-link desktop-only" to="/catalog">
@@ -226,10 +247,10 @@ export default function Home(): ReactElement {
         <section className="section container" id="collections" aria-labelledby="collections-title">
           <div className="section-topline">
             <div className="section-heading">
-              <p className="eyebrow">Curated by feeling / 02</p>
+              <p className="eyebrow">{page.collectionsEyebrow}</p>
               <h2 id="collections-title" className="section-title">
-                <span>Collections for</span>
-                <span className="muted-line">everyday living.</span>
+                <span>{page.collectionsTitle1}</span>
+                <span className="muted-line">{page.collectionsTitle2}</span>
               </h2>
             </div>
             <Link className="text-link desktop-only" to="/collections">
@@ -243,44 +264,23 @@ export default function Home(): ReactElement {
         <section className="category-band" id="categories" aria-labelledby="categories-title">
           <div className="container category-layout">
             <div className="section-heading">
-              <p className="eyebrow">Browse by category / 03</p>
+              <p className="eyebrow">{page.categoryEyebrow}</p>
               <h2 id="categories-title" className="section-title">
-                <span>Make space for</span>
-                <span className="muted-line">what matters.</span>
+                <span>{page.categoryTitle1}</span>
+                <span className="muted-line">{page.categoryTitle2}</span>
               </h2>
             </div>
-            <nav className="category-list" aria-label="Product categories">
-              <Link to="/catalog?category=home-decor">
-                <span>01</span>
-                <strong>Home decor</strong>
-                <span aria-hidden="true">↗</span>
-              </Link>
-              <Link to="/catalog?category=table-accessories">
-                <span>02</span>
-                <strong>Table accessories</strong>
-                <span aria-hidden="true">↗</span>
-              </Link>
-              <Link to="/catalog?category=vases">
-                <span>03</span>
-                <strong>Vases &amp; vessels</strong>
-                <span aria-hidden="true">↗</span>
-              </Link>
-              <Link to="/catalog?category=lifestyle">
-                <span>04</span>
-                <strong>Lifestyle</strong>
-                <span aria-hidden="true">↗</span>
-              </Link>
-            </nav>
+            <CategoryBand />
           </div>
         </section>
 
         <section className="section container lookbook-section" id="lookbook" aria-labelledby="lookbook-title">
           <div className="section-topline">
             <div className="section-heading">
-              <p className="eyebrow">The Napak journal / 04</p>
+              <p className="eyebrow">{page.lookbookEyebrow}</p>
               <h2 id="lookbook-title" className="section-title">
-                <span>Scenes from</span>
-                <span className="muted-line">a slower home.</span>
+                <span>{page.lookbookTitle1}</span>
+                <span className="muted-line">{page.lookbookTitle2}</span>
               </h2>
             </div>
             <Link className="text-link desktop-only" to="/lookbook">
@@ -294,32 +294,24 @@ export default function Home(): ReactElement {
         <section className="section story-section container" id="story" aria-labelledby="story-title">
           <div className="story-image">
             <div className="story-image-frame">
-              <img
-                src="https://images.unsplash.com/photo-1600607688969-a5bfcd646154?auto=format&fit=crop&w=900&q=70"
-                alt="Natural material textures and handmade ceramics"
-                loading="lazy"
-              />
+              <img src={page.storyImage} alt={page.storyAlt ?? ''} loading="lazy" />
             </div>
-            <span className="story-image-note mono">made by hand / made to stay</span>
+            <span className="story-image-note mono">{page.storyNote}</span>
           </div>
           <div className="story-copy">
-            <p className="eyebrow">Our story / 05</p>
+            <p className="eyebrow">{page.storyEyebrow}</p>
             <h2 id="story-title" className="section-title">
-              <span>Made for the</span>
-              <span className="muted-line">life inside.</span>
+              <span>{page.storyTitle1}</span>
+              <span className="muted-line">{page.storyTitle2}</span>
             </h2>
-            <p className="lead">
-              Napak means a trace. We believe home is not about perfection, but about the traces of
-              life that grow within it. We work with local artisans to create simple, useful forms
-              with room to become part of your story.
-            </p>
+            <p className="lead">{page.storyLead}</p>
             <Link className="text-link" to="/about">
               Read our story <span aria-hidden="true">→</span>
             </Link>
             <div className="values-list" aria-label="Napak Living values">
-              <span>Honest materials</span>
-              <span>Made locally</span>
-              <span>Made to last</span>
+              {page.storyValues.map((value) => (
+                <span key={value}>{value}</span>
+              ))}
             </div>
           </div>
         </section>
@@ -328,20 +320,17 @@ export default function Home(): ReactElement {
           <div className="trade-panel">
             <div className="trade-pattern" aria-hidden="true"></div>
             <div className="trade-copy">
-              <p className="eyebrow eyebrow-light">For your next space / 06</p>
+              <p className="eyebrow eyebrow-light">{page.tradeEyebrow}</p>
               <h2 id="trade-title" className="section-title section-title-light">
-                <span>Let’s make a</span>
-                <span className="muted-line">space together.</span>
+                <span>{page.tradeTitle1}</span>
+                <span className="muted-line">{page.tradeTitle2}</span>
               </h2>
-              <p>
-                For interior designers, hospitality teams, retail partners, or custom projects — let
-                us talk about how Napak can enter your space.
-              </p>
+              <p>{page.tradeText}</p>
               <Link className="button button-light" to="/business">
-                Start a conversation <span aria-hidden="true">↗</span>
+                {page.tradeButton} <span aria-hidden="true">↗</span>
               </Link>
             </div>
-            <div className="trade-index mono">TRADE / 06</div>
+            <div className="trade-index mono">{page.tradeIndex}</div>
           </div>
         </section>
       </main>

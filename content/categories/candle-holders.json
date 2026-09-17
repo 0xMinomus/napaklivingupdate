@@ -3,5 +3,7 @@
   "slug": "candle-holders",
   "description": "Small forms made for a quiet glow.",
   "image": null,
-  "parent": "home-decor"
+  "parent": "home-decor",
+  "order": 6,
+  "showOnHome": false
 }

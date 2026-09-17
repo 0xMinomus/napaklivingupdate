@@ -1,92 +1,17 @@
 import { useEffect, useState } from 'react'
 import type { FormEvent, ReactElement } from 'react'
 import { Link, useSearchParams } from 'react-router-dom'
-import { get } from '../api'
+import { DEFAULT_CATALOG_PAGE, get } from '../api'
 import Footer from '../components/Footer'
 import Pagination from '../components/Pagination'
 import ProductGrid from '../components/ProductGrid'
 import { useDocumentTitle } from '../hooks/useDocumentTitle'
 import { usePageHero } from '../hooks/usePageHero'
 import { categoryUrl } from '../lib/links'
-import type { Paginated, ProductSummary } from '../types'
+import type { Category, Collection, PageHero, Paginated, ProductSummary } from '../types'
 
 const PAGE_SIZE = 8
-
-const CATEGORY_META: Record<string, { eyebrow: string; title1: string; title2: string; lead: string; label: string; searchLabel: string }> = {
-  'home-decor': {
-    eyebrow: 'Category / 01',
-    title1: 'Home',
-    title2: 'decor.',
-    lead: 'Vases, decorative objects, and candle holders that bring character to small corners of the home.',
-    label: 'Home decor',
-    searchLabel: 'Search in home decor',
-  },
-  'table-accessories': {
-    eyebrow: 'Category / 02',
-    title1: 'Table',
-    title2: 'accessories.',
-    lead: 'Bowls, trays, and tabletop objects that make everyday moments feel more intentional.',
-    label: 'Table accessories',
-    searchLabel: 'Search in table accessories',
-  },
-  vases: {
-    eyebrow: 'Category / 03',
-    title1: 'Vases &',
-    title2: 'vessels.',
-    lead: 'Forms that stand alone, accompany flowers, or create a pause on a surface.',
-    label: 'Vases & vessels',
-    searchLabel: 'Search in vases and vessels',
-  },
-  lifestyle: {
-    eyebrow: 'Category / 04',
-    title1: 'Everyday',
-    title2: 'rituals.',
-    lead: 'Small objects for making tea, reading, lighting a candle, and returning to yourself.',
-    label: 'Lifestyle',
-    searchLabel: 'Search in lifestyle',
-  },
-}
-
-const CHIPS = [
-  { slug: 'home-decor', label: 'Home decor' },
-  { slug: 'table-accessories', label: 'Table accessories' },
-  { slug: 'vases', label: 'Vases & vessels' },
-  { slug: 'lifestyle', label: 'Lifestyle' },
-]
-
-const SUBCATEGORIES: Record<string, { label: string; value: string }[]> = {
-  'home-decor': [
-    { label: 'Vases', value: 'vases' },
-    { label: 'Decorative objects', value: 'decorative-objects' },
-    { label: 'Candle holders', value: 'candle-holders' },
-  ],
-  'table-accessories': [
-    { label: 'Bowls', value: 'bowls' },
-    { label: 'Trays', value: 'trays' },
-    { label: 'Serving pieces', value: 'serving-pieces' },
-  ],
-  vases: [
-    { label: 'Vases', value: 'vases' },
-    { label: 'Bud vases', value: 'vases' },
-    { label: 'Floor vessels', value: 'vases' },
-  ],
-  lifestyle: [
-    { label: 'Candle holders', value: 'candle-holders' },
-    { label: 'Catchalls', value: 'lifestyle' },
-    { label: 'Incense holders', value: 'lifestyle' },
-  ],
-}
-
-const SHOP_CATEGORIES = [
-  { label: 'Home decor', value: 'home-decor' },
-  { label: 'Table accessories', value: 'table-accessories' },
-  { label: 'Lifestyle', value: 'lifestyle' },
-]
-
-const SHOP_COLLECTIONS = [
-  { label: 'Ruang Pagi', value: 'ruang-pagi' },
-  { label: 'Bumi Tenang', value: 'bumi-tenang' },
-]
+const DEFAULT_SEARCH_LABEL = 'Search by name, SKU, or material'
 
 const SHOP_MATERIALS = [
   { label: 'Ceramic', value: 'ceramic' },
@@ -108,8 +33,45 @@ export default function Catalog(): ReactElement {
   const [searchParams, setSearchParams] = useSearchParams()
 
   const categoryParam = searchParams.get('category') ?? ''
-  const meta = CATEGORY_META[categoryParam]
+  const [taxonomies, setTaxonomies] = useState<{ categories: Category[]; collections: Collection[] }>({
+    categories: [],
+    collections: [],
+  })
+
+  useEffect(() => {
+    let cancelled = false
+    Promise.all([get<{ items: Category[] }>('/categories'), get<{ items: Collection[] }>('/collections')])
+      .then(([cats, cols]) => {
+        if (!cancelled) setTaxonomies({ categories: cats.items, collections: cols.items })
+      })
+      .catch(() => {
+        if (!cancelled) setTaxonomies({ categories: [], collections: [] })
+      })
+    return () => {
+      cancelled = true
+    }
+  }, [])
+
+  const [shopHero, setShopHero] = useState<PageHero>(DEFAULT_CATALOG_PAGE)
+
+  useEffect(() => {
+    let cancelled = false
+    get<PageHero>('/pages/catalog')
+      .then((data) => {
+        if (!cancelled) setShopHero(data)
+      })
+      .catch(() => {
+        if (!cancelled) setShopHero(DEFAULT_CATALOG_PAGE)
+      })
+    return () => {
+      cancelled = true
+    }
+  }, [])
+
+  const meta = taxonomies.categories.find((c) => c.slug === categoryParam)
   const mode = meta ? 'category' : 'shop'
+  const chips = taxonomies.categories.filter((c) => c.showOnHome)
+  const parentCategories = taxonomies.categories.filter((c) => c.parent === null)
 
   const q = searchParams.get('q') ?? ''
   const subcategory = readList(searchParams, 'subcategory')
@@ -126,10 +88,10 @@ export default function Catalog(): ReactElement {
 
   useEffect(() => setSearchText(q), [q])
 
-  const title = mode === 'category' && meta ? meta.title1 : 'Objects for'
-  const title2 = mode === 'category' && meta ? meta.title2 : 'everyday living.'
+  const title = mode === 'category' && meta ? (meta.title1 ?? meta.name) : shopHero.heroTitle1
+  const title2 = mode === 'category' && meta ? (meta.title2 ?? '') : shopHero.heroTitle2
   useDocumentTitle(
-    mode === 'category' && meta ? `${meta.label} — Napak Living` : 'Shop — Napak Living'
+    mode === 'category' && meta ? `${meta.name} — Napak Living` : 'Shop — Napak Living'
   )
   usePageHero()
 
@@ -228,14 +190,14 @@ export default function Catalog(): ReactElement {
             {mode === 'category' && meta && (
               <>
                 <span>/</span>
-                <span>{meta.label}</span>
+                <span>{meta.name}</span>
               </>
             )}
           </p>
           <div className="page-hero-row">
             <div>
               <p className="eyebrow">
-                {mode === 'category' && meta ? meta.eyebrow : 'The catalog / all objects'}
+                {mode === 'category' && meta ? (meta.eyebrow ?? 'Category') : shopHero.heroEyebrow}
               </p>
               <h1 id="page-title" className="display-title">
                 <span>{title}</span>
@@ -244,8 +206,8 @@ export default function Catalog(): ReactElement {
             </div>
             <p className="lead">
               {mode === 'category' && meta
-                ? meta.lead
-                : 'Quiet forms that fill the home with more feeling and less noise.'}
+                ? (meta.lead ?? meta.description ?? '')
+                : shopHero.heroLead}
             </p>
           </div>
           <nav
@@ -259,48 +221,48 @@ export default function Catalog(): ReactElement {
               >
                 All objects
               </Link>
-            {CHIPS.map((chip) => (
+            {chips.map((chip) => (
               <Link
                 key={chip.slug}
                 className="category-chip"
                 to={categoryUrl(chip.slug)}
                 aria-current={mode === 'category' && categoryParam === chip.slug ? 'page' : undefined}
               >
-                {chip.label}
+                {chip.name}
               </Link>
             ))}
           </nav>
           <div className="page-hero-rule"></div>
         </section>
 
-        <section
+          <section
           className="catalog-section container"
           id="catalog"
-          aria-label={mode === 'category' && meta ? `${meta.label} products` : 'Product catalog'}
+          aria-label={mode === 'category' && meta ? `${meta.name} products` : 'Product catalog'}
         >
           <div className="catalog-layout">
             <aside
               className="filter-panel"
-              aria-label={mode === 'category' && meta ? `Filter ${meta.label.toLowerCase()}` : 'Product filters'}
+              aria-label={mode === 'category' && meta ? `Filter ${meta.name.toLowerCase()}` : 'Product filters'}
             >
               <h2 className="filter-heading">
-                {mode === 'category' && meta ? meta.label : 'Refine your search'}
+                {mode === 'category' && meta ? meta.name : 'Refine your search'}
               </h2>
 
-              {mode === 'category' && meta && (
+              {mode === 'category' && meta && meta.children.length > 0 && (
                 <div className="filter-group">
                   <h3 className="filter-group-title">Subcategory</h3>
                   <div className="filter-options">
-                    {SUBCATEGORIES[categoryParam].map((opt) => (
-                      <label className="filter-option" key={opt.label}>
+                    {meta.children.map((opt) => (
+                      <label className="filter-option" key={opt.slug}>
                         <input
                           type="checkbox"
                           data-filter="subcategory"
-                          value={opt.value}
-                          checked={subcategory.includes(opt.value)}
-                          onChange={(e) => handleCheck('subcategory', opt.value, e.target.checked)}
+                          value={opt.slug}
+                          checked={subcategory.includes(opt.slug)}
+                          onChange={(e) => handleCheck('subcategory', opt.slug, e.target.checked)}
                         />
-                        {opt.label}
+                        {opt.name}
                       </label>
                     ))}
                   </div>
@@ -311,16 +273,16 @@ export default function Catalog(): ReactElement {
                 <div className="filter-group">
                   <h3 className="filter-group-title">Category</h3>
                   <div className="filter-options">
-                    {SHOP_CATEGORIES.map((opt) => (
-                      <label className="filter-option" key={opt.value}>
+                    {parentCategories.map((opt) => (
+                      <label className="filter-option" key={opt.slug}>
                         <input
                           type="checkbox"
                           data-filter="category"
-                          value={opt.value}
-                          checked={shopCategories.includes(opt.value)}
-                          onChange={(e) => handleCheck('category', opt.value, e.target.checked)}
+                          value={opt.slug}
+                          checked={shopCategories.includes(opt.slug)}
+                          onChange={(e) => handleCheck('category', opt.slug, e.target.checked)}
                         />
-                        {opt.label}
+                        {opt.name}
                       </label>
                     ))}
                   </div>
@@ -330,16 +292,16 @@ export default function Catalog(): ReactElement {
               <div className="filter-group">
                 <h3 className="filter-group-title">Collection</h3>
                 <div className="filter-options">
-                  {SHOP_COLLECTIONS.map((opt) => (
-                    <label className="filter-option" key={opt.value}>
+                  {taxonomies.collections.map((opt) => (
+                    <label className="filter-option" key={opt.slug}>
                       <input
                         type="checkbox"
                         data-filter="collection"
-                        value={opt.value}
-                        checked={collection.includes(opt.value)}
-                        onChange={(e) => handleCheck('collection', opt.value, e.target.checked)}
+                        value={opt.slug}
+                        checked={collection.includes(opt.slug)}
+                        onChange={(e) => handleCheck('collection', opt.slug, e.target.checked)}
                       />
-                      {opt.label}
+                      {opt.name}
                     </label>
                   ))}
                 </div>
@@ -403,7 +365,7 @@ export default function Catalog(): ReactElement {
                     type="search"
                     name="q"
                     placeholder={
-                      mode === 'category' && meta ? meta.searchLabel : 'Search by name, SKU, or material'
+                      mode === 'category' && meta ? (meta.searchLabel ?? DEFAULT_SEARCH_LABEL) : DEFAULT_SEARCH_LABEL
                     }
                     value={searchText}
                     onChange={(e) => setSearchText(e.target.value)}

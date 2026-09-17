@@ -3,5 +3,7 @@
   "slug": "serving-pieces",
   "description": "Platters and bowls made for gathering.",
   "image": null,
-  "parent": "table-accessories"
+  "parent": "table-accessories",
+  "order": 8,
+  "showOnHome": false
 }

@@ -3,5 +3,12 @@
   "slug": "lifestyle",
   "description": "Everyday pieces that add texture and ritual to the home.",
   "image": "https://images.unsplash.com/photo-1603905179139-db12ab5350e4?auto=format&fit=crop&w=1200&q=70",
-  "parent": null
+  "parent": null,
+  "order": 4,
+  "showOnHome": true,
+  "eyebrow": "Category / 04",
+  "title1": "Everyday",
+  "title2": "rituals.",
+  "lead": "Small objects for making tea, reading, lighting a candle, and returning to yourself.",
+  "searchLabel": "Search in lifestyle"
 }

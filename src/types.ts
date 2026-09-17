@@ -54,8 +54,15 @@ export interface Category {
   description: string | null
   image: string | null
   parent: CategoryRef | null
-  children?: CategoryRef[]
+  children: CategoryRef[]
   productCount: number
+  eyebrow: string | null
+  title1: string | null
+  title2: string | null
+  lead: string | null
+  searchLabel: string | null
+  showOnHome: boolean
+  order: number
   products?: ProductSummary[]
 }
 
@@ -83,6 +90,56 @@ export interface Collection {
 export interface HomePage {
   heroImage: string | null
   heroAlt: string | null
+  heroTitle1: string
+  heroTitle2: string
+  heroLead: string
+  heroCta: string
+  introEyebrow: string
+  introTitle1: string
+  introTitle2: string
+  introLead: string
+  featuredEyebrow: string
+  featuredTitle1: string
+  featuredTitle2: string
+  collectionsEyebrow: string
+  collectionsTitle1: string
+  collectionsTitle2: string
+  categoryEyebrow: string
+  categoryTitle1: string
+  categoryTitle2: string
+  lookbookEyebrow: string
+  lookbookTitle1: string
+  lookbookTitle2: string
+  storyImage: string
+  storyAlt: string | null
+  storyNote: string
+  storyEyebrow: string
+  storyTitle1: string
+  storyTitle2: string
+  storyLead: string
+  storyValues: string[]
+  tradeEyebrow: string
+  tradeTitle1: string
+  tradeTitle2: string
+  tradeText: string
+  tradeButton: string
+  tradeIndex: string
+}
+
+export interface PageHero {
+  heroEyebrow: string
+  heroTitle1: string
+  heroTitle2: string
+  heroLead: string
+}
+
+export interface LookbookPage extends PageHero {
+  tradeEyebrow: string
+  tradeTitle1: string
+  tradeTitle2: string
+  tradeText: string
+  tradeButton: string
+  tradeIndex: string
 }
 
 export interface Settings {
@@ -94,6 +151,12 @@ export interface Settings {
   studioAddress: string | null
   mapsEmbedUrl: string | null
   mapsUrl: string | null
+  footerTagline: string
+  newsletterTitle: string
+  newsletterText: string
+  newsletterPlaceholder: string
+  copyrightNote: string
+  locationNote: string
 }
 
 export interface LookbookEntry {

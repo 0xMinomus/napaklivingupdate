@@ -118,6 +118,13 @@ collections:
       - { label: 'Slug (URL — lock after first publish)', name: slug, widget: string, required: true, pattern: ['^[a-z0-9-]+$', 'Lowercase letters, numbers and hyphens only'] }
       - { label: 'Description', name: description, widget: text, required: false }
       - { label: 'Image', name: image, widget: image, required: false }
+      - { label: 'Order', name: order, widget: number, required: false, default: 0 }
+      - { label: 'Show on home category band', name: showOnHome, widget: boolean, required: false, default: false }
+      - { label: 'Hero Eyebrow (catalog page)', name: eyebrow, widget: string, required: false }
+      - { label: 'Hero Title Line 1', name: title1, widget: string, required: false }
+      - { label: 'Hero Title Line 2', name: title2, widget: string, required: false }
+      - { label: 'Hero Lead', name: lead, widget: text, required: false }
+      - { label: 'Search Placeholder', name: searchLabel, widget: string, required: false }
       - label: Parent Category
         name: parent
         widget: relation
@@ -162,12 +169,87 @@ collections:
     description: 'Teks + gambar halaman statis (hero, about, bisnis, kontak). Kosongkan field = kembali ke teks bawaan.'
     files:
       - name: home
-        label: Beranda — Hero
-        description: 'Gambar besar pembuka halaman depan.'
+        label: Beranda — Hero & Sections
+        description: 'Seluruh teks + gambar halaman depan. Kosongkan field = kembali ke teks bawaan.'
         file: content/pages/home.json
         fields:
           - { label: 'Hero Image (lebar ±1600px, WebP)', name: heroImage, widget: image, required: true }
           - { label: 'Hero Alt Text', name: heroAlt, widget: string, required: false }
+          - { label: 'Hero Title Line 1', name: heroTitle1, widget: string, required: false }
+          - { label: 'Hero Title Line 2', name: heroTitle2, widget: string, required: false }
+          - { label: 'Hero Lead', name: heroLead, widget: text, required: false }
+          - { label: 'Hero Button', name: heroCta, widget: string, required: false }
+          - { label: 'Intro Eyebrow', name: introEyebrow, widget: string, required: false }
+          - { label: 'Intro Title Line 1', name: introTitle1, widget: string, required: false }
+          - { label: 'Intro Title Line 2', name: introTitle2, widget: string, required: false }
+          - { label: 'Intro Lead', name: introLead, widget: text, required: false }
+          - { label: 'Featured Eyebrow', name: featuredEyebrow, widget: string, required: false }
+          - { label: 'Featured Title Line 1', name: featuredTitle1, widget: string, required: false }
+          - { label: 'Featured Title Line 2', name: featuredTitle2, widget: string, required: false }
+          - { label: 'Collections Eyebrow', name: collectionsEyebrow, widget: string, required: false }
+          - { label: 'Collections Title Line 1', name: collectionsTitle1, widget: string, required: false }
+          - { label: 'Collections Title Line 2', name: collectionsTitle2, widget: string, required: false }
+          - { label: 'Category Eyebrow', name: categoryEyebrow, widget: string, required: false }
+          - { label: 'Category Title Line 1', name: categoryTitle1, widget: string, required: false }
+          - { label: 'Category Title Line 2', name: categoryTitle2, widget: string, required: false }
+          - { label: 'Lookbook Eyebrow', name: lookbookEyebrow, widget: string, required: false }
+          - { label: 'Lookbook Title Line 1', name: lookbookTitle1, widget: string, required: false }
+          - { label: 'Lookbook Title Line 2', name: lookbookTitle2, widget: string, required: false }
+          - { label: 'Story Image', name: storyImage, widget: image, required: false }
+          - { label: 'Story Alt Text', name: storyAlt, widget: string, required: false }
+          - { label: 'Story Note', name: storyNote, widget: string, required: false }
+          - { label: 'Story Eyebrow', name: storyEyebrow, widget: string, required: false }
+          - { label: 'Story Title Line 1', name: storyTitle1, widget: string, required: false }
+          - { label: 'Story Title Line 2', name: storyTitle2, widget: string, required: false }
+          - { label: 'Story Lead', name: storyLead, widget: text, required: false }
+          - label: Story Values
+            name: storyValues
+            widget: list
+            required: false
+            collapsed: true
+            field: { label: 'Value', name: value, widget: string }
+          - { label: 'Trade Eyebrow', name: tradeEyebrow, widget: string, required: false }
+          - { label: 'Trade Title Line 1', name: tradeTitle1, widget: string, required: false }
+          - { label: 'Trade Title Line 2', name: tradeTitle2, widget: string, required: false }
+          - { label: 'Trade Text', name: tradeText, widget: text, required: false }
+          - { label: 'Trade Button', name: tradeButton, widget: string, required: false }
+          - { label: 'Trade Index', name: tradeIndex, widget: string, required: false }
+
+      - name: lookbook
+        label: Halaman Lookbook
+        description: 'Hero + panel trade halaman Lookbook. Kartu foto ada di menu Lookbook.'
+        file: content/pages/lookbook.json
+        fields:
+          - { label: 'Hero Eyebrow', name: heroEyebrow, widget: string, required: false }
+          - { label: 'Hero Title Line 1', name: heroTitle1, widget: string, required: false }
+          - { label: 'Hero Title Line 2', name: heroTitle2, widget: string, required: false }
+          - { label: 'Hero Lead', name: heroLead, widget: text, required: false }
+          - { label: 'Trade Eyebrow', name: tradeEyebrow, widget: string, required: false }
+          - { label: 'Trade Title Line 1', name: tradeTitle1, widget: string, required: false }
+          - { label: 'Trade Title Line 2', name: tradeTitle2, widget: string, required: false }
+          - { label: 'Trade Text', name: tradeText, widget: text, required: false }
+          - { label: 'Trade Button', name: tradeButton, widget: string, required: false }
+          - { label: 'Trade Index', name: tradeIndex, widget: string, required: false }
+
+      - name: collections
+        label: Halaman Collections
+        description: 'Hero halaman daftar koleksi.'
+        file: content/pages/collections.json
+        fields:
+          - { label: 'Hero Eyebrow', name: heroEyebrow, widget: string, required: false }
+          - { label: 'Hero Title Line 1', name: heroTitle1, widget: string, required: false }
+          - { label: 'Hero Title Line 2', name: heroTitle2, widget: string, required: false }
+          - { label: 'Hero Lead', name: heroLead, widget: text, required: false }
+
+      - name: catalog
+        label: Halaman Catalog
+        description: 'Hero mode toko (tanpa filter kategori). Hero tiap kategori diatur di menu Kategori.'
+        file: content/pages/catalog.json
+        fields:
+          - { label: 'Hero Eyebrow', name: heroEyebrow, widget: string, required: false }
+          - { label: 'Hero Title Line 1', name: heroTitle1, widget: string, required: false }
+          - { label: 'Hero Title Line 2', name: heroTitle2, widget: string, required: false }
+          - { label: 'Hero Lead', name: heroLead, widget: text, required: false }
 
       - name: about
         label: Halaman About
@@ -277,6 +359,12 @@ collections:
           - { label: 'Studio Address (satu baris per baris)', name: studioAddress, widget: text, required: false }
           - { label: 'Google Maps Embed URL', name: mapsEmbedUrl, widget: string, required: false }
           - { label: 'Google Maps Link', name: mapsUrl, widget: string, required: false }
+          - { label: 'Footer Tagline', name: footerTagline, widget: string, required: false }
+          - { label: 'Newsletter Title', name: newsletterTitle, widget: string, required: false }
+          - { label: 'Newsletter Text', name: newsletterText, widget: text, required: false }
+          - { label: 'Newsletter Placeholder', name: newsletterPlaceholder, widget: string, required: false }
+          - { label: 'Copyright', name: copyrightNote, widget: string, required: false }
+          - { label: 'Location', name: locationNote, widget: string, required: false }
 
   - name: lookbook
     label: Lookbook

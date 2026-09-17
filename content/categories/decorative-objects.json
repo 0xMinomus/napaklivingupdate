@@ -3,5 +3,7 @@
   "slug": "decorative-objects",
   "description": "Objects that hold a space without a loud voice.",
   "image": null,
-  "parent": "home-decor"
+  "parent": "home-decor",
+  "order": 7,
+  "showOnHome": false
 }

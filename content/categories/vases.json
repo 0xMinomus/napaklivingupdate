@@ -3,5 +3,12 @@
   "slug": "vases",
   "description": "Vessels for stems, branches, or standing alone.",
   "image": null,
-  "parent": "home-decor"
+  "parent": "home-decor",
+  "order": 3,
+  "showOnHome": true,
+  "eyebrow": "Category / 03",
+  "title1": "Vases &",
+  "title2": "vessels.",
+  "lead": "Forms that stand alone, accompany flowers, or create a pause on a surface.",
+  "searchLabel": "Search in vases and vessels"
 }

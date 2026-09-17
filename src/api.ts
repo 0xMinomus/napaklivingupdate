@@ -1,4 +1,4 @@
-import type { AboutPage, BusinessPage, Collection, ContactPage, HomePage, LookbookEntry, Paginated, Product, ProductSummary, Settings } from './types'
+import type { AboutPage, BusinessPage, Category, Collection, ContactPage, HomePage, LookbookEntry, LookbookPage, PageHero, Paginated, Product, ProductSummary, Settings } from './types'
 
 export const API_URL: string = (import.meta.env as { VITE_API_URL?: string } | undefined)
   ?.VITE_API_URL ?? '/api'
@@ -35,6 +35,13 @@ interface CategoryFile {
   description?: string | null
   image?: string | null
   parent?: string | null
+  order?: number | null
+  showOnHome?: boolean | null
+  eyebrow?: string | null
+  title1?: string | null
+  title2?: string | null
+  lead?: string | null
+  searchLabel?: string | null
 }
 
 interface CollectionFile {
@@ -70,6 +77,12 @@ interface SettingsFile {
   studioAddress?: string | null
   mapsEmbedUrl?: string | null
   mapsUrl?: string | null
+  footerTagline?: string | null
+  newsletterTitle?: string | null
+  newsletterText?: string | null
+  newsletterPlaceholder?: string | null
+  copyrightNote?: string | null
+  locationNote?: string | null
 }
 
 interface LookbookFile {
@@ -314,6 +327,12 @@ export const DEFAULT_SETTINGS: Settings = {
   studioAddress: 'Jimbaran\nBali, Indonesia\nby appointment',
   mapsEmbedUrl: 'https://maps.google.com/maps?q=-8.7961749,115.1869325&z=16&output=embed',
   mapsUrl: 'https://maps.app.goo.gl/EVkYBVYKu3ViL8aE8',
+  footerTagline: 'Objects for a slower home.',
+  newsletterTitle: 'Stay close',
+  newsletterText: 'Occasional notes from our home.',
+  newsletterPlaceholder: 'Email address',
+  copyrightNote: '© 2024 Napak Living',
+  locationNote: 'Jakarta / Indonesia',
 }
 
 function siteSettings(): Settings {
@@ -327,12 +346,86 @@ function siteSettings(): Settings {
     studioAddress: entry?.studioAddress ?? DEFAULT_SETTINGS.studioAddress,
     mapsEmbedUrl: entry?.mapsEmbedUrl ?? DEFAULT_SETTINGS.mapsEmbedUrl,
     mapsUrl: entry?.mapsUrl ?? DEFAULT_SETTINGS.mapsUrl,
+    footerTagline: entry?.footerTagline ?? DEFAULT_SETTINGS.footerTagline,
+    newsletterTitle: entry?.newsletterTitle ?? DEFAULT_SETTINGS.newsletterTitle,
+    newsletterText: entry?.newsletterText ?? DEFAULT_SETTINGS.newsletterText,
+    newsletterPlaceholder: entry?.newsletterPlaceholder ?? DEFAULT_SETTINGS.newsletterPlaceholder,
+    copyrightNote: entry?.copyrightNote ?? DEFAULT_SETTINGS.copyrightNote,
+    locationNote: entry?.locationNote ?? DEFAULT_SETTINGS.locationNote,
   }
 }
 
-const DEFAULT_HOME: HomePage = {
-  heroImage: DEFAULT_HERO_IMAGE,
+export const DEFAULT_HOME: HomePage = {  heroImage: DEFAULT_HERO_IMAGE,
   heroAlt: null,
+  heroTitle1: 'A room that feels',
+  heroTitle2: 'like coming home.',
+  heroLead:
+    'Everyday objects made by hand, thoughtfully selected, and designed to live with you for years.',
+  heroCta: 'Shop the collection',
+  introEyebrow: 'A considered collection',
+  introTitle1: 'Objects that belong',
+  introTitle2: 'without a loud voice.',
+  introLead:
+    'Napak Living brings together home decor, table accessories, and lifestyle pieces that slow the rhythm of home. Each form celebrates natural texture, beautiful imperfection, and the small moments that make a space feel like ours.',
+  featuredEyebrow: 'Selected objects / 01',
+  featuredTitle1: 'Pieces with',
+  featuredTitle2: 'a quiet presence.',
+  collectionsEyebrow: 'Curated by feeling / 02',
+  collectionsTitle1: 'Collections for',
+  collectionsTitle2: 'everyday living.',
+  categoryEyebrow: 'Browse by category / 03',
+  categoryTitle1: 'Make space for',
+  categoryTitle2: 'what matters.',
+  lookbookEyebrow: 'The Napak journal / 04',
+  lookbookTitle1: 'Scenes from',
+  lookbookTitle2: 'a slower home.',
+  storyImage:
+    'https://images.unsplash.com/photo-1600607688969-a5bfcd646154?auto=format&fit=crop&w=900&q=70',
+  storyAlt: 'Natural material textures and handmade ceramics',
+  storyNote: 'made by hand / made to stay',
+  storyEyebrow: 'Our story / 05',
+  storyTitle1: 'Made for the',
+  storyTitle2: 'life inside.',
+  storyLead:
+    'Napak means a trace. We believe home is not about perfection, but about the traces of life that grow within it. We work with local artisans to create simple, useful forms with room to become part of your story.',
+  storyValues: ['Honest materials', 'Made locally', 'Made to last'],
+  tradeEyebrow: 'For your next space / 06',
+  tradeTitle1: 'Let’s make a',
+  tradeTitle2: 'space together.',
+  tradeText:
+    'For interior designers, hospitality teams, retail partners, or custom projects — let us talk about how Napak can enter your space.',
+  tradeButton: 'Start a conversation',
+  tradeIndex: 'TRADE / 06',
+}
+
+export const DEFAULT_LOOKBOOK_PAGE: LookbookPage = {
+  heroEyebrow: 'The Napak journal',
+  heroTitle1: 'Scenes from',
+  heroTitle2: 'a slower home.',
+  heroLead:
+    'A space is not only what we see, but how it makes us feel. Discover the details, textures, and objects that shape the Napak Living rhythm.',
+  tradeEyebrow: 'For the trade / catalog access',
+  tradeTitle1: 'Take Napak',
+  tradeTitle2: 'with you.',
+  tradeText:
+    'Download the trade catalog for project, hospitality, and wholesale partnership references.',
+  tradeButton: 'Request trade catalog',
+  tradeIndex: 'PDF / 2024',
+}
+
+export const DEFAULT_COLLECTIONS_PAGE: PageHero = {
+  heroEyebrow: 'Curated by feeling',
+  heroTitle1: 'Find a feeling',
+  heroTitle2: 'to live with.',
+  heroLead:
+    'A collection of thoughtfully chosen pieces, made by skilled Indonesian artisans. From tableware to home décor and hospitality essentials, each piece reflects the beauty and character of handmade craftsmanship.',
+}
+
+export const DEFAULT_CATALOG_PAGE: PageHero = {
+  heroEyebrow: 'The catalog / all objects',
+  heroTitle1: 'Objects for',
+  heroTitle2: 'everyday living.',
+  heroLead: 'Quiet forms that fill the home with more feeling and less noise.',
 }
 
 export const DEFAULT_ABOUT: AboutPage = {
@@ -421,6 +514,9 @@ const PAGE_DEFAULTS: Record<string, object> = {
   about: DEFAULT_ABOUT,
   business: DEFAULT_BUSINESS,
   contact: DEFAULT_CONTACT,
+  lookbook: DEFAULT_LOOKBOOK_PAGE,
+  collections: DEFAULT_COLLECTIONS_PAGE,
+  catalog: DEFAULT_CATALOG_PAGE,
 }
 
 function pageBySlug<T extends object>(slug: string, defaults: T): T {
@@ -479,8 +575,40 @@ function lookbookEntries(): LookbookEntry[] {
   return items.sort((a, b) => a.order - b.order)
 }
 
+function buildCategories(): Category[] {
+  const list = rawCategories.map((c) => {
+    const childSlugs = rawCategories.filter((k) => k.parent === c.slug).map((k) => k.slug)
+    const inTree = new Set([c.slug, ...childSlugs])
+    const count = products.filter((p) => p.status === 'active' && p.category !== null && inTree.has(p.category.slug)).length
+    const parent = c.parent ? categoryBySlug.get(c.parent) : undefined
+    return {
+      name: c.name,
+      slug: c.slug,
+      description: c.description ?? null,
+      image: c.image ?? null,
+      parent: parent ? { name: parent.name, slug: parent.slug } : null,
+      children: childSlugs
+        .map((slug) => categoryBySlug.get(slug))
+        .filter((k): k is CategoryFile => Boolean(k))
+        .map((k) => ({ name: k.name, slug: k.slug })),
+      productCount: count,
+      eyebrow: c.eyebrow ?? null,
+      title1: c.title1 ?? null,
+      title2: c.title2 ?? null,
+      lead: c.lead ?? null,
+      searchLabel: c.searchLabel ?? null,
+      showOnHome: c.showOnHome ?? false,
+      order: c.order ?? 0,
+    }
+  })
+  return list.sort((a, b) => a.order - b.order)
+}
+
+const categories = buildCategories()
+
 function routeGet(path: string, params: QueryParams = {}): unknown {
   if (path === '/products') return listProducts(params)
+  if (path === '/categories') return { items: categories }
   if (path === '/home') return homePage()
   if (path === '/settings') return siteSettings()
   if (path === '/lookbook') return { items: lookbookEntries() }
