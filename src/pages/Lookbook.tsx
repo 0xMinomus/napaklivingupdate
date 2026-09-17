@@ -1,8 +1,11 @@
+import { useEffect, useState } from 'react'
 import type { ReactElement } from 'react'
 import { Link } from 'react-router-dom'
+import { DEFAULT_LOOKBOOK, get } from '../api'
 import Footer from '../components/Footer'
 import { useDocumentTitle } from '../hooks/useDocumentTitle'
 import { usePageHero } from '../hooks/usePageHero'
+import type { LookbookEntry } from '../types'
 
 interface LookbookCardProps {
   src: string
@@ -26,6 +29,21 @@ function LookbookCard({ src, alt, mono, caption }: LookbookCardProps): ReactElem
 export default function Lookbook(): ReactElement {
   useDocumentTitle('Lookbook — Napak Living')
   usePageHero()
+  const [entries, setEntries] = useState<LookbookEntry[]>(DEFAULT_LOOKBOOK)
+
+  useEffect(() => {
+    let cancelled = false
+    get<{ items: LookbookEntry[] }>('/lookbook')
+      .then((data) => {
+        if (!cancelled) setEntries(data.items)
+      })
+      .catch(() => {
+        if (!cancelled) setEntries(DEFAULT_LOOKBOOK)
+      })
+    return () => {
+      cancelled = true
+    }
+  }, [])
 
   return (
     <>
@@ -49,26 +67,15 @@ export default function Lookbook(): ReactElement {
         </section>
 
         <section className="container lookbook-page-grid" aria-label="Editorial lookbook">
-          <LookbookCard
-            src="https://images.unsplash.com/photo-1616486338812-3dadae4b4ace?auto=format&fit=crop&w=600&q=70"
-            alt="A living room corner with a vase and natural light"
-            mono="01 / living slowly"
-            caption="Details in the everyday"
-          />
-
-          <LookbookCard
-            src="https://images.unsplash.com/photo-1600210492486-724fe5c67fb0?auto=format&fit=crop&w=600&q=70"
-            alt="A dining table styled with ceramics and flowers"
-            mono="02 / gather here"
-            caption="A table made for staying"
-          />
-
-          <LookbookCard
-            src="https://images.unsplash.com/photo-1604014237800-1c9102c219da?auto=format&fit=crop&w=500&q=70"
-            alt="A decorative detail in sunlight"
-            mono="03 / natural light"
-            caption="Find your quiet"
-          />
+          {entries.map((entry) => (
+            <LookbookCard
+              key={entry.mono}
+              src={entry.image}
+              alt={entry.alt ?? entry.caption}
+              mono={entry.mono}
+              caption={entry.caption}
+            />
+          ))}
         </section>
 
         <section className="container section" aria-labelledby="lookbook-download-title">

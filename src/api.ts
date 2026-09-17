@@ -1,4 +1,4 @@
-import type { Collection, HomePage, Paginated, Product, ProductSummary } from './types'
+import type { Collection, HomePage, LookbookEntry, Paginated, Product, ProductSummary, Settings } from './types'
 
 export const API_URL: string = (import.meta.env as { VITE_API_URL?: string } | undefined)
   ?.VITE_API_URL ?? '/api'
@@ -42,11 +42,40 @@ interface CollectionFile {
   slug: string
   description?: string | null
   image?: string | null
+  eyebrow?: string | null
+  titleLine1?: string | null
+  titleLine2?: string | null
+  lead?: string | null
+  heroImage?: string | null
+  heroAlt?: string | null
+  storyEyebrow?: string | null
+  storyLine1?: string | null
+  storyLine2?: string | null
+  quote?: string | null
 }
 
 interface HomeFile {
   heroImage?: string | null
   heroAlt?: string | null
+}
+
+interface SettingsFile {
+  email?: string | null
+  tradeEmail?: string | null
+  whatsapp?: string | null
+  whatsappLabel?: string | null
+  instagram?: string | null
+  studioAddress?: string | null
+  mapsEmbedUrl?: string | null
+  mapsUrl?: string | null
+}
+
+interface LookbookFile {
+  image?: string | null
+  alt?: string | null
+  mono?: string | null
+  caption?: string | null
+  order?: number | null
 }
 
 const productFiles = import.meta.glob<{ default: ProductFile }>('../content/products/*.json', {
@@ -63,6 +92,13 @@ const collectionFiles = import.meta.glob<{ default: CollectionFile }>(
 const pageFiles = import.meta.glob<{ default: HomeFile }>('../content/pages/*.json', {
   eager: true,
 })
+const settingsFiles = import.meta.glob<{ default: SettingsFile }>('../content/settings.json', {
+  eager: true,
+})
+const lookbookFiles = import.meta.glob<{ default: LookbookFile }>(
+  '../content/lookbook/*.json',
+  { eager: true }
+)
 
 // Products without a date sort as newest-first so fresh CMS entries surface on top.
 const FALLBACK_DATE = new Date().toISOString()
@@ -241,6 +277,16 @@ function buildCollections(): Collection[] {
       slug: c.slug,
       description: c.description ?? null,
       image: c.image ?? null,
+      eyebrow: c.eyebrow ?? null,
+      titleLine1: c.titleLine1 ?? null,
+      titleLine2: c.titleLine2 ?? null,
+      lead: c.lead ?? null,
+      heroImage: c.heroImage ?? null,
+      heroAlt: c.heroAlt ?? null,
+      storyEyebrow: c.storyEyebrow ?? null,
+      storyLine1: c.storyLine1 ?? null,
+      storyLine2: c.storyLine2 ?? null,
+      quote: c.quote ?? null,
       productCount: items.length,
       products: items,
     }
@@ -257,6 +303,31 @@ function collectionDetail(slug: string): Collection {
 
 const DEFAULT_HERO_IMAGE = '/pexels-the-ghazi-2152398165-36353283.webp'
 
+export const DEFAULT_SETTINGS: Settings = {
+  email: 'hello@napakliving.com',
+  tradeEmail: 'trade@napakliving.com',
+  whatsapp: 'https://wa.me/6281234567890',
+  whatsappLabel: '+62 812 3456 7890',
+  instagram: '#footer',
+  studioAddress: 'Jimbaran\nBali, Indonesia\nby appointment',
+  mapsEmbedUrl: 'https://maps.google.com/maps?q=-8.7961749,115.1869325&z=16&output=embed',
+  mapsUrl: 'https://maps.app.goo.gl/EVkYBVYKu3ViL8aE8',
+}
+
+function siteSettings(): Settings {
+  const entry = Object.values(settingsFiles)[0]?.default ?? null
+  return {
+    email: entry?.email ?? DEFAULT_SETTINGS.email,
+    tradeEmail: entry?.tradeEmail ?? DEFAULT_SETTINGS.tradeEmail,
+    whatsapp: entry?.whatsapp ?? DEFAULT_SETTINGS.whatsapp,
+    whatsappLabel: entry?.whatsappLabel ?? DEFAULT_SETTINGS.whatsappLabel,
+    instagram: entry?.instagram ?? DEFAULT_SETTINGS.instagram,
+    studioAddress: entry?.studioAddress ?? DEFAULT_SETTINGS.studioAddress,
+    mapsEmbedUrl: entry?.mapsEmbedUrl ?? DEFAULT_SETTINGS.mapsEmbedUrl,
+    mapsUrl: entry?.mapsUrl ?? DEFAULT_SETTINGS.mapsUrl,
+  }
+}
+
 function homePage(): HomePage {
   const entry = Object.entries(pageFiles).find(([path]) => path.endsWith('/home.json'))
   const file = entry ? entry[1].default : null
@@ -266,9 +337,50 @@ function homePage(): HomePage {
   }
 }
 
+export const DEFAULT_LOOKBOOK: LookbookEntry[] = [
+  {
+    image: 'https://images.unsplash.com/photo-1616486338812-3dadae4b4ace?auto=format&fit=crop&w=700&q=70',
+    alt: 'A living room corner with a vase and natural light',
+    mono: '01 / living slowly',
+    caption: 'Details in the everyday',
+    order: 1,
+  },
+  {
+    image: 'https://images.unsplash.com/photo-1600210492486-724fe5c67fb0?auto=format&fit=crop&w=600&q=70',
+    alt: 'A dining table styled with ceramics and flowers',
+    mono: '02 / gather here',
+    caption: 'A table made for staying',
+    order: 2,
+  },
+  {
+    image: 'https://images.unsplash.com/photo-1604014237800-1c9102c219da?auto=format&fit=crop&w=500&q=70',
+    alt: 'A decorative detail in sunlight',
+    mono: '03 / natural light',
+    caption: 'Find your quiet',
+    order: 3,
+  },
+]
+
+function lookbookEntries(): LookbookEntry[] {
+  const items = Object.values(lookbookFiles).map((m) => {
+    const f = m.default
+    return {
+      image: f.image ?? '',
+      alt: f.alt ?? null,
+      mono: f.mono ?? '',
+      caption: f.caption ?? '',
+      order: f.order ?? 0,
+    }
+  }).filter((e) => e.image !== '' && e.caption !== '')
+  if (items.length === 0) return DEFAULT_LOOKBOOK
+  return items.sort((a, b) => a.order - b.order)
+}
+
 function routeGet(path: string, params: QueryParams = {}): unknown {
   if (path === '/products') return listProducts(params)
   if (path === '/home') return homePage()
+  if (path === '/settings') return siteSettings()
+  if (path === '/lookbook') return { items: lookbookEntries() }
 
   let match = path.match(/^\/products\/([^/]+)\/related$/)
   if (match) return { items: relatedProducts(decodeURIComponent(match[1])) }

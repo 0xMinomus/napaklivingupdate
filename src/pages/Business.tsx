@@ -4,10 +4,12 @@ import ContactForm from '../components/ContactForm'
 import Footer from '../components/Footer'
 import { useDocumentTitle } from '../hooks/useDocumentTitle'
 import { usePageHero } from '../hooks/usePageHero'
+import { useSettings } from '../hooks/useSettings'
 
 export default function Business(): ReactElement {
   useDocumentTitle('Trade & Business — Napak Living')
   usePageHero()
+  const settings = useSettings()
 
   return (
     <>
@@ -43,8 +45,8 @@ export default function Business(): ReactElement {
             <h2>Tell us what you are building.</h2>
             <p>Tell us about your needs and project context. Our team will follow up by email or WhatsApp.</p>
             <div className="business-contact-list">
-              <a href="mailto:trade@napakliving.com">trade@napakliving.com ↗</a>
-              <a href="https://wa.me/6281234567890">WhatsApp trade desk ↗</a>
+              <a href={`mailto:${settings.tradeEmail}`}>{settings.tradeEmail} ↗</a>
+              <a href={settings.whatsapp}>WhatsApp trade desk ↗</a>
               <Link to="/lookbook">View lookbook →</Link>
             </div>
           </aside>

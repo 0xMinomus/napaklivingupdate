@@ -4,10 +4,13 @@ import ContactForm from '../components/ContactForm'
 import Footer from '../components/Footer'
 import { useDocumentTitle } from '../hooks/useDocumentTitle'
 import { usePageHero } from '../hooks/usePageHero'
+import { useSettings } from '../hooks/useSettings'
 
 export default function Contact(): ReactElement {
   useDocumentTitle('Contact — Napak Living')
   usePageHero()
+  const settings = useSettings()
+  const addressLines = (settings.studioAddress ?? '').split('\n').filter(Boolean)
 
   return (
     <>
@@ -36,25 +39,26 @@ export default function Contact(): ReactElement {
             <div className="contact-items">
               <div className="contact-item">
                 <span>Email</span>
-                <a href="mailto:hello@napakliving.com">hello@napakliving.com</a>
+                <a href={`mailto:${settings.email}`}>{settings.email}</a>
               </div>
               <div className="contact-item">
                 <span>WhatsApp</span>
-                <a href="https://wa.me/6281234567890">+62 812 3456 7890 ↗</a>
+                <a href={settings.whatsapp}>{settings.whatsappLabel ?? settings.whatsapp} ↗</a>
               </div>
               <div className="contact-item">
                 <span>Studio / showroom</span>
                 <address>
-                  Jimbaran
-                  <br />
-                  Bali, Indonesia
-                  <br />
-                  by appointment
+                  {addressLines.map((line, i) => (
+                    <span key={line}>
+                      {line}
+                      {i < addressLines.length - 1 && <br />}
+                    </span>
+                  ))}
                 </address>
               </div>
               <div className="contact-item">
                 <span>Social</span>
-                <a href="#footer">Instagram ↗</a>
+                <a href={settings.instagram ?? '#footer'}>Instagram ↗</a>
               </div>
             </div>
           </div>
@@ -89,7 +93,7 @@ export default function Contact(): ReactElement {
           <div className="map-card">
             <iframe
               title="Map to Napak Living Studio"
-              src="https://maps.google.com/maps?q=-8.7961749,115.1869325&z=16&output=embed"
+              src={settings.mapsEmbedUrl ?? ''}
               loading="lazy"
               referrerPolicy="no-referrer-when-downgrade"
             />
@@ -99,7 +103,7 @@ export default function Contact(): ReactElement {
               <p>Jimbaran, Bali — open by appointment. Tap the pin for directions.</p>
               <a
                 className="text-link"
-                href="https://maps.app.goo.gl/EVkYBVYKu3ViL8aE8"
+                href={settings.mapsUrl ?? ''}
                 target="_blank"
                 rel="noreferrer"
               >

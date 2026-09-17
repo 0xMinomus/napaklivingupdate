@@ -121,6 +121,16 @@ collections:
       - { label: 'Slug (URL — lock after first publish)', name: slug, widget: string, required: true, pattern: ['^[a-z0-9-]+$', 'Lowercase letters, numbers and hyphens only'] }
       - { label: 'Description', name: description, widget: text, required: false }
       - { label: 'Image', name: image, widget: image, required: false }
+      - { label: 'Eyebrow (e.g. Collection / 01)', name: eyebrow, widget: string, required: false }
+      - { label: 'Title Line 1', name: titleLine1, widget: string, required: false }
+      - { label: 'Title Line 2', name: titleLine2, widget: string, required: false }
+      - { label: 'Lead', name: lead, widget: text, required: false }
+      - { label: 'Hero Image', name: heroImage, widget: image, required: false }
+      - { label: 'Hero Alt Text', name: heroAlt, widget: string, required: false }
+      - { label: 'Story Eyebrow', name: storyEyebrow, widget: string, required: false }
+      - { label: 'Story Line 1', name: storyLine1, widget: string, required: false }
+      - { label: 'Story Line 2', name: storyLine2, widget: string, required: false }
+      - { label: 'Quote', name: quote, widget: text, required: false }
 
   - name: pages
     label: Pages
@@ -131,3 +141,37 @@ collections:
         fields:
           - { label: 'Hero Image (lebar ±1600px, WebP)', name: heroImage, widget: image, required: true }
           - { label: 'Hero Alt Text', name: heroAlt, widget: string, required: false }
+
+  - name: settings
+    label: Settings
+    files:
+      - name: site
+        label: Site Contact & Social
+        file: content/settings.json
+        fields:
+          - { label: 'Email', name: email, widget: string, required: true }
+          - { label: 'Trade Email', name: tradeEmail, widget: string, required: true }
+          - { label: 'WhatsApp URL (https://wa.me/...)', name: whatsapp, widget: string, required: true }
+          - { label: 'WhatsApp Label', name: whatsappLabel, widget: string, required: false }
+          - { label: 'Instagram URL', name: instagram, widget: string, required: false }
+          - { label: 'Studio Address (satu baris per baris)', name: studioAddress, widget: text, required: false }
+          - { label: 'Google Maps Embed URL', name: mapsEmbedUrl, widget: string, required: false }
+          - { label: 'Google Maps Link', name: mapsUrl, widget: string, required: false }
+
+  - name: lookbook
+    label: Lookbook
+    folder: content/lookbook
+    extension: json
+    format: json
+    create: true
+    delete: true
+    slug: '{{slug}}'
+    summary: '{{mono}} — {{caption}}'
+    fields:
+      - { label: 'Name', name: name, widget: string, required: true }
+      - { label: 'Slug (lock after first publish)', name: slug, widget: string, required: true, pattern: ['^[a-z0-9-]+$', 'Lowercase letters, numbers and hyphens only'] }
+      - { label: 'Image', name: image, widget: image, required: true }
+      - { label: 'Alt Text', name: alt, widget: string, required: true }
+      - { label: 'Mono Label (e.g. 01 / living slowly)', name: mono, widget: string, required: true }
+      - { label: 'Caption', name: caption, widget: string, required: true }
+      - { label: 'Order', name: order, widget: number, required: false, default: 0 }

@@ -8,49 +8,8 @@ import { useDocumentTitle } from '../hooks/useDocumentTitle'
 import { usePageHero } from '../hooks/usePageHero'
 import type { Collection } from '../types'
 
-interface CollectionConfig {
-  eyebrow: string
-  titleLine1: string
-  titleLine2: string
-  lead: string
-  image: string
-  imageAlt: string
-  storyEyebrow: string
-  storyLine1: string
-  storyLine2: string
-  quote: string
-}
-
-const COLLECTION_PAGES: Record<string, CollectionConfig> = {
-  'ruang-pagi': {
-    eyebrow: 'Collection / 01',
-    titleLine1: 'Ruang',
-    titleLine2: 'Pagi.',
-    lead: 'Soft colors for a slower beginning. Ruang Pagi gathers light forms that catch the first light and make a home feel open.',
-    image: 'https://images.unsplash.com/photo-1600607687920-4e2a09cf159d?auto=format&fit=crop&w=1000&q=70',
-    imageAlt: 'A warm interior from the Ruang Pagi collection',
-    storyEyebrow: 'The feeling',
-    storyLine1: 'Start softly.',
-    storyLine2: 'Stay awhile.',
-    quote: '“Morning light, warm surfaces, and one object that makes us want to stay.”',
-  },
-  'bumi-tenang': {
-    eyebrow: 'Collection / 02',
-    titleLine1: 'Bumi',
-    titleLine2: 'Tenang.',
-    lead: 'Honest materials for a grounded space. Bumi Tenang gathers earthy colors, textures, and objects that feel better with use.',
-    image: 'https://images.unsplash.com/photo-1618221195710-dd6b41faaea6?auto=format&fit=crop&w=1000&q=70',
-    imageAlt: 'A natural interior from the Bumi Tenang collection',
-    storyEyebrow: 'The feeling',
-    storyLine1: 'Stay grounded.',
-    storyLine2: 'Keep it honest.',
-    quote: '“Honest textures, calming colors, and objects that keep finding their place.”',
-  },
-}
-
 export default function CollectionDetail(): ReactElement {
   const { slug = '' } = useParams()
-  const config = COLLECTION_PAGES[slug]
   const [data, setData] = useState<Collection | null>(null)
   const [error, setError] = useState(false)
 
@@ -70,7 +29,10 @@ export default function CollectionDetail(): ReactElement {
     }
   }, [slug])
 
-  const displayName = data?.name ?? (config ? config.titleLine1 + ' ' + config.titleLine2.replace(/\.$/, '') : slug)
+  const displayName = data?.name ?? slug
+  const titleLine1 = data?.titleLine1 ?? displayName
+  const titleLine2 = data?.titleLine2 ?? ''
+  const hasStory = Boolean(data?.storyLine1 ?? data?.quote)
   useDocumentTitle(`${displayName} — Napak Living`)
   usePageHero()
 
@@ -84,15 +46,15 @@ export default function CollectionDetail(): ReactElement {
               <span>/</span>
               <Link to="/collections">Collections</Link>
               <span>/</span>
-              <span>{config ? config.titleLine1 : displayName}</span>
+              <span>{titleLine1}</span>
             </p>
-            <p className="eyebrow">{config?.eyebrow ?? 'Collection'}</p>
+            <p className="eyebrow">{data?.eyebrow ?? 'Collection'}</p>
             <h1 id="page-title" className="display-title">
-              <span>{config ? config.titleLine1 : displayName}</span>
-              <span className="muted-line">{config ? config.titleLine2 : ''}</span>
+              <span>{titleLine1}</span>
+              <span className="muted-line">{titleLine2}</span>
             </h1>
             <p className="lead">
-              {config ? config.lead : data?.description ?? 'A Napak Living collection.'}
+              {data?.lead ?? data?.description ?? 'A Napak Living collection.'}
             </p>
             <div className="category-links">
               <Link className="category-chip" to={`/catalog?collection=${encodeURIComponent(slug)}`}>
@@ -105,23 +67,23 @@ export default function CollectionDetail(): ReactElement {
           </div>
           <figure className="collection-detail-image">
             <img
-              src={config ? config.image : (data?.image ?? '')}
-              alt={config ? config.imageAlt : displayName}
+              src={data?.heroImage ?? data?.image ?? ''}
+              alt={data?.heroAlt ?? displayName}
             />
           </figure>
         </section>
 
-        {config && (
+        {hasStory && (
           <section className="container collection-story" aria-labelledby="collection-story-title">
             <div>
-              <p className="eyebrow">{config.storyEyebrow}</p>
+              <p className="eyebrow">{data?.storyEyebrow ?? ''}</p>
               <h2 id="collection-story-title" className="section-title">
-                <span>{config.storyLine1}</span>
-                <span className="muted-line">{config.storyLine2}</span>
+                <span>{data?.storyLine1 ?? ''}</span>
+                <span className="muted-line">{data?.storyLine2 ?? ''}</span>
               </h2>
             </div>
             <div className="collection-story-note">
-              <p>{config.quote}</p>
+              <p>{data?.quote ?? ''}</p>
             </div>
           </section>
         )}

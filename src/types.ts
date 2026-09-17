@@ -64,6 +64,16 @@ export interface Collection {
   slug: string
   description: string | null
   image: string | null
+  eyebrow: string | null
+  titleLine1: string | null
+  titleLine2: string | null
+  lead: string | null
+  heroImage: string | null
+  heroAlt: string | null
+  storyEyebrow: string | null
+  storyLine1: string | null
+  storyLine2: string | null
+  quote: string | null
   productCount: number
   products?: ProductSummary[]
 }
@@ -71,4 +81,23 @@ export interface Collection {
 export interface HomePage {
   heroImage: string | null
   heroAlt: string | null
+}
+
+export interface Settings {
+  email: string
+  tradeEmail: string
+  whatsapp: string
+  whatsappLabel: string | null
+  instagram: string | null
+  studioAddress: string | null
+  mapsEmbedUrl: string | null
+  mapsUrl: string | null
+}
+
+export interface LookbookEntry {
+  image: string
+  alt: string | null
+  mono: string
+  caption: string
+  order: number
 }

@@ -1,12 +1,12 @@
 import { useEffect, useState } from 'react'
 import type { ReactElement } from 'react'
 import { Link } from 'react-router-dom'
-import { get } from '../api'
+import { get, DEFAULT_LOOKBOOK } from '../api'
 import ProductGrid from '../components/ProductGrid'
 import Footer from '../components/Footer'
 import { useDocumentTitle } from '../hooks/useDocumentTitle'
 import { useHeroAnimation } from '../hooks/useHeroAnimation'
-import type { HomePage, Paginated, ProductSummary } from '../types'
+import type { HomePage, LookbookEntry, Paginated, ProductSummary } from '../types'
 
 function shuffle<T>(arr: T[]): T[] {
   const a = arr.slice()
@@ -53,6 +53,43 @@ function FeaturedProducts(): ReactElement {
     )
   }
   return <ProductGrid products={products} id="featured-products" />
+}
+
+const LOOKBOOK_SIZES = ['lookbook-tall', 'lookbook-wide', 'lookbook-small']
+
+function LookbookPreview(): ReactElement {
+  const [entries, setEntries] = useState<LookbookEntry[]>(DEFAULT_LOOKBOOK)
+
+  useEffect(() => {
+    let cancelled = false
+    get<{ items: LookbookEntry[] }>('/lookbook')
+      .then((data) => {
+        if (!cancelled) setEntries(data.items)
+      })
+      .catch(() => {
+        if (!cancelled) setEntries(DEFAULT_LOOKBOOK)
+      })
+    return () => {
+      cancelled = true
+    }
+  }, [])
+
+  return (
+    <div className="lookbook-grid">
+      {entries.map((entry, i) => (
+        <figure
+          key={entry.mono}
+          className={`lookbook-image ${LOOKBOOK_SIZES[i % LOOKBOOK_SIZES.length]}`}
+        >
+          <img src={entry.image} alt={entry.alt ?? entry.caption} loading="lazy" />
+          <figcaption>
+            <span className="mono">{entry.mono}</span>
+            <span>{entry.caption}</span>
+          </figcaption>
+        </figure>
+      ))}
+    </div>
+  )
 }
 
 export default function Home(): ReactElement {
@@ -243,41 +280,7 @@ export default function Home(): ReactElement {
             </Link>
           </div>
 
-          <div className="lookbook-grid">
-            <figure className="lookbook-image lookbook-tall">
-              <img
-                src="https://images.unsplash.com/photo-1616486338812-3dadae4b4ace?auto=format&fit=crop&w=700&q=70"
-                alt="A home corner with a chair, wooden table, and vase"
-                loading="lazy"
-              />
-              <figcaption>
-                <span className="mono">01 / living slowly</span>
-                <span>Details in the everyday</span>
-              </figcaption>
-            </figure>
-            <figure className="lookbook-image lookbook-wide">
-              <img
-                src="https://images.unsplash.com/photo-1600210492486-724fe5c67fb0?auto=format&fit=crop&w=600&q=70"
-                alt="A dining table with ceramic plates and a flower vase"
-                loading="lazy"
-              />
-              <figcaption>
-                <span className="mono">02 / gather here</span>
-                <span>A table made for staying</span>
-              </figcaption>
-            </figure>
-            <figure className="lookbook-image lookbook-small">
-              <img
-                src="https://images.unsplash.com/photo-1604014237800-1c9102c219da?auto=format&fit=crop&w=500&q=70"
-                alt="A tabletop detail with sunlight"
-                loading="lazy"
-              />
-              <figcaption>
-                <span className="mono">03 / natural light</span>
-                <span>Find your quiet</span>
-              </figcaption>
-            </figure>
-          </div>
+          <LookbookPreview />
         </section>
 
         <section className="section story-section container" id="story" aria-labelledby="story-title">

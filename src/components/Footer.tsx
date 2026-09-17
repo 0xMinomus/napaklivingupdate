@@ -1,6 +1,7 @@
 import { FormEvent } from 'react'
 import type { ReactElement } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
+import { useSettings } from '../hooks/useSettings'
 
 interface FooterProps {
   variant?: 'instagram' | 'contact'
@@ -9,6 +10,7 @@ interface FooterProps {
 
 export default function Footer({ variant = 'instagram', minimal = false }: FooterProps): ReactElement {
   const navigate = useNavigate()
+  const settings = useSettings()
 
   const handleNewsletter = (e: FormEvent<HTMLFormElement>): void => {
     e.preventDefault()
@@ -36,11 +38,11 @@ export default function Footer({ variant = 'instagram', minimal = false }: Foote
           </div>
           <div className="footer-column">
             <p className="footer-label">Get in touch</p>
-            <a href="mailto:hello@napakliving.com">hello@napakliving.com</a>
-            <a href="https://wa.me/6281234567890">WhatsApp</a>
+            <a href={`mailto:${settings.email}`}>{settings.email}</a>
+            <a href={settings.whatsapp}>WhatsApp</a>
             <Link to="/business">Trade inquiries</Link>
             {variant === 'instagram' ? (
-              <a href="#footer">Instagram ↗</a>
+              <a href={settings.instagram ?? '#footer'}>Instagram ↗</a>
             ) : (
               <Link to="/contact">Contact</Link>
             )}

@@ -2,5 +2,15 @@
   "name": "Ruang Pagi",
   "slug": "ruang-pagi",
   "description": "Soft colors and quiet forms for a slower start to the day. Ruang Pagi gathers light forms that catch the first light and make a home feel open.",
-  "image": "https://images.unsplash.com/photo-1600607687920-4e2a09cf159d?auto=format&fit=crop&w=1500&q=70"
+  "image": "https://images.unsplash.com/photo-1600607687920-4e2a09cf159d?auto=format&fit=crop&w=1500&q=70",
+  "eyebrow": "Collection / 01",
+  "titleLine1": "Ruang",
+  "titleLine2": "Pagi.",
+  "lead": "Soft colors for a slower beginning. Ruang Pagi gathers light forms that catch the first light and make a home feel open.",
+  "heroImage": "https://images.unsplash.com/photo-1600607687920-4e2a09cf159d?auto=format&fit=crop&w=1000&q=70",
+  "heroAlt": "A warm interior from the Ruang Pagi collection",
+  "storyEyebrow": "The feeling",
+  "storyLine1": "Start softly.",
+  "storyLine2": "Stay awhile.",
+  "quote": "“Morning light, warm surfaces, and one object that makes us want to stay.”"
 }
