@@ -9,9 +9,16 @@ backend:
 media_folder: public/Product
 public_folder: /Product
 
+site_url: https://napaklivingupdate.vercel.app
+display_url: https://napaklivingupdate.vercel.app
+logo_url: /logo-hitam.png
+show_preview_links: true
+
 collections:
   - name: products
-    label: Products
+    label: Produk
+    label_singular: Produk
+    description: 'Kelola katalog: tambah produk baru, ubah harga/stok, atau sembunyikan via status Draft.'
     folder: content/products
     extension: json
     format: json
@@ -19,6 +26,14 @@ collections:
     delete: true
     slug: '{{slug}}'
     summary: '{{name}} ({{slug}})'
+    sortable_fields: ['name', 'createdAt', 'updatedAt']
+    view_groups:
+      - label: Aktif
+        field: status
+        pattern: 'active'
+      - label: Draft
+        field: status
+        pattern: 'draft'
     fields:
       - { label: 'Name', name: name, widget: string, required: true }
       - { label: 'Slug (URL — lock after first publish, renaming breaks links)', name: slug, widget: string, required: true, pattern: ['^[a-z0-9-]+$', 'Lowercase letters, numbers and hyphens only'] }
@@ -53,6 +68,8 @@ collections:
         name: images
         widget: list
         required: false
+        summary: '{{alt}}'
+        collapsed: true
         fields:
           - { label: 'Image', name: url, widget: image, required: true }
           - { label: 'Alt Text', name: alt, widget: string, required: true }
@@ -85,7 +102,9 @@ collections:
       - { label: 'Last Updated', name: updatedAt, widget: datetime, required: false }
 
   - name: categories
-    label: Categories
+    label: Kategori
+    label_singular: Kategori
+    description: 'Kelompok produk untuk filter katalog (mis. Vas, Tray). Slug jangan diganti setelah live.'
     folder: content/categories
     extension: json
     format: json
@@ -93,6 +112,7 @@ collections:
     delete: true
     slug: '{{slug}}'
     summary: '{{name}} ({{slug}})'
+    sortable_fields: ['name']
     fields:
       - { label: 'Name', name: name, widget: string, required: true }
       - { label: 'Slug (URL — lock after first publish)', name: slug, widget: string, required: true, pattern: ['^[a-z0-9-]+$', 'Lowercase letters, numbers and hyphens only'] }
@@ -108,7 +128,9 @@ collections:
         required: false
 
   - name: collections
-    label: Collections
+    label: Koleksi
+    label_singular: Koleksi
+    description: 'Koleksi kurasi (Ruang Pagi, Bumi Tenang, ...). Urutan tampil diatur via field Order.'
     folder: content/collections
     extension: json
     format: json
@@ -116,6 +138,7 @@ collections:
     delete: true
     slug: '{{slug}}'
     summary: '{{name}} ({{slug}})'
+    sortable_fields: ['order', 'name']
     fields:
       - { label: 'Name', name: name, widget: string, required: true }
       - { label: 'Slug (URL — lock after first publish)', name: slug, widget: string, required: true, pattern: ['^[a-z0-9-]+$', 'Lowercase letters, numbers and hyphens only'] }
@@ -135,17 +158,20 @@ collections:
       - { label: 'Quote', name: quote, widget: text, required: false }
 
   - name: pages
-    label: Pages
+    label: Halaman
+    description: 'Teks + gambar halaman statis (hero, about, bisnis, kontak). Kosongkan field = kembali ke teks bawaan.'
     files:
       - name: home
-        label: Home Hero
+        label: Beranda — Hero
+        description: 'Gambar besar pembuka halaman depan.'
         file: content/pages/home.json
         fields:
           - { label: 'Hero Image (lebar ±1600px, WebP)', name: heroImage, widget: image, required: true }
           - { label: 'Hero Alt Text', name: heroAlt, widget: string, required: false }
 
       - name: about
-        label: About Page
+        label: Halaman About
+        description: 'Seluruh teks halaman Our Story + daftar Values & Materials.'
         file: content/pages/about.json
         fields:
           - { label: 'Hero Eyebrow', name: heroEyebrow, widget: string, required: false }
@@ -173,6 +199,8 @@ collections:
             name: values
             widget: list
             required: false
+            summary: '{{title}}'
+            collapsed: true
             fields:
               - { label: 'Title', name: title, widget: string }
               - { label: 'Text', name: text, widget: text }
@@ -183,13 +211,16 @@ collections:
             name: materials
             widget: list
             required: false
+            summary: '{{title}}'
+            collapsed: true
             fields:
               - { label: 'Tag (e.g. 01 / ceramic)', name: tag, widget: string }
               - { label: 'Title', name: title, widget: string }
               - { label: 'Text', name: text, widget: text }
 
       - name: business
-        label: Business Page
+        label: Halaman Bisnis
+        description: 'Teks halaman Trade + daftar Services.'
         file: content/pages/business.json
         fields:
           - { label: 'Hero Eyebrow', name: heroEyebrow, widget: string, required: false }
@@ -208,13 +239,16 @@ collections:
             name: services
             widget: list
             required: false
+            summary: '{{title}}'
+            collapsed: true
             fields:
               - { label: 'Mono (e.g. 01 / wholesale)', name: mono, widget: string }
               - { label: 'Title', name: title, widget: string }
               - { label: 'Text', name: text, widget: text }
 
       - name: contact
-        label: Contact Page
+        label: Halaman Kontak
+        description: 'Teks halaman Contact. Email/WA/alamat ada di menu Settings.'
         file: content/pages/contact.json
         fields:
           - { label: 'Hero Eyebrow', name: heroEyebrow, widget: string, required: false }
@@ -228,10 +262,11 @@ collections:
           - { label: 'Map Text', name: mapText, widget: text, required: false }
 
   - name: settings
-    label: Settings
+    label: Pengaturan
+    description: 'Kontak + sosmed + alamat yang tampil di footer dan halaman Contact/Bisnis.'
     files:
       - name: site
-        label: Site Contact & Social
+        label: Kontak & Sosial Media
         file: content/settings.json
         fields:
           - { label: 'Email', name: email, widget: string, required: true }
@@ -245,6 +280,8 @@ collections:
 
   - name: lookbook
     label: Lookbook
+    label_singular: Lookbook
+    description: 'Kartu foto jurnal di halaman depan + halaman Lookbook. Urutan via field Order.'
     folder: content/lookbook
     extension: json
     format: json
@@ -252,6 +289,7 @@ collections:
     delete: true
     slug: '{{slug}}'
     summary: '{{mono}} — {{caption}}'
+    sortable_fields: ['order', 'name']
     fields:
       - { label: 'Name', name: name, widget: string, required: true }
       - { label: 'Slug (lock after first publish)', name: slug, widget: string, required: true, pattern: ['^[a-z0-9-]+$', 'Lowercase letters, numbers and hyphens only'] }
