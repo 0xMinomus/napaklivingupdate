@@ -15,7 +15,7 @@ Single source of truth for this codebase. Read this once and you know everything
 1. **Static frontend + Decap CMS (git-based, no server).** Product/category/collection content lives in `content/*.json` (one file per product/category/collection), edited via `/admin` (Decap, GitHub OAuth via `api/auth.js`). Every save = commit to `main` = Vercel rebuild. `src/api.ts` is a **client-side mock API** over those JSON files (same signatures as the old REST API); components don't know/care there's no server.
 2. Deployed on **Vercel**. `vercel.json` sets `"buildCommand": "npm run build"` explicitly — this intentionally overrides any stale `vercel-build` setting in the Vercel dashboard. Don't remove it. NOTE: `api/auth.js` is a Vercel serverless function (OAuth broker) — functions take precedence over the SPA rewrite in `vercel.json`; keep the rewrite as-is.
 3. Deployed on **Vercel**. `vercel.json` sets `"buildCommand": "npm run build"` explicitly — this intentionally overrides any stale `vercel-build` setting in the Vercel dashboard. Don't remove it.
-4. All images are **WebP only**, no `.jpg/.png` anywhere. Product images come in 3 sizes each (`base`=1000px max-dim, `@640`, `@320`) under `public/Product/`.
+4. Photos are **WebP only**; provided brand logos remain PNG (`logo-hitam.png`, `logo-putih.png`). Product photos come in 3 sizes each (`base`=1000px max-dim, `@640`, `@320`) under `public/Product/`.
 5. React 19 + Vite 6 + TypeScript + react-router-dom v7. No CSS framework, no Tailwind, no UI library. Plain CSS in two files.
 6. Node 22 (`engines` in package.json). `"type": "module"`.
 
@@ -106,6 +106,8 @@ Rules:
 - Never commit JPEG/PNG product photos. Convert to WebP first (e.g. squoosh.app).
 - Every product image MUST have all 3 variants or cards/thumbs will 404.
 - Unsplash embeds use `q=70` (tuned for PageSpeed) and modest `w` values per usage.
+- Brand logos are an exception to the photo format rule. Header and footer use `/logo-hitam.png` (6023×1457); header-only CSS handles white contrast over dark surfaces. `/logo-putih.png` also exists; `/logo.png` does not. Do not restore that obsolete footer path.
+- Footer logo path repair verified on desktop home/catalog and 320px catalog: the black PNG loads visibly, preserves its aspect ratio, and links home. TypeScript and production build passed; the header asset/style are unchanged.
 
 ### Homepage hero
 
