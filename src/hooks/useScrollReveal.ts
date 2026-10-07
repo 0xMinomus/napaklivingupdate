@@ -1,107 +1,88 @@
 import { useRef } from 'react'
 import { useGSAP } from '@gsap/react'
-import { gsap, ScrollTrigger } from '../lib/gsap'
+import { gsap } from '../lib/gsap'
 
-const EASE = 'power2.out'
-
-interface GroupOpts {
-  y: number
-  duration: number
-  stagger?: number
-  start?: string
-}
-
-const GROUPS: Record<string, GroupOpts> = {
-  '.eyebrow': { y: 16, duration: 0.6, stagger: 0.08, start: 'top 88%' },
-  '.display-title, .section-title': { y: 28, duration: 0.8, stagger: 0.1 },
-  '.lead': { y: 20, duration: 0.7, stagger: 0.08, start: 'top 85%' },
-  '.text-link, .shop-link, .button': { y: 14, duration: 0.6, stagger: 0.06, start: 'top 90%' },
-  '.section-heading, .section-topline, .form-heading': { y: 22, duration: 0.7, stagger: 0.1 },
-  '.product-card': { y: 28, duration: 0.7, stagger: 0.08 },
-  '.collection-card, .collection-list-card': { y: 30, duration: 0.8, stagger: 0.1 },
-  '.lookbook-image, .lookbook-page-card': { y: 26, duration: 0.75, stagger: 0.1 },
-  '.material-card, .service-card': { y: 24, duration: 0.7, stagger: 0.08 },
-  '.value-item': { y: 18, duration: 0.6, stagger: 0.06 },
-  '.category-list a': { y: 16, duration: 0.5, stagger: 0.06, start: 'top 90%' },
-  '.trade-panel': { y: 30, duration: 0.8 },
-  '.page-hero': { y: 20, duration: 0.7, start: 'top 90%' },
-  '.breadcrumb': { y: 12, duration: 0.5, stagger: 0.05, start: 'top 92%' },
-  '.filter-panel': { y: 20, duration: 0.6, start: 'top 88%' },
-  '.confirmation-card': { y: 24, duration: 0.7 },
-  '.contact-form, .inquiry-form': { y: 22, duration: 0.65 },
-  '.map-card': { y: 20, duration: 0.6 },
-  '.contact-items, .business-contact-list': { y: 20, duration: 0.6, stagger: 0.08 },
-  '.contact-information, .business-aside': { y: 22, duration: 0.65 },
-}
-
-function batchReveal(targets: Element[], opts: GroupOpts) {
-  if (!targets.length) return
-  const { y, duration, stagger, start = 'top 87%' } = opts
-
-  gsap.set(targets, { opacity: 0, y })
-  ScrollTrigger.batch(targets, {
-    onEnter: (batch) => {
-      gsap.to(batch, {
-        opacity: 1,
-        y: 0,
-        duration,
-        ease: EASE,
-        stagger,
-        overwrite: true,
-      })
-    },
-    start,
-    once: true,
-  })
-}
-
-function collect(container: HTMLElement, added?: Element[]): void {
-  for (const [selector, opts] of Object.entries(GROUPS)) {
-    if (!added) {
-      batchReveal(Array.from(container.querySelectorAll(selector)), opts)
-      continue
-    }
-    const els: Element[] = []
-    for (const node of added) {
-      if (node.matches(selector)) els.push(node)
-      els.push(...Array.from(node.querySelectorAll(selector)))
-    }
-    batchReveal(els, opts)
-  }
-}
+const EXCLUDED = '.hero-bg, .page-hero, .about-intro, .business-hero, .contact-page-hero, .collection-detail-hero, .product-page'
 
 export function useScrollReveal() {
   const containerRef = useRef<HTMLDivElement>(null)
 
-  useGSAP(
-    () => {
-      const el = containerRef.current
-      if (!el) return
+  useGSAP(() => {
+    const root = containerRef.current
+    if (!root) return
+    const media = gsap.matchMedia()
 
-      collect(el)
+    media.add('(prefers-reduced-motion: no-preference)', (context) => {
+      const tracked = new Set<HTMLElement>()
+      const running = new Map<HTMLElement, gsap.core.Timeline>()
+      const played = new WeakSet<HTMLElement>()
+      const enter = context.add('enter', (heading: HTMLElement) => {
+        if (!root.contains(heading) || played.has(heading)) return
+        played.add(heading)
+        observer.unobserve(heading)
+        const lines = heading.querySelectorAll(':scope > span')
+        const targets = lines.length ? lines : [heading]
+        const timeline = gsap.timeline({ onComplete: () => running.delete(heading) })
+        timeline.fromTo(targets, {
+          clipPath: 'inset(0 100% 0 0)', x: 18,
+        }, {
+          clipPath: 'inset(0 0% 0 0)', x: 0, duration: 0.8,
+          stagger: 0.1, ease: 'power3.out', clearProps: 'clipPath,transform',
+        })
+        running.set(heading, timeline)
+      })
 
-      const handled = new WeakSet<Element>()
-      const observer = new MutationObserver((mutations) => {
-        const added: Element[] = []
-        for (const m of mutations) {
-          for (const n of m.addedNodes) {
-            if (n instanceof Element && !handled.has(n)) {
-              handled.add(n)
-              added.push(n)
-            }
+      const observer = new IntersectionObserver((entries) => {
+        for (const entry of entries) {
+          if (entry.isIntersecting) enter(entry.target)
+          else if (entry.boundingClientRect.bottom < 0) observer.unobserve(entry.target)
+        }
+      }, { threshold: 0.15, rootMargin: '0px 0px -12% 0px' })
+
+      const collect = (node: Element) => {
+        const headings = node.matches('.section-title')
+          ? [node, ...node.querySelectorAll('.section-title')]
+          : node.querySelectorAll('.section-title')
+        for (const heading of headings) {
+          if (!(heading instanceof HTMLElement) || heading.closest(EXCLUDED) || tracked.has(heading)) continue
+          tracked.add(heading)
+          observer.observe(heading)
+        }
+      }
+      collect(root)
+
+      const mutations = new MutationObserver((changes) => {
+        for (const change of changes) {
+          for (const node of change.addedNodes) {
+            if (node instanceof Element) collect(node)
           }
         }
-        if (added.length) {
-          collect(el, added)
-          ScrollTrigger.refresh()
+        for (const heading of tracked) {
+          if (!root.contains(heading)) {
+            observer.unobserve(heading)
+            running.get(heading)?.revert()
+            running.delete(heading)
+            tracked.delete(heading)
+          }
         }
       })
-      observer.observe(el, { childList: true, subtree: true })
+      mutations.observe(root, { childList: true, subtree: true })
 
-      return () => observer.disconnect()
-    },
-    { scope: containerRef }
-  )
+      const onFocus = () => {
+        for (const timeline of running.values()) timeline.progress(1)
+      }
+      root.addEventListener('focusin', onFocus)
+      return () => {
+        observer.disconnect()
+        mutations.disconnect()
+        root.removeEventListener('focusin', onFocus)
+        running.clear()
+        tracked.clear()
+      }
+    }, root)
+
+    return () => media.revert()
+  }, { scope: containerRef })
 
   return containerRef
 }

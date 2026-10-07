@@ -32,7 +32,7 @@ function CollectionCard({
         <h2>{title}</h2>
         <p>{description}</p>
         <span className="collection-list-arrow" aria-hidden="true">
-          ↗
+          <span className="motion-arrow-mark">↗</span>
         </span>
       </div>
     </Link>
@@ -41,7 +41,7 @@ function CollectionCard({
 
 export default function Collections(): ReactElement {
   useDocumentTitle('Collections — Napak Living')
-  usePageHero()
+  const pageRef = usePageHero()
   const [items, setItems] = useState<Collection[]>([])
   const [page, setPage] = useState<PageHero>(DEFAULT_COLLECTIONS_PAGE)
 
@@ -68,7 +68,7 @@ export default function Collections(): ReactElement {
 
   return (
     <>
-      <main id="main-content" className="page-main">
+      <main ref={pageRef} id="main-content" className="page-main">
         <section className="page-hero collection-page-hero container" aria-labelledby="page-title">
           <p className="breadcrumb">
             <Link to="/">Home</Link>
@@ -81,7 +81,6 @@ export default function Collections(): ReactElement {
             <span className="muted-line">{page.heroTitle2}</span>
           </h1>
           <p className="lead">{page.heroLead}</p>
-          <div className="page-hero-rule"></div>
         </section>
 
         <section className="container collection-list-grid" aria-label="Collection list">

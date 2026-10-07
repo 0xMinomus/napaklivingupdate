@@ -152,7 +152,7 @@ function CollectionPreview(): ReactElement {  const [items, setItems] = useState
             <h3>{c.name}</h3>
             <p>{c.tagline ?? c.description ?? ''}</p>
             <span className="collection-arrow" aria-hidden="true">
-              ↗
+              <span className="motion-arrow-mark">↗</span>
             </span>
           </div>
         </Link>
@@ -163,7 +163,7 @@ function CollectionPreview(): ReactElement {  const [items, setItems] = useState
 
 export default function Home(): ReactElement {
   useDocumentTitle('Napak Living — Objects for a slower home')
-  useHeroAnimation()
+  const heroRef = useHeroAnimation()
   const [page, setPage] = useState<HomePage>(DEFAULT_HOME)
 
   useEffect(() => {
@@ -183,21 +183,30 @@ export default function Home(): ReactElement {
   return (
     <>
       <main id="main-content">
-        <section className="hero hero-bg" aria-labelledby="hero-title">
+        <section ref={heroRef} className="hero hero-bg" aria-labelledby="hero-title">
           <div className="hero-bg-image" aria-hidden="true">
-            <img
-              src={page.heroImage ?? '/pexels-the-ghazi-2152398165-36353283.webp'}
-              alt={page.heroAlt ?? ''}
-              fetchPriority="high"
-              decoding="async"
-            />
+            <picture>
+              {(page.heroImage === null || page.heroImage === DEFAULT_HOME.heroImage) && (
+                <source media="(max-width: 767px)" srcSet="/hero-pexels-erik-mclean-7340487-mobile.webp" />
+              )}
+              <img
+                src={page.heroImage ?? DEFAULT_HOME.heroImage ?? undefined}
+                alt={page.heroAlt ?? ''}
+                fetchPriority="high"
+                decoding="async"
+              />
+            </picture>
           </div>
           <div className="hero-bg-overlay" aria-hidden="true"></div>
           <div className="container hero-bg-content">
             <div className="hero-copy">
               <h1 id="hero-title" className="display-title">
-                <span>{page.heroTitle1}</span>
-                <span className="muted-line">{page.heroTitle2}</span>
+                <span className="hero-title-line">
+                  <span className="hero-title-text">{page.heroTitle1}</span>
+                </span>
+                <span className="hero-title-line muted-line">
+                  <span className="hero-title-text">{page.heroTitle2}</span>
+                </span>
               </h1>
               <p className="lead hero-lead">{page.heroLead}</p>
               <Link className="shop-link" to="/catalog">
@@ -206,6 +215,10 @@ export default function Home(): ReactElement {
               </Link>
             </div>
           </div>
+          <a className="hero-scroll" href="#products">
+            <span className="mono">Scroll to objects</span>
+            <span className="hero-scroll-line" aria-hidden="true"></span>
+          </a>
         </section>
 
         <section className="intro section container" aria-labelledby="intro-title">

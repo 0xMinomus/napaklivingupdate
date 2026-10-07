@@ -1,0 +1,8 @@
+skills:
+  ignoredSkills:
+    - write-swift
+    - animate-expo
+    - migrate-to-shoehorn
+    - scaffold-exercises
+    - antislop*
+    - anti-slop*

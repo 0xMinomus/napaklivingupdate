@@ -67,7 +67,7 @@ export default function ProductDetail(): ReactElement {
   useDocumentTitle(
     product ? `${product.name} — Napak Living` : 'Product — Napak Living'
   )
-  usePageHero()
+  const pageRef = usePageHero(Boolean(product))
 
   const categoryName = product?.category?.name ?? ''
   const categorySlug = product?.category?.slug
@@ -82,7 +82,7 @@ export default function ProductDetail(): ReactElement {
 
   return (
     <>
-      <main id="main-content" className="page-main">
+      <main ref={pageRef} id="main-content" className="page-main">
         <section
           className="container product-page"
           aria-labelledby="product-title"

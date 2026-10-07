@@ -28,7 +28,7 @@ function LookbookCard({ src, alt, mono, caption }: LookbookCardProps): ReactElem
 
 export default function Lookbook(): ReactElement {
   useDocumentTitle('Lookbook — Napak Living')
-  usePageHero()
+  const pageRef = usePageHero()
   const [entries, setEntries] = useState<LookbookEntry[]>(DEFAULT_LOOKBOOK)
   const [page, setPage] = useState<LookbookPage>(DEFAULT_LOOKBOOK_PAGE)
 
@@ -55,7 +55,7 @@ export default function Lookbook(): ReactElement {
 
   return (
     <>
-      <main id="main-content" className="page-main">
+      <main ref={pageRef} id="main-content" className="page-main">
         <section className="page-hero container" aria-labelledby="page-title">
           <p className="breadcrumb">
             <Link to="/">Home</Link>
@@ -68,7 +68,6 @@ export default function Lookbook(): ReactElement {
             <span className="muted-line">{page.heroTitle2}</span>
           </h1>
           <p className="lead lookbook-page-intro">{page.heroLead}</p>
-          <div className="page-hero-rule"></div>
         </section>
 
         <section className="container lookbook-page-grid" aria-label="Editorial lookbook">

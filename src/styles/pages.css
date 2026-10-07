@@ -60,11 +60,6 @@ section[id],
   color: var(--color-smoke);
 }
 
-.page-hero-rule {
-  margin-top: 55px;
-  border-bottom: 1px solid var(--color-stone);
-}
-
 .catalog-section {
   margin-top: 56px;
   margin-bottom: var(--section-gap);
@@ -330,9 +325,13 @@ section[id],
   border: 1px solid transparent;
   border-radius: 8px;
   background: var(--color-ash-gray);
+  width: 100%;
+  padding: 0;
+  cursor: pointer;
 }
 
-.gallery-thumb:first-child,
+.gallery-thumb[aria-pressed='true'],
+.gallery-thumb:focus-visible,
 .gallery-thumb:hover {
   border-color: var(--color-ink);
 }
@@ -1391,10 +1390,6 @@ section[id],
   .contact-page-hero,
   .business-hero {
     padding-top: 45px;
-  }
-
-  .page-hero-rule {
-    margin-top: 42px;
   }
 
   .catalog-section {

@@ -31,7 +31,7 @@ Single source of truth for this codebase. Read this once and you know everything
 | Hosting   | Vercel (static build, SPA rewrite)       | Auto-deploy on push to `main`                  |
 | Backend   | **None**                                 | Formerly Express+Prisma in `server/` — deleted |
 
-Dependencies are minimal on purpose: `react`, `react-dom`, `react-router-dom`. No state library, no animation library, no icon set (icons are inline SVG/CSS shapes).
+Dependencies are minimal on purpose: `react`, `react-dom`, `react-router-dom`, `gsap`, and `@gsap/react`. No state library or icon set (icons are inline SVG/CSS shapes). GSAP owns typography entrances, section-heading reveals, and the portal menu; CSS owns caption/arrow/link/button feedback. Photos and gallery containers stay stationary.
 
 ## 4. Project Structure
 
@@ -43,7 +43,8 @@ Dependencies are minimal on purpose: `react`, `react-dom`, `react-router-dom`. N
 │   ├── llms.txt                # AI-crawler manifest (# H1 + markdown links) — needs H1 + links to pass "agentic browsing" checks
 │   ├── robots.txt              # User-agent: * / Allow: / / Sitemap line only (no exotic directives)
 │   ├── sitemap.xml             # static list of routes
-│   ├── pexels-the-ghazi-2152398165-36353283.webp   # hero image (1600px wide, ~87KB)
+│   ├── hero-pexels-erik-mclean-7340487.webp         # homepage desktop crop
+│   ├── hero-pexels-erik-mclean-7340487-mobile.webp  # homepage portrait crop
 │   └── Product/                # 18 webp files = 6 products × 3 sizes
 │       └── <slug>.webp, <slug>@640.webp, <slug>@320.webp
 ├── src/
@@ -54,8 +55,8 @@ Dependencies are minimal on purpose: `react`, `react-dom`, `react-router-dom`. N
 │   ├── lib/
 │   │   ├── image.ts            # scaleImage(url, width) — responsive URL builder (§7)
 │   │   ├── links.ts            # productUrl/categoryUrl/collectionUrl helpers
-│   │   └── reveal.ts           # useRevealOnScroll hook (IntersectionObserver)
-│   ├── hooks/useDocumentTitle.ts
+│   │   └── gsap.ts             # shared GSAP + useGSAP registration; no ScrollTrigger
+│   ├── hooks/                  # document titles/settings + hero, page-hero, heading-reveal motion
 │   ├── components/             # Header, Footer, Layout, Gallery, ProductCard,
 │   │                           # ProductGrid, Pagination, ContactForm, ScrollToTop
 │   ├── pages/                  # Home, Catalog, ProductDetail, Collections,
@@ -106,6 +107,18 @@ Rules:
 - Every product image MUST have all 3 variants or cards/thumbs will 404.
 - Unsplash embeds use `q=70` (tuned for PageSpeed) and modest `w` values per usage.
 
+### Homepage hero
+
+- Photo: [Erik Mclean / Pexels, 7340487](https://www.pexels.com/photo/living-room-with-couch-and-plants-against-table-near-window-7340487/), used under the [Pexels license](https://www.pexels.com/license/). Resized/cropped locally, metadata stripped, and encoded as WebP; no runtime Pexels request.
+- `content/pages/home.json` and `DEFAULT_HOME` select the desktop asset. `Home.tsx` uses a `<picture>` mobile source at widths up to 767px only for this default photo or its null fallback; a custom CMS hero is not overridden.
+- Keep `fetchPriority="high"`, eager loading, and `decoding="async"`. The photo and its container remain stationary; the overlay preserves white-text readability.
+- Beige/greige grading is baked into both WebPs, not applied by CSS: in CIELAB, positive `a*` is scaled to 12% and positive `b*` to 80%; negative components stay unchanged before converting back to sRGB. This removes the pink cast while keeping colored wood/foliage and the original composition. Desktop/mobile browser checks and the production build passed after grading; image `filter` and `transform` remain `none`.
+
+| Hero asset | Resolution | File size |
+|------------|------------|----------:|
+| `hero-pexels-erik-mclean-7340487.webp` | 1920×1200 | 188 KiB |
+| `hero-pexels-erik-mclean-7340487-mobile.webp` | 1280×1920 | 121 KiB |
+
 ## 8. Deployment (Vercel)
 
 ```json
@@ -125,7 +138,7 @@ Rules:
 
 - **Fonts non-blocking** in `index.html`: stylesheet loaded with `media="print" onload="this.media='all'"`.
 - Preconnects: fonts.googleapis.com, fonts.gstatic.com, images.unsplash.com.
-- Hero image is a resized 1600px WebP (~87KB).
+- Homepage hero uses local WebP desktop/mobile art direction (see §7). Chromium verified that a 390px initial load requests only the mobile variant.
 - PageSpeed history: image delivery was the big win (hero 953KB→87KB, products →42–74KB base). PSI diagnostics like "Reduce unused JavaScript" / "Minify JS Error" can be stale or inherent-to-SPA noise — verify against actual built output before acting.
 - Built assets ARE minified by Vite by default.
 
@@ -143,11 +156,12 @@ Rules:
 3. **Hero banner "shifted" on all devices.** A zoom implemented as `width/height:116%; margin:-8%` shifts the crop. Correct way: `transform: scale(1.16)` on `.hero-bg-image img` (center-origin, no shift). Current intended state: `scale(1.16)` + `object-position: center 58%`.
 4. **Hamburger icon too high.** `.mobile-menu-toggle` needs `place-items:center` (40×40 button, icon centered) so it aligns with the logo.
 5. **package.json regression watch:** the working tree once reverted to the old monorepo version (workspaces/server/concurrently/vercel-build) while `server/` no longer exists — `git restore package.json` fixed it. Committed version is the clean static one (`dev: "vite"` only).
+6. **GSAP cleanup recursion can blank a route.** A callback wrapped by the outer `useGSAP` context and invoked inside its nested `matchMedia` context creates a cyclic context graph. Menu/gallery callbacks now belong directly to the media context via `context.add`; do not wrap them again in the outer context's `contextSafe`.
 
 ## 12. Header / Mobile Menu Implementation
 
-- Desktop: inline nav in `<header>`. Mobile (≤ breakpoint): a `<button class="mobile-menu-toggle">` toggles `menuOpen` state.
-- Overlay: `createPortal(<div class="mobile-menu-overlay">…</div>, document.body)` — solid krem background `var(--color-bone-canvas)` (#efefe4), centered nav links `clamp(22px, 6vw, 30px)`, active page gets olive underline (`--color-studio-blue` #58624a), staggered fade-in, Esc/close button dismisses, body scroll locked while open.
+- Desktop: inline nav in `<header>`. Mobile (≤680px): a `<button class="mobile-menu-toggle">` toggles `menuOpen` state.
+- Overlay: `createPortal(<div class="mobile-menu-overlay">…</div>, document.body)` — solid krem background `var(--color-bone-canvas)` (#efefe4), centered nav links `clamp(22px, 6vw, 30px)`, active page gets olive underline (`--color-studio-blue` #58624a). A reversible GSAP timeline owns entrance/exit; the closing portal is inert and pointer-transparent until removed. Esc/close dismisses, Tab is trapped, focus returns to the trigger, and the previous body overflow is restored. Navigation or resizing past 680px dismisses the menu immediately.
 - Brand palette: olive `#58624a` (`--color-studio-blue`/`--color-wash-blue`), bone `#efefe4`, paper `#fcfcf9`, ink `#181818`.
 
 ## 13. Commands
@@ -169,9 +183,26 @@ Deploy = `git add -A && git commit -m "..." && git push origin main` (auto-deplo
 - TypeScript everywhere; shared domain types centralized in `src/types.ts`.
 - No code comments unless asked; no emojis in code/UI.
 - Functional components + hooks only. Small helper libs in `src/lib/`.
-- CSS: BEM-ish flat class names, design tokens as CSS custom properties in `:root` of `global.css`. Responsive breakpoints around 1331px (desktop nav→burger) and 767px/680px (mobile tweaks).
+- CSS: BEM-ish flat class names, design tokens as CSS custom properties in `:root` of `global.css`. Desktop nav switches to the mobile menu at 680px; other responsive layouts also use 767px and larger breakpoints.
 - Animations respect `prefers-reduced-motion` — anything that hides content behind animation must keep content visible when animations are off (see §11.2).
 
 ## 15. Removed Legacy (context for "why isn't X here")
 
 Formerly a monorepo with `server/` (Express + Prisma + SQLite, admin CRUD API) and Docker/nginx deploy files. All removed in favor of pure static hosting. `src/api.ts` kept the old API surface so pages would need zero changes. If real backend/e-commerce is ever needed, reintroduce it behind the same `api.ts` interface.
+
+## 16. Motion Ownership & Verification
+
+- `src/lib/gsap.ts` registers `useGSAP` once. Scope hooks to their React refs; revert media contexts and disconnect listeners/observers on teardown. Late callbacks inside `matchMedia` must use that child context's `add`, not an outer `contextSafe` wrapper (see §11.6).
+- `useHeroAnimation` rolls headline text through clipped line windows, then introduces supporting copy and a drawn scroll cue linking to `#products`. `usePageHero` wipes in text; data-dependent pages wait until ready. Neither hook animates photos or their containers.
+- `useScrollReveal` uses one native `IntersectionObserver` for `.section-title` headings, playing once when reached. Hero headings are excluded. One child-list `MutationObserver` handles added/removed headings; no per-card observers, `ResizeObserver`, scroll-position polling, or ScrollTrigger refreshes. Text is visible by default; focus finishes running reveals, and live reduced motion restores static text. Page/section titles have no decorative underline strokes or rule elements; functional form borders, section separators, and link feedback remain.
+- CSS replaces the removed `useCardHover`: arrows exit/re-enter their circular windows, product captions underline, and collection/category titles shift slightly. Hover movement requires a fine hover-capable pointer and no reduced-motion preference. Keyboard focus retains outlines/caption feedback. No photo zoom, card lift, or large hover shadow.
+- Gallery thumbnails remain native buttons with `aria-pressed`. Keep the displayed image during a pending load, accept only the latest successful selection, and retain it if the new source fails. Loaded images switch without fade/scale tweens.
+- No continuous decorative animation, scroll hijacking, pinning, permanent `will-change`, or additional animation dependency. Keep menu motion separately scoped to its portal.
+- Earlier motion pass verified: `tsc --noEmit` and production build; recorded hero/section reveals; fine-pointer caption/arrow hover with stationary photos; all nine main/detail routes; 390px and 320px layouts; live reduced motion during an entrance; fast scrolling; empty availability filters and restored cards; product gallery loading/thumbnail selection; mobile-menu route dismissal and restored body scrolling. Repeated development home → catalog → product → home transitions ended with zero active GSAP animations and zero detached targets.
+- Title/hero update verified: build/types; desktop and 390px/320px hero crops and image loading; section headings without pseudo-element lines; home, catalog/category, collections, lookbook, about, business, contact, product/collection details, thank-you, and not-found views; reduced motion; no horizontal overflow or application JavaScript errors in those scenarios.
+- Before this photo replacement, warm-cache Chromium measured typography motion at 1440×900 with CPU throttled 4×: 2,008ms after hero mount, 120 frame intervals, p95 16.7ms, maximum 16.8ms, no observed long tasks. This excludes initial startup before sampling and is not physical iOS/Android or universal FPS certification. There is no permanent automated test suite.
+
+| Motion revision | Main JavaScript, gzip | CSS, gzip |
+|-----------------|----------------------:|----------:|
+| Image motion + ScrollTrigger | 142.57 kB | 9.00 kB |
+| Typography + caption motion, responsive hero | 123.69 kB | 9.28 kB |

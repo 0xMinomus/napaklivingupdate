@@ -11,7 +11,7 @@ import type { ContactPage } from '../types'
 
 export default function Contact(): ReactElement {
   useDocumentTitle('Contact — Napak Living')
-  usePageHero()
+  const pageRef = usePageHero()
   const settings = useSettings()
   const [page, setPage] = useState<ContactPage>(DEFAULT_CONTACT)
 
@@ -33,7 +33,7 @@ export default function Contact(): ReactElement {
 
   return (
     <>
-      <main id="main-content" className="page-main">
+      <main ref={pageRef} id="main-content" className="page-main">
         <section className="container contact-page-hero" aria-labelledby="page-title">
           <p className="breadcrumb">
             <Link to="/">Home</Link>

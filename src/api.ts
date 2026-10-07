@@ -316,7 +316,7 @@ function collectionDetail(slug: string): Collection {
   return collection
 }
 
-const DEFAULT_HERO_IMAGE = '/pexels-the-ghazi-2152398165-36353283.webp'
+const DEFAULT_HERO_IMAGE = '/hero-pexels-erik-mclean-7340487.webp'
 
 export const DEFAULT_SETTINGS: Settings = {
   email: 'hello@napakliving.com',

@@ -9,7 +9,7 @@ import type { AboutPage } from '../types'
 
 export default function About(): ReactElement {
   useDocumentTitle('Our Story — Napak Living')
-  usePageHero()
+  const pageRef = usePageHero()
   const [page, setPage] = useState<AboutPage>(DEFAULT_ABOUT)
 
   useEffect(() => {
@@ -28,7 +28,7 @@ export default function About(): ReactElement {
 
   return (
     <>
-      <main id="main-content" className="page-main">
+      <main ref={pageRef} id="main-content" className="page-main">
         <section className="container about-intro" aria-labelledby="page-title">
           <div>
             <p className="breadcrumb">

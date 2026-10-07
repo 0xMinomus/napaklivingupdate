@@ -11,7 +11,7 @@ import type { BusinessPage } from '../types'
 
 export default function Business(): ReactElement {
   useDocumentTitle('Trade & Business — Napak Living')
-  usePageHero()
+  const pageRef = usePageHero()
   const settings = useSettings()
   const [page, setPage] = useState<BusinessPage>(DEFAULT_BUSINESS)
 
@@ -31,7 +31,7 @@ export default function Business(): ReactElement {
 
   return (
     <>
-      <main id="main-content" className="page-main">
+      <main ref={pageRef} id="main-content" className="page-main">
         <section className="container business-hero" aria-labelledby="page-title">
           <div>
             <p className="breadcrumb">

@@ -19,7 +19,7 @@ export default function ProductCard({ product }: { product: ProductSummary }): R
           <img src={scaleImage(product.image, 640)} alt={product.name} loading="lazy" decoding="async" onError={fallbackToBaseImage} />
         )}
         <span className="image-arrow" aria-hidden="true">
-          ↗
+          <span className="motion-arrow-mark">↗</span>
         </span>
       </Link>
       <div className="product-meta">

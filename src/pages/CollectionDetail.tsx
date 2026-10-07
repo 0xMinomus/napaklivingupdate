@@ -34,11 +34,11 @@ export default function CollectionDetail(): ReactElement {
   const titleLine2 = data?.titleLine2 ?? ''
   const hasStory = Boolean(data?.storyLine1 ?? data?.quote)
   useDocumentTitle(`${displayName} — Napak Living`)
-  usePageHero()
+  const pageRef = usePageHero(Boolean(data))
 
   return (
     <>
-      <main id="main-content" className="page-main">
+      <main ref={pageRef} id="main-content" className="page-main">
         <section className="container collection-detail-hero" aria-labelledby="page-title">
           <div>
             <p className="breadcrumb">

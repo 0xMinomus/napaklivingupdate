@@ -93,7 +93,7 @@ export default function Catalog(): ReactElement {
   useDocumentTitle(
     mode === 'category' && meta ? `${meta.name} — Napak Living` : 'Shop — Napak Living'
   )
-  usePageHero()
+  const pageRef = usePageHero()
 
   const setParams = (updates: Record<string, string | string[] | null>): void => {
     setSearchParams(
@@ -181,7 +181,7 @@ export default function Catalog(): ReactElement {
 
   return (
     <>
-      <main id="main-content" className="page-main">
+      <main ref={pageRef} id="main-content" className="page-main">
         <section className="page-hero container" aria-labelledby="page-title">
           <p className="breadcrumb">
             <Link to="/">Home</Link>
@@ -232,7 +232,6 @@ export default function Catalog(): ReactElement {
               </Link>
             ))}
           </nav>
-          <div className="page-hero-rule"></div>
         </section>
 
           <section
