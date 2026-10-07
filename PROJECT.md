@@ -14,10 +14,9 @@ Single source of truth for this codebase. Read this once and you know everything
 
 1. **Static frontend + Decap CMS (git-based, no server).** Product/category/collection content lives in `content/*.json` (one file per product/category/collection), edited via `/admin` (Decap, GitHub OAuth via `api/auth.js`). Every save = commit to `main` = Vercel rebuild. `src/api.ts` is a **client-side mock API** over those JSON files (same signatures as the old REST API); components don't know/care there's no server.
 2. Deployed on **Vercel**. `vercel.json` sets `"buildCommand": "npm run build"` explicitly — this intentionally overrides any stale `vercel-build` setting in the Vercel dashboard. Don't remove it. NOTE: `api/auth.js` is a Vercel serverless function (OAuth broker) — functions take precedence over the SPA rewrite in `vercel.json`; keep the rewrite as-is.
-3. Deployed on **Vercel**. `vercel.json` sets `"buildCommand": "npm run build"` explicitly — this intentionally overrides any stale `vercel-build` setting in the Vercel dashboard. Don't remove it.
-4. Photos are **WebP only**; provided brand logos remain PNG (`logo-hitam.png`, `logo-putih.png`). Product photos come in 3 sizes each (`base`=1000px max-dim, `@640`, `@320`) under `public/Product/`.
-5. React 19 + Vite 6 + TypeScript + react-router-dom v7. No CSS framework, no Tailwind, no UI library. Plain CSS in two files.
-6. Node 22 (`engines` in package.json). `"type": "module"`.
+3. Photos are **WebP only**; provided brand logos remain PNG (`logo-hitam.png`, `logo-putih.png`). Product photos come in 3 sizes each (`base`=1000px max-dim, `@640`, `@320`) under `public/Product/`.
+4. React 19 + Vite 6 + TypeScript + react-router-dom v7. No CSS framework, no Tailwind, no UI library. Plain CSS in two files.
+5. Node 22 (`engines` in package.json). `"type": "module"`.
 
 ## 3. Tech Stack
 
@@ -123,18 +122,11 @@ Rules:
 
 ## 8. Deployment (Vercel)
 
-```json
-// vercel.json — complete file
-{
-  "$schema": "https://openapi.vercel.sh/vercel.json",
-  "buildCommand": "npm run build",
-  "rewrites": [{ "source": "/(.*)", "destination": "/index.html" }]
-}
-```
+Read `vercel.json` for the current build, redirects, security headers, and rewrites; use [[DEPLOY_VERCEL]] for deployment steps.
 
 - The SPA rewrite makes deep links like `/product/lina-tray` work on refresh.
 - `buildCommand` here overrides the dashboard's framework preset — historically the dashboard had a stale `npm run vercel-build` which broke deploys. If a deploy fails with "Missing script: vercel-build", this file is the fix; keep it.
-- No functions, no env vars needed. `VITE_API_URL` is optional legacy in `api.ts` (defaults to `/api`, unused).
+- Catalog data needs no business API or database. CMS login uses the `api/auth.js` OAuth function and server-only `OAUTH_CLIENT_ID` / `OAUTH_CLIENT_SECRET`; see `DEPLOY_VERCEL.md`. `VITE_API_URL` is optional legacy in `api.ts` (defaults to `/api`, unused).
 
 ## 9. Performance Decisions (don't regress)
 
@@ -155,7 +147,7 @@ Rules:
 
 1. **iOS Safari: product photo fills whole screen.** Cause: `aspect-ratio` box whose `<img>` child used `height:100%` in normal flow — iOS lets intrinsic image size inflate the container. Fix (in `pages.css`): `.gallery-main`/`.gallery-thumb` are `position:relative`, their imgs are `position:absolute; inset:0; width/height:100%; object-fit:cover`. Container height comes purely from `aspect-ratio`.
 2. **Mobile menu bugs (transparent overlay / leftover band after close).** Root cause: `.site-header` has `animation: rise-in ... both` which retains a `transform`, making the header the containing block for `position:fixed` descendants; plus `prefers-reduced-motion` killed link entrance animations leaving them at `opacity:0`. Fix: mobile menu is rendered via **React portal to `document.body`** from `Header.tsx` (`useState(menuOpen)` + conditional render + own ✕ close button + body scroll lock). Menu links default to `opacity:1`; animations only enhance. Do NOT move the overlay back inside `<header>`.
-3. **Hero banner "shifted" on all devices.** A zoom implemented as `width/height:116%; margin:-8%` shifts the crop. Correct way: `transform: scale(1.16)` on `.hero-bg-image img` (center-origin, no shift). Current intended state: `scale(1.16)` + `object-position: center 58%`.
+3. **Hero banner "shifted" on all devices.** An earlier zoom used `width/height:116%; margin:-8%`, shifting the crop. That zoom is retired: current hero photos and containers remain stationary (see §7 and §16). Keep cropping in the responsive assets/object positioning, not enlargement, negative margins, or scale transforms.
 4. **Hamburger icon too high.** `.mobile-menu-toggle` needs `place-items:center` (40×40 button, icon centered) so it aligns with the logo.
 5. **package.json regression watch:** the working tree once reverted to the old monorepo version (workspaces/server/concurrently/vercel-build) while `server/` no longer exists — `git restore package.json` fixed it. Committed version is the clean static one (`dev: "vite"` only).
 6. **GSAP cleanup recursion can blank a route.** A callback wrapped by the outer `useGSAP` context and invoked inside its nested `matchMedia` context creates a cyclic context graph. Menu/gallery callbacks now belong directly to the media context via `context.add`; do not wrap them again in the outer context's `contextSafe`.
@@ -208,3 +200,11 @@ Formerly a monorepo with `server/` (Express + Prisma + SQLite, admin CRUD API) a
 |-----------------|----------------------:|----------:|
 | Image motion + ScrollTrigger | 142.57 kB | 9.00 kB |
 | Typography + caption motion, responsive hero | 123.69 kB | 9.28 kB |
+
+## 17. Project Memory (Obsidian)
+
+- The repository root is the Obsidian vault. Start with [[AGENTS]]; the local [[MEMORY]] index links to existing project/design/content/deployment documentation instead of duplicating it.
+- `MEMORY.md` is intentionally Git-ignored. A fresh clone can reconstruct it from this document and user-confirmed decisions; agents fall back to `PROJECT.md` when it is absent.
+- `.omp/mcp.json` scopes the `obsidian` server to this project's working directory (`mcpvault .`), overriding the global connection without changing another vault. After changing configuration in a running OMP session, run `/mcp reload`; verify the vault lists `PROJECT.md` and `content/` before writing through MCP.
+- After verified work, update the relevant shared section and the local memory checkpoint. Record evidence with its scope; older build/browser/performance results are historical, not proof of the current run. Keep secrets and raw transcripts out of notes.
+

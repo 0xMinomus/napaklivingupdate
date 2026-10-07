@@ -20,7 +20,7 @@ git push -u origin main
 ## 2. Buat project di Vercel
 
 1. [vercel.com/new](https://vercel.com/new) → Import repo GitHub.
-2. Framework preset: **Vite** (auto-detect). `vercel.json` hanya berisi rewrite SPA.
+2. Framework preset: **Vite** (auto-detect). `vercel.json` menetapkan `npm run build`, redirect `/admin`, security headers, dan rewrite SPA; gunakan file tersebut sebagai sumber konfigurasi terbaru.
 3. **Butuh 2 env variable** untuk login admin: `OAUTH_CLIENT_ID` dan
    `OAUTH_CLIENT_SECRET` dari GitHub OAuth App (lihat `PANDUAN-TAMBAH-PRODUK.md`).
 4. Deploy. Selesai.
@@ -40,5 +40,5 @@ Ikuti `PANDUAN-TAMBAH-PRODUK.md` (buka `/admin`, isi form, upload gambar ke
 - Gambar produk berada di `public/Product/` → ikut ter-upload otomatis.
 - Form kontak tidak terhubung backend; submit langsung ke halaman terima kasih
   (bisa disambungkan ke Formspree/Web3Forms nanti jika ingin email sungguhan).
-- Folder `server/` tidak dipakai di Vercel (hanya untuk pengembangan lokal
-  sebelumnya) dan tidak memengaruhi deploy.
+- Folder `server/` sudah dihapus. Project memakai frontend statis dan satu
+  function OAuth (`api/auth.js`), bukan monorepo/backend lama.
