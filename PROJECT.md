@@ -160,17 +160,21 @@ Read `vercel.json` for the current build, redirects, security headers, and rewri
 
 ## 13. Commands
 
-```bash
-npm install          # setup
-npm run dev          # vite dev server → http://localhost:5173
-npm run build        # production build → dist/ (also what Vercel runs)
-npm run preview      # serve dist/ locally
-npx tsc --noEmit     # typecheck (run before committing)
-```
+Setup, pemeriksaan TypeScript, build, dan preview produksi terdokumentasi di
+[README.md](README.md#mulai-lokal). Gunakan Node.js 22.x dan `npm ci` untuk
+mengikuti lockfile; build dan typecheck merupakan pemeriksaan terpisah.
 
-There is no test suite, no linter config. Verify changes with `npx tsc --noEmit && npm run build`.
+Tidak ada test suite atau konfigurasi linter. Sebelum publikasi, stage hanya
+file yang dimaksud, commit, lalu `git push origin main` (memicu auto-deploy);
+jangan ikutkan perubahan workspace Obsidian atau file lokal lain.
 
-Deploy = `git add -A && git commit -m "..." && git push origin main` (auto-deploys).
+Verifikasi onboarding (2026-10-08): Node 22.23.1 / npm 10.9.8; `npm ci`,
+`npx tsc --noEmit`, dan `npm run build` berhasil. `npm run dev` menyajikan
+homepage di port 5173; `npm run preview` menyajikan hasil produksi di port
+4173. Chromium menampilkan homepage development dan navigasi homepage →
+catalog produksi dengan enam produk, tanpa application JavaScript error
+pada skenario tersebut. Perubahan hanya dokumentasi; deployment Vercel
+belum diperiksa.
 
 ## 14. Code Conventions
 
